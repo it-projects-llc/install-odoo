@@ -1,4 +1,3 @@
-
  export ODOO_USER=odoo
 
  export ODOO_BRANCH=master
