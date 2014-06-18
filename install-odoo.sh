@@ -292,10 +292,10 @@ EOF
 
    location /longpolling {
             proxy_pass http://localhost:8072;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP       $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Host \$host;
+            proxy_set_header X-Real-IP       \$remote_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto \$scheme;
             #proxy_redirect http:// https://;
 
             client_max_body_size 500m;
@@ -303,10 +303,10 @@ EOF
 
    location / {
             proxy_pass http://localhost:8069;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP       $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Host \$host;
+            proxy_set_header X-Real-IP       \$remote_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto \$scheme;
             #proxy_redirect http:// https://;  
 
             client_max_body_size 500m;
@@ -314,7 +314,7 @@ EOF
 }
 EOF
  ## EOF =====================================
-ln -s /etc/nginx/sites-available/odoo.conf /etc/nginx/sites-enabled/odoo.conf 
+ ln -s /etc/nginx/sites-available/odoo.conf /etc/nginx/sites-enabled/odoo.conf 
 
 service nginx restart
 
