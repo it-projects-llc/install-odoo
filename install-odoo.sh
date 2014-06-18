@@ -279,6 +279,7 @@ EOF
 
 
  ### NGINX
+ apt-get install nginx -y
  cat <<EOF > /etc/nginx/sites-available/odoo.conf
 
  server {
