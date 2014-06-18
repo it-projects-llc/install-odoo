@@ -1,3 +1,4 @@
+ ### SETTINGS
  export ODOO_USER=odoo
 
  export ODOO_BRANCH=master
@@ -8,26 +9,28 @@ export ODOO_DOMAIN=example.com # EDIT ME !!!
 
  adduser --system --home=/opt/${ODOO_USER} --group ${ODOO_USER}
 
+ sudo -u postgres  createuser -s ${ODOO_USER}
+ 
+
+ ### SOURCE
+ cd /usr/local/src/
+
+ ## tterp - russian localization
+ git clone https://github.com/tterp/openerp.git tterp &&\
+ git clone https://github.com/yelizariev/pos-addons.git &&\
+ git clone https://github.com/yelizariev/addons-yelizariev.git &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git
+
+ mkdir addons-extra
+ ln -s /usr/local/src/tterp/modules/l10n_ru/ /usr/local/src/addons-extra/
+
+ ### DEPS
  python --version # should be 2.7 or higher
 
- apt-get update && apt-get upgrade
-
- apt-get install -y git bzr htop nano\
-          python-unittest2 python-psutil python-jinja2 \
-          python-gevent \
-          python-docutils \
-          postgresql postgresql-contrib\
-          graphviz ghostscript postgresql-client \
-          python-dateutil python-feedparser python-gdata \
-          python-ldap python-libxslt1 python-lxml python-mako \
-          python-openid python-psycopg2 python-pybabel python-pychart \
-          python-pydot python-pyparsing python-reportlab python-simplejson \
-          python-tz python-vatnumber python-vobject python-webdav \
-          python-werkzeug python-xlwt python-yaml python-imaging \
-          python-matplotlib
- 
- pip install Werkzeug --upgrade
- pip install psycogreen
+ cd odoo
+ ## https://github.com/odoo/odoo/issues/283
+ wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|sed s/simple/upstream/|python
+ # pip install Werkzeug --upgrade
 
  ## wkhtmltopdf
  cd /usr/local/src
@@ -35,23 +38,14 @@ export ODOO_DOMAIN=example.com # EDIT ME !!!
  tar xaf wkhtmltox-linux-*
  ln -s /usr/local/src/wkhtmltox/bin/wkhtmltopdf /usr/local/bin/
 
+ ## Werkzeug
+ # apt-get install python-pip -y
+ # pip install Werkzeug --upgrade
 
- sudo -u postgres  createuser -s ${ODOO_USER}
- 
- cd /usr/local/src/
 
- mkdir odoo
 
- cd odoo
 
- # tterp - russian localization
- git clone https://github.com/tterp/openerp.git tterp &&\
- git clone https://github.com/yelizariev/pos-addons.git &&\
- git clone https://github.com/yelizariev/addons-yelizariev.git &&\
- git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git
-
- mkdir extra
-
+ ### CONFIGS
  mkdir /var/log/odoo/
 
  chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
@@ -61,7 +55,7 @@ export ODOO_DOMAIN=example.com # EDIT ME !!!
  cat <<EOF > /etc/odoo/odoo-server.conf
 
 [options]
-addons_path = /usr/local/src/odoo/extra,/usr/local/src/odoo/addons,/usr/local/src/odoo/web/addons,/usr/local/src/odoo/odoo-addons-yelizariev,/usr/local/src/odoo/pos-addons,/usr/local/src/odoo/tterp/modules
+addons_path = /usr/local/src/addons-extra,/usr/local/src/odoo/addons,/usr/local/src/odoo/openerp/addons,/usr/local/src/addons-yelizariev,/usr/local/src/pos-addons
 admin_passwd = ${ODOO_PASS}
 auto_reload = False
 csv_internal_sep = ,
@@ -72,7 +66,7 @@ db_password = False
 db_port = False
 db_template = template1
 db_user = ${ODOO_USER}
-dbfilter = *
+dbfilter = .*
 debug_mode = False
 demo = {}
 email_from = False
@@ -153,7 +147,7 @@ EOF
 ### END INIT INFO
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
-DAEMON=/usr/local/src/odoo/server/odoo-server
+DAEMON=/usr/local/src/odoo/openerp-server
 NAME=odoo-server
 DESC=odoo-server
 CONFIG=/etc/odoo/odoo-server.conf
@@ -202,14 +196,14 @@ esac
 exit 0
 
 EOF
- # EOF =====================================
+ ## EOF =====================================
 
  cat <<EOF > /etc/init.d/odoo-longpolling
 
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:		odoo-server
+# Provides:		odoo-server-longpolling
 # Required-Start:	\$remote_fs \$syslog
 # Required-Stop:	\$remote_fs \$syslog
 # Should-Start:		\$network
@@ -221,7 +215,7 @@ EOF
 ### END INIT INFO
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
-DAEMON=/usr/local/src/odoo/server/odoo-gevent
+DAEMON=/usr/local/src/odoo/openerp-gevent
 NAME=odoo-server-longpolling
 DESC=odoo-server-longpolling
 CONFIG=/etc/odoo/odoo-server.conf
@@ -270,8 +264,10 @@ esac
 exit 0
 
 EOF
- # EOF =====================================
+ ## EOF =====================================
 
+
+ ### START
  chmod +x  /etc/init.d/odoo
  chmod +x  /etc/init.d/odoo-longpolling
 
@@ -282,7 +278,7 @@ EOF
  /etc/init.d/odoo-longpolling start
 
 
-
+ ### NGINX
  cat <<EOF > /etc/nginx/sites-available/odoo.conf
 
  server {
@@ -316,16 +312,18 @@ EOF
    }
 }
 EOF
- # EOF =====================================
+ ## EOF =====================================
 ln -s /etc/nginx/sites-available/odoo.conf /etc/nginx/sites-enabled/odoo.conf 
 
 service nginx restart
 
- ### log
+ ### DEBUG
+ ## log
  # tail -f -n 100 /var/log/odoo/odoo-server.log 
 
- ### start from console: 
- # sudo -u ${ODOO_USER} /usr/local/src/odoo/server/odoo-server -c /etc/odoo/odoo-server.conf
+ ## start from console: 
+ # sudo -u ${ODOO_USER} /usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf
+
 
 
 
