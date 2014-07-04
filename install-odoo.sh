@@ -17,7 +17,6 @@ export ODOO_DOMAIN=example.com # EDIT ME !!!
 
  ## tterp - russian localization
  git clone https://github.com/tterp/openerp.git tterp &&\
- git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
  git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git
 
@@ -55,7 +54,7 @@ export ODOO_DOMAIN=example.com # EDIT ME !!!
  cat <<EOF > /etc/odoo/odoo-server.conf
 
 [options]
-addons_path = /usr/local/src/addons-extra,/usr/local/src/odoo/addons,/usr/local/src/odoo/openerp/addons,/usr/local/src/addons-yelizariev,/usr/local/src/pos-addons
+addons_path = /usr/local/src/addons-extra,/usr/local/src/odoo/addons,/usr/local/src/odoo/openerp/addons,/usr/local/src/addons-yelizariev
 admin_passwd = ${ODOO_PASS}
 auto_reload = False
 csv_internal_sep = ,
@@ -67,6 +66,7 @@ db_port = False
 db_template = template1
 db_user = ${ODOO_USER}
 dbfilter = .*
+#dbfilter = ^%h$
 debug_mode = False
 demo = {}
 email_from = False
@@ -324,7 +324,9 @@ service nginx restart
 
  ## start from console: 
  # sudo -u ${ODOO_USER} /usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf
-
+ # OR
+ # sudo su - ${ODOO_USER} -s /bin/bash
+ # /usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf
 
 
 
