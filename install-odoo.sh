@@ -283,7 +283,7 @@ EOF
  ### NGINX
  apt-get install nginx -y
 
- cat <<EOF > /etc/nginx/odoo_params.conf
+ cat <<EOF > /etc/nginx/odoo_params
 charset utf-8;
 location = /favicon.ico {
     return 404;
