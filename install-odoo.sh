@@ -1,7 +1,7 @@
  ### SETTINGS
  export ODOO_USER=odoo
 
- export ODOO_BRANCH=master
+ export ODOO_BRANCH=saas-5
 
 export ODOO_DOMAIN=example.com # EDIT ME !!!
 
