@@ -1,4 +1,4 @@
- ### USEFULL PACKAGED
+ ### USEFULL PACKAGES
 apt-get install -y git python-pip htop
 
  ### SETTINGS
