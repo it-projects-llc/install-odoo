@@ -306,7 +306,7 @@ EOF
  server {
         listen 80 default_server;
         server_name ${ODOO_DOMAIN}
-        include openerp_params;
+        include odoo_params;
 
         location /longpolling {
             proxy_pass http://localhost:8072;
