@@ -32,6 +32,7 @@ export ODOO_DOMAIN=example.com # EDIT ME !!!
  cd odoo
  ## https://github.com/odoo/odoo/issues/283
  wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|sed s/simple/upstream/|python
+ git checkout ${ODOO_BRANCH}
 
  ## wkhtmltopdf
  # http://wkhtmltopdf.org/downloads.html
