@@ -282,37 +282,39 @@ EOF
 
  ### NGINX
  apt-get install nginx -y
+
+ cat <<EOF > /etc/nginx/odoo_params.conf
+charset utf-8;
+location = /favicon.ico {
+    return 404;
+}
+# increase proxy buffer to handle some OpenERP web requests
+proxy_buffers 16 64k;
+proxy_buffer_size 128k;
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP       $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+#proxy_redirect http:// https://;  
+proxy_read_timeout          600s;
+client_max_body_size 100m;
+EOF
+ ## EOF =====================================
+
  cat <<EOF > /etc/nginx/sites-available/odoo.conf
 
  server {
         listen 80 default_server;
         server_name ${ODOO_DOMAIN}
-        charset utf-8;
-    # increase proxy buffer to handle some Odoo web requests
-    proxy_buffers 16 64k;
-    proxy_buffer_size 128k;
+        include openerp_params;
 
-   location /longpolling {
+        location /longpolling {
             proxy_pass http://localhost:8072;
-            proxy_set_header Host \$host;
-            proxy_set_header X-Real-IP       \$remote_addr;
-            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto \$scheme;
-            #proxy_redirect http:// https://;
+        }
 
-            client_max_body_size 500m;
-   }
-
-   location / {
+        location / {
             proxy_pass http://localhost:8069;
-            proxy_set_header Host \$host;
-            proxy_set_header X-Real-IP       \$remote_addr;
-            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto \$scheme;
-            #proxy_redirect http:// https://;  
-
-            client_max_body_size 500m;
-   }
+        }
 }
 EOF
  ## EOF =====================================
