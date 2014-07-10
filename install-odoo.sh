@@ -9,7 +9,7 @@ export ODOO_DOMAIN=example.com # EDIT ME !!!
 
  adduser --system --home=/opt/${ODOO_USER} --group ${ODOO_USER}
 
- sudo -u postgres  createuser -s ${ODOO_USER}
+ sudo -iu postgres  createuser -s ${ODOO_USER}
  
 
  ### SOURCE
@@ -323,7 +323,7 @@ service nginx restart
  # tail -f -n 100 /var/log/odoo/odoo-server.log 
 
  ## start from console: 
- # sudo -u ${ODOO_USER} /usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf
+ # sudo -iu ${ODOO_USER} /usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf
  # OR
  # sudo su - ${ODOO_USER} -s /bin/bash
  # /usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf
