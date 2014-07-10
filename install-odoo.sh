@@ -32,13 +32,12 @@ export ODOO_DOMAIN=example.com # EDIT ME !!!
  cd odoo
  ## https://github.com/odoo/odoo/issues/283
  wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|sed s/simple/upstream/|python
- # pip install Werkzeug --upgrade
 
  ## wkhtmltopdf
+ # http://wkhtmltopdf.org/downloads.html
  cd /usr/local/src
- wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.0/wkhtmltox-linux-amd64_0.12.0-03c001d.tar.xz
- tar xaf wkhtmltox-linux-*
- ln -s /usr/local/src/wkhtmltox/bin/wkhtmltopdf /usr/local/bin/
+ wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.1/wkhtmltox-0.12.1_linux-wheezy-amd64.deb
+ dpkg -i wkhtmltox-*.deb
 
  ## Werkzeug
  # apt-get install python-pip -y
