@@ -1,3 +1,6 @@
+ ### USEFULL PACKAGED
+apt-get install -y git python-pip htop
+
  ### SETTINGS
  export ODOO_USER=odoo
 
