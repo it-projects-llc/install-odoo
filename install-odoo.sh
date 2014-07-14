@@ -12,7 +12,7 @@ export ODOO_DOMAIN=example.com # EDIT ME !!!
 
  adduser --system --home=/opt/${ODOO_USER} --group ${ODOO_USER}
 
- sudo -iu postgres  createuser -s ${ODOO_USER}
+ #sudo -iu postgres  createuser -s ${ODOO_USER}
  
 
  ### SOURCE
