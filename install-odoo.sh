@@ -2,11 +2,11 @@
 apt-get install -y git python-pip htop
 
  ### SETTINGS
+export ODOO_DOMAIN=example.com # EDIT ME !!!
+
  export ODOO_USER=odoo
 
  export ODOO_BRANCH=saas-5
-
-export ODOO_DOMAIN=example.com # EDIT ME !!!
 
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
 
