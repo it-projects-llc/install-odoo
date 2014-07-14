@@ -1,5 +1,5 @@
- ### USEFULL PACKAGES
-apt-get install -y git python-pip htop
+ ### PACKAGES
+apt-get install -y git python-pip htop postgresql
 
  ### SETTINGS
 export ODOO_DOMAIN=example.com # EDIT ME !!!
