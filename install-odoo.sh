@@ -44,7 +44,8 @@ export ODOO_DOMAIN=example.com # EDIT ME !!!
  # apt-get install python-pip -y
  # pip install Werkzeug --upgrade
 
-
+ ## psycogreen
+ pip install psycogreen
 
 
  ### CONFIGS
