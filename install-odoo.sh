@@ -329,7 +329,4 @@ service nginx restart
  # tail -f -n 100 /var/log/odoo/odoo-server.log 
 
  ## start from console: 
- # sudo su - ${ODOO_USER} -s  /usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf
-
-
-
+ #  sudo su - ${ODOO_USER} -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
