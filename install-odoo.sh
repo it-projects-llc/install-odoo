@@ -2,7 +2,7 @@
 apt-get install -y git python-pip htop postgresql
 
  ### SETTINGS
-export ODOO_DOMAIN=example.com # EDIT ME !!!
+export ODOO_DOMAIN=EDIT-ME.example.com
 
  export ODOO_USER=odoo
 
