@@ -20,6 +20,7 @@ export ODOO_DOMAIN=EDIT-ME.example.com
 
  ## tterp - russian localization
  git clone https://github.com/tterp/openerp.git tterp &&\
+ git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
  git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git
 
@@ -58,7 +59,7 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  cat <<EOF > /etc/odoo/odoo-server.conf
 
 [options]
-addons_path = /usr/local/src/addons-extra,/usr/local/src/odoo/addons,/usr/local/src/odoo/openerp/addons,/usr/local/src/addons-yelizariev
+addons_path = /usr/local/src/addons-extra,/usr/local/src/odoo/addons,/usr/local/src/odoo/openerp/addons,/usr/local/src/addons-yelizariev,/usr/local/src/pos-addons
 admin_passwd = ${ODOO_PASS}
 auto_reload = False
 csv_internal_sep = ,
