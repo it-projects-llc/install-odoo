@@ -1,5 +1,7 @@
  ### PACKAGES
-apt-get install -y git python-pip htop postgresql
+apt-get update
+apt-get upgrade
+apt-get install -y git python-pip htop postgresql sudo 
 
  ### SETTINGS
 export ODOO_DOMAIN=EDIT-ME.example.com
