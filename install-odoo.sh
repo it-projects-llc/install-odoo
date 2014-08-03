@@ -35,6 +35,7 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  cd odoo
  ## https://github.com/odoo/odoo/issues/283
  wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|sed s/simple/upstream/|python
+
  git checkout ${ODOO_BRANCH}
 
  ## wkhtmltopdf
