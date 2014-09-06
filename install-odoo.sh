@@ -2,6 +2,7 @@
 apt-get update
 apt-get upgrade
 apt-get install -y git python-pip htop postgresql sudo 
+apt-get install -y emacs23-nox
 
  ### SETTINGS
 export ODOO_DOMAIN=EDIT-ME.example.com
