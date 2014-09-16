@@ -1,7 +1,7 @@
  ### PACKAGES
 apt-get update
 apt-get upgrade
-apt-get install -y git python-pip htop postgresql sudo 
+apt-get install -y git python-pip htop postgresql sudo moreutils
 apt-get install -y emacs23-nox
 
  ### SETTINGS
@@ -15,6 +15,8 @@ export ODOO_DOMAIN=EDIT-ME.example.com
 
  adduser --system --home=/opt/${ODOO_USER} --group ${ODOO_USER}
 
+ # psql --version
+ # pg_createcluster 9.3 main --start
  sudo -iu postgres  createuser -s ${ODOO_USER}
  
 
@@ -25,7 +27,7 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  git clone https://github.com/tterp/openerp.git tterp &&\
  git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
- git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git
+ git clone https://github.com/odoo/odoo.git
 
  mkdir addons-extra
  ln -s /usr/local/src/tterp/modules/l10n_ru/ /usr/local/src/addons-extra/
@@ -33,11 +35,12 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  ### DEPS
  python --version # should be 2.7 or higher
 
- cd odoo
+ cd /usr/local/src/odoo
  ## https://github.com/odoo/odoo/issues/283
  wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|sed s/simple/upstream/|python
+ ## choose Y when prompted
 
- git checkout ${ODOO_BRANCH}
+ git checkout -b ${ODOO_BRANCH} origin/${ODOO_BRANCH} 
 
  ## wkhtmltopdf
  # http://wkhtmltopdf.org/downloads.html
@@ -60,82 +63,14 @@ export ODOO_DOMAIN=EDIT-ME.example.com
 
  mkdir /etc/odoo
 
- cat <<EOF > /etc/odoo/odoo-server.conf
+ cd /etc/odoo
 
-[options]
-addons_path = /usr/local/src/addons-extra,/usr/local/src/odoo/addons,/usr/local/src/odoo/openerp/addons,/usr/local/src/addons-yelizariev,/usr/local/src/pos-addons
-admin_passwd = ${ODOO_PASS}
-auto_reload = False
-csv_internal_sep = ,
-db_host = False
-db_maxconn = 64
-db_name = False
-db_password = False
-db_port = False
-db_template = template1
-db_user = ${ODOO_USER}
-dbfilter = .*
-#dbfilter = ^%h$
-debug_mode = False
-demo = {}
-email_from = False
-import_partial = 
-limit_memory_hard = 805306368
-limit_memory_soft = 671088640
-limit_request = 8192
-limit_time_cpu = 60
-limit_time_real = 120
-list_db = True
-log_handler = ['["[\':INFO\']"]']
-log_level = info
-logfile = /var/log/odoo/odoo-server.log
-login_message = False
-logrotate = True
-longpolling_port = 8072
-max_cron_threads = 2
-netrpc = False
-netrpc_interface = 
-netrpc_port = 8070
-osv_memory_age_limit = 1.0
-osv_memory_count_limit = False
-pg_path = None
-pidfile = False
-proxy_mode = False
-reportgz = False
-secure_cert_file = server.cert
-secure_pkey_file = server.pkey
-server_wide_modules = None
-smtp_password = False
-smtp_port = 25
-smtp_server = localhost
-smtp_ssl = False
-smtp_user = False
-static_http_document_root = None
-static_http_enable = False
-static_http_url_prefix = None
-syslog = False
-test_commit = False
-test_enable = False
-test_file = False
-test_report_directory = False
-timezone = False
-translate_modules = ['all']
-unaccent = False
-without_demo = False
-workers = 0
-xmlrpc = True
-xmlrpc_interface = 
-xmlrpc_port = 8069
-xmlrpcs = True
-xmlrpcs_interface = 
-xmlrpcs_port = 8071
+ wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/odoo-server.conf
+ while read line ; do eval echo "$line"; done < odoo-server.conf | sponge odoo-server.conf
+ 
 
-
-
-EOF
-
- chown ${ODOO_USER}:${ODOO_USER} /etc/odoo/odoo-server.conf
- chmod 600 /etc/odoo/odoo-server.conf
+ chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
+ chmod 600 odoo-server.conf
 
 
 
