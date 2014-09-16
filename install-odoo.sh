@@ -112,8 +112,9 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
  cd /etc/nginx/sites-enabled/
+ rm default
  ln -s ../sites-available/odoo.conf odoo.conf 
-
+ 
 service nginx restart
 
  ### DEBUG
