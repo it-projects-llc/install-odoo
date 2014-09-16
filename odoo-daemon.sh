@@ -2,10 +2,10 @@
  
 ### BEGIN INIT INFO
 # Provides:		odoo-server
-# Required-Start:	\$remote_fs \$syslog
-# Required-Stop:	\$remote_fs \$syslog
-# Should-Start:		\$network
-# Should-Stop:		\$network
+# Required-Start:	$remote_fs $syslog
+# Required-Stop:	$remote_fs $syslog
+# Should-Start:		$network
+# Should-Stop:		$network
 # Default-Start:	2 3 4 5
 # Default-Stop:		0 1 6
 # Short-Description:	Enterprise Resource Management software
@@ -18,25 +18,25 @@ NAME=odoo-server
 DESC=odoo-server
 CONFIG=/etc/odoo/odoo-server.conf
 LOGFILE=/var/log/odoo/odoo-server.log
-USER=${ODOO_USER}
+USER={{ODOO_USER}}
  
-test -x \${DAEMON} || exit 0
+test -x ${DAEMON} || exit 0
  
 set -e
  
 do_start () {
-    echo -n "Starting \${DESC}: "
-    start-stop-daemon --start --quiet --pidfile /var/run/\${NAME}.pid --chuid \${USER} --background --make-pidfile --exec \${DAEMON} -- --config=\${CONFIG} --logfile=\${LOGFILE}
-    echo "\${NAME}."
+    echo -n "Starting ${DESC}: "
+    start-stop-daemon --start --quiet --pidfile /var/run/${NAME}.pid --chuid ${USER} --background --make-pidfile --exec ${DAEMON} -- --config=${CONFIG} --logfile=${LOGFILE}
+    echo "${NAME}."
 }
  
 do_stop () {
-    echo -n "Stopping \${DESC}: "
-    start-stop-daemon --stop --quiet --pidfile /var/run/\${NAME}.pid --oknodo
-    echo "\${NAME}."
+    echo -n "Stopping ${DESC}: "
+    start-stop-daemon --stop --quiet --pidfile /var/run/${NAME}.pid --oknodo
+    echo "${NAME}."
 }
  
-case "\${1}" in
+case "${1}" in
     start)
         do_start
         ;;
@@ -46,15 +46,15 @@ case "\${1}" in
         ;;
  
     restart|force-reload)
-        echo -n "Restarting \${DESC}: "
+        echo -n "Restarting ${DESC}: "
         do_stop
         sleep 1
         do_start
         ;;
  
     *)
-        N=/etc/init.d/\${NAME}
-        echo "Usage: \${NAME} {start|stop|restart|force-reload}" >&2
+        N=/etc/init.d/${NAME}
+        echo "Usage: ${NAME} {start|stop|restart|force-reload}" >&2
         exit 1
         ;;
 esac
