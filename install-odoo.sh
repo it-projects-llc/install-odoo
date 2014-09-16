@@ -5,6 +5,8 @@ apt-get install -y git python-pip htop postgresql sudo moreutils
 apt-get install -y emacs23-nox
 
  ### SETTINGS
+export GIST="yelizariev/2abdd91d00dddc4e4fa4"
+
  ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
 export PERL_UPDATE_ENV="perl -p -i -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
 
@@ -68,7 +70,7 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  mkdir /etc/odoo
  cd /etc/odoo/
 
- wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/odoo-server.conf -O odoo-server.conf
+ wget https://gist.githubusercontent.com/${GIST}/raw/odoo-server.conf -O odoo-server.conf
  eval "${PERL_UPDATE_ENV} < odoo-server.conf" | sponge odoo-server.conf
  
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
@@ -77,14 +79,14 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  ## /etc/init.d/odoo
  cd /etc/init.d
 
- wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/odoo-daemon.sh -O odoo
+ wget https://gist.githubusercontent.com/${GIST}/raw/odoo-daemon.sh -O odoo
  eval "${PERL_UPDATE_ENV} < odoo" | sponge odoo
  chmod +x odoo
 
  ## /etc/init.d/odoo-longpolling
  cd /etc/init.d
 
- wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/odoo-longpolling-daemon.sh -O odoo-longpolling
+ wget https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-daemon.sh -O odoo-longpolling
  eval "${PERL_UPDATE_ENV} < odoo-longpolling" | sponge odoo-longpolling
  chmod +x odoo-longpolling
 
@@ -103,11 +105,11 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  apt-get install nginx -y
 
  cd /etc/nginx
- wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/nginx_odoo_params -O odoo_params
+ wget https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params
  #eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
 
  cd /etc/nginx/sites-available/
- wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/nginx_odoo.conf -O odoo.conf
+ wget https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
  cd /etc/nginx/sites-enabled/
