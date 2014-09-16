@@ -5,6 +5,9 @@ apt-get install -y git python-pip htop postgresql sudo moreutils
 apt-get install -y emacs23-nox
 
  ### SETTINGS
+ ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
+export PERL_UPDATE_ENV="perl -p -i -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
+
 export ODOO_DOMAIN=EDIT-ME.example.com
 
  export ODOO_USER=odoo
@@ -57,90 +60,27 @@ export ODOO_DOMAIN=EDIT-ME.example.com
 
 
  ### CONFIGS
- mkdir /var/log/odoo/
 
+ ## /var/log/odoo/
+ mkdir /var/log/odoo/
  chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
 
+ ## /etc/odoo/odoo-server.conf
  mkdir /etc/odoo
+ cd /etc/odoo/
 
- cd /etc/odoo
-
- wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/odoo-server.conf
- while read line ; do eval echo "$line"; done < odoo-server.conf | sponge odoo-server.conf
+ wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/odoo-server.conf -O odoo-server.conf
+ eval "${PERL_UPDATE_ENV} < odoo-server.conf" | sponge odoo-server.conf
  
-
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
  chmod 600 odoo-server.conf
 
+ ## /etc/init.d/odoo
+ cd /etc/init.d
 
+ wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/odoo-daemon.sh -O odoo
+ eval "${PERL_UPDATE_ENV} < odoo" | sponge odoo
 
- cat <<EOF > /etc/init.d/odoo
-
-#!/bin/sh
-
-### BEGIN INIT INFO
-# Provides:		odoo-server
-# Required-Start:	\$remote_fs \$syslog
-# Required-Stop:	\$remote_fs \$syslog
-# Should-Start:		\$network
-# Should-Stop:		\$network
-# Default-Start:	2 3 4 5
-# Default-Stop:		0 1 6
-# Short-Description:	Enterprise Resource Management software
-# Description:		Open ERP is a complete ERP and CRM software.
-### END INIT INFO
-
-PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
-DAEMON=/usr/local/src/odoo/openerp-server
-NAME=odoo-server
-DESC=odoo-server
-CONFIG=/etc/odoo/odoo-server.conf
-LOGFILE=/var/log/odoo/odoo-server.log
-USER=${ODOO_USER}
-
-test -x \${DAEMON} || exit 0
-
-set -e
-
-do_start () {
-    echo -n "Starting \${DESC}: "
-    start-stop-daemon --start --quiet --pidfile /var/run/\${NAME}.pid --chuid \${USER} --background --make-pidfile --exec \${DAEMON} -- --config=\${CONFIG} --logfile=\${LOGFILE}
-    echo "\${NAME}."
-}
-
-do_stop () {
-    echo -n "Stopping \${DESC}: "
-    start-stop-daemon --stop --quiet --pidfile /var/run/\${NAME}.pid --oknodo
-    echo "\${NAME}."
-}
-
-case "\${1}" in
-    start)
-        do_start
-        ;;
-
-    stop)
-        do_stop
-        ;;
-
-    restart|force-reload)
-        echo -n "Restarting \${DESC}: "
-        do_stop
-        sleep 1
-        do_start
-        ;;
-
-    *)
-        N=/etc/init.d/\${NAME}
-        echo "Usage: \${NAME} {start|stop|restart|force-reload}" >&2
-        exit 1
-        ;;
-esac
-
-exit 0
-
-EOF
- ## EOF =====================================
 
  cat <<EOF > /etc/init.d/odoo-longpolling
 
