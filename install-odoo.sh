@@ -39,9 +39,8 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  python --version # should be 2.7 or higher
 
  cd /usr/local/src/odoo
- ## https://github.com/odoo/odoo/issues/283
- wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|sed s/simple/upstream/|python
- ## choose Y when prompted
+ wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|python
+ ## (choose Y when prompted)
 
  git checkout -b ${ODOO_BRANCH} origin/${ODOO_BRANCH} 
 
