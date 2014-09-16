@@ -126,3 +126,6 @@ service nginx restart
 
  ## psql
  # sudo -u odoo psql DATABASE
+
+ ## settings (admin password, addons path)
+ # head /etc/odoo/odoo-server.conf 
