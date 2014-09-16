@@ -81,6 +81,11 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/odoo-daemon.sh -O odoo
  eval "${PERL_UPDATE_ENV} < odoo" | sponge odoo
 
+ ## /etc/init.d/odoo-longpolling
+ cd /etc/init.d
+
+ wget https://gist.githubusercontent.com/yelizariev/2abdd91d00dddc4e4fa4/raw/odoo-longpolling-daemon.sh -O odoo-longpolling
+ eval "${PERL_UPDATE_ENV} < odoo-longpolling" | sponge odoo-longpolling
 
  cat <<EOF > /etc/init.d/odoo-longpolling
 
