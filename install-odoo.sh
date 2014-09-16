@@ -123,3 +123,6 @@ service nginx restart
 
  ## start from console: 
  #  sudo su - ${ODOO_USER} -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
+
+ ## psql
+ # sudo -u odoo psql DATABASE
