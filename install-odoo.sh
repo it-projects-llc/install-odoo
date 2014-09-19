@@ -4,6 +4,25 @@ apt-get upgrade -y
 apt-get install -y git python-pip htop postgresql sudo moreutils
 apt-get install -y emacs23-nox
 
+ ### SOURCE
+ cd /usr/local/src/
+
+ ## tterp - russian localization
+ git clone https://github.com/tterp/openerp.git tterp &&\
+ git clone https://github.com/yelizariev/pos-addons.git &&\
+ git clone https://github.com/yelizariev/addons-yelizariev.git &&\
+ git clone https://github.com/odoo/odoo.git
+
+ mkdir addons-extra
+ ln -s /usr/local/src/tterp/modules/l10n_ru/ /usr/local/src/addons-extra/
+
+ ### DEPS
+ python --version # should be 2.7 or higher
+
+ cd /usr/local/src/odoo
+ wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|python
+ ## (choose Y when prompted)
+
  ### FIX locale
  locale # show locale settings
  locale-gen en_US.UTF-8 ru_RU.UTF-8
@@ -28,26 +47,9 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  # psql --version
  # pg_createcluster 9.3 main --start
  sudo -iu postgres  createuser -s ${ODOO_USER}
- 
 
- ### SOURCE
- cd /usr/local/src/
-
- ## tterp - russian localization
- git clone https://github.com/tterp/openerp.git tterp &&\
- git clone https://github.com/yelizariev/pos-addons.git &&\
- git clone https://github.com/yelizariev/addons-yelizariev.git &&\
- git clone https://github.com/odoo/odoo.git
-
- mkdir addons-extra
- ln -s /usr/local/src/tterp/modules/l10n_ru/ /usr/local/src/addons-extra/
-
- ### DEPS
- python --version # should be 2.7 or higher
-
+ ### BRANCH
  cd /usr/local/src/odoo
- wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|python
- ## (choose Y when prompted)
 
  git checkout -b ${ODOO_BRANCH} origin/${ODOO_BRANCH} 
 
