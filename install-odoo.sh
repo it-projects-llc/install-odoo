@@ -113,7 +113,7 @@ export ODOO_DOMAIN=EDIT-ME.example.com
 
 
  ### NGINX
- apt-get remove apache2
+ apt-get remove apache2 -y
  apt-get install nginx -y
 
  cd /etc/nginx
