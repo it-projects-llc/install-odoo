@@ -4,6 +4,11 @@ apt-get upgrade -y
 apt-get install -y git python-pip htop postgresql sudo moreutils
 apt-get install -y emacs23-nox
 
+ ### FIX locale
+ locale # show locale settings
+ locale-gen en_US.UTF-8 ru_RU.UTF-8
+ dpkg-reconfigure locales
+
  ### SETTINGS
 export GIST="yelizariev/2abdd91d00dddc4e4fa4"
 
