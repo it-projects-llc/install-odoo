@@ -1,6 +1,6 @@
  ### PACKAGES
 apt-get update
-apt-get upgrade
+apt-get upgrade -y
 apt-get install -y git python-pip htop postgresql sudo moreutils
 apt-get install -y emacs23-nox
 
