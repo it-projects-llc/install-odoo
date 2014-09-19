@@ -131,6 +131,10 @@ export ODOO_DOMAIN=EDIT-ME.example.com
 service nginx restart
 
  ### DEBUG
+
+ ## show settings (admin password, addons path)
+head /etc/odoo/odoo-server.conf 
+
  ## log
  # tail -f -n 100 /var/log/odoo/odoo-server.log 
 
@@ -139,6 +143,3 @@ service nginx restart
 
  ## psql
  # sudo -u odoo psql DATABASE
-
- ## settings (admin password, addons path)
- # head /etc/odoo/odoo-server.conf 
