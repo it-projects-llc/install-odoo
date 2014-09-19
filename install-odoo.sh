@@ -23,7 +23,7 @@ apt-get install -y emacs23-nox
 
  cd /usr/local/src/odoo
  wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|python
- ## (choose Y when prompted)
+ ## (type "y" when prompted)
 
 #### DOWNLOADS done.
 
