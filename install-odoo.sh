@@ -22,8 +22,7 @@ apt-get install -y emacs23-nox
  python --version # should be 2.7 or higher
 
  cd /usr/local/src/odoo
- wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|python
- ## (type "y" when prompted)
+ echo "y" | wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py | python
 
  ## wkhtmltopdf
  # http://wkhtmltopdf.org/downloads.html
