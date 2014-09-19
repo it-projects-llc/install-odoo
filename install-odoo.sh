@@ -25,6 +25,20 @@ apt-get install -y emacs23-nox
  wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|python
  ## (type "y" when prompted)
 
+ ## wkhtmltopdf
+ # http://wkhtmltopdf.org/downloads.html
+ cd /usr/local/src
+ wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.1/wkhtmltox-0.12.1_linux-wheezy-amd64.deb
+ dpkg -i wkhtmltox-*.deb
+
+ ## Werkzeug
+ # apt-get install python-pip -y
+ # pip install Werkzeug --upgrade
+
+ ## psycogreen
+ pip install psycogreen
+
+
 #### DOWNLOADS done.
 
 
@@ -57,19 +71,6 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  cd /usr/local/src/odoo
 
  git checkout -b ${ODOO_BRANCH} origin/${ODOO_BRANCH} 
-
- ## wkhtmltopdf
- # http://wkhtmltopdf.org/downloads.html
- cd /usr/local/src
- wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.1/wkhtmltox-0.12.1_linux-wheezy-amd64.deb
- dpkg -i wkhtmltox-*.deb
-
- ## Werkzeug
- # apt-get install python-pip -y
- # pip install Werkzeug --upgrade
-
- ## psycogreen
- pip install psycogreen
 
 
  ### CONFIGS
