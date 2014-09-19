@@ -1,3 +1,5 @@
+ #### DOWNLOADS...
+
  ### PACKAGES
 apt-get update
 apt-get upgrade -y
@@ -22,6 +24,9 @@ apt-get install -y emacs23-nox
  cd /usr/local/src/odoo
  wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py|python
  ## (choose Y when prompted)
+
+#### DOWNLOADS done.
+
 
  ### FIX locale
  locale # show locale settings
