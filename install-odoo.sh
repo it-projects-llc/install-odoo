@@ -139,7 +139,7 @@ head /etc/odoo/odoo-server.conf
  grep 'version_info ' /usr/local/src/odoo/openerp/release.py 
 
  ## log
- # tail -f -n 100 /var/log/odoo/odoo-server.log 
+tail -f -n 100 /var/log/odoo/odoo-server.log 
 
  ## start from console: 
  #  sudo su - ${ODOO_USER} -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
