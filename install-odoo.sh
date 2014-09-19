@@ -134,6 +134,9 @@ service nginx restart
 
  ## show settings (admin password, addons path)
 head /etc/odoo/odoo-server.conf 
+ 
+ ## show odoo version
+ grep 'version_info ' /usr/local/src/odoo/openerp/release.py 
 
  ## log
  # tail -f -n 100 /var/log/odoo/odoo-server.log 
