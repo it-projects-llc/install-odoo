@@ -42,6 +42,7 @@ apt-get install -y emacs23-nox
 
 
  ### SETTINGS
+ ## gist url --  update it if you've forked this gist
 export GIST="yelizariev/2abdd91d00dddc4e4fa4"
 
  ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
