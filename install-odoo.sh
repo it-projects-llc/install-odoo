@@ -84,14 +84,11 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
  chmod 600 odoo-server.conf
 
- ## /etc/init/odoo.conf
+ ## /etc/init/odoo*.conf
  cd /etc/init/
 
  wget https://gist.githubusercontent.com/${GIST}/raw/odoo-init.conf -O odoo.conf
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
-
- ## /etc/init.d/odoo-longpolling.conf
- cd /etc/init/
 
  wget https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-init.conf -O odoo-longpolling.conf
  eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
