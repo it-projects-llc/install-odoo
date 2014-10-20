@@ -84,28 +84,22 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
  chmod 600 odoo-server.conf
 
- ## /etc/init.d/odoo
- cd /etc/init.d
+ ## /etc/init/odoo.conf
+ cd /etc/init/
 
- wget https://gist.githubusercontent.com/${GIST}/raw/odoo-daemon.sh -O odoo
- eval "${PERL_UPDATE_ENV} < odoo" | sponge odoo
- chmod +x odoo
+ wget https://gist.githubusercontent.com/${GIST}/raw/odoo-init.conf -O odoo.conf
+ eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
- ## /etc/init.d/odoo-longpolling
- cd /etc/init.d
+ ## /etc/init.d/odoo-longpolling.conf
+ cd /etc/init/
 
- wget https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-daemon.sh -O odoo-longpolling
- eval "${PERL_UPDATE_ENV} < odoo-longpolling" | sponge odoo-longpolling
- chmod +x odoo-longpolling
-
+ wget https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-init.conf -O odoo-longpolling.conf
+ eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
 
 
  ### START
- update-rc.d odoo defaults
- update-rc.d odoo-longpolling defaults
-
- /etc/init.d/odoo start
- /etc/init.d/odoo-longpolling start
+start odoo
+start odoo-longpolling
 
 
  ### NGINX
