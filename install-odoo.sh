@@ -16,7 +16,7 @@ apt-get install -y emacs23-nox
  git clone https://github.com/odoo/odoo.git
 
  mkdir addons-extra
- ln -s /usr/local/src/tterp/modules/l10n_ru/ /usr/local/src/addons-extra/
+ ln -s /usr/local/src/tterp/addons/l10n_ru/ /usr/local/src/addons-extra/
 
  ### DEPS
  python --version # should be 2.7 or higher
