@@ -9,14 +9,13 @@ apt-get install -y emacs23-nox
  ### SOURCE
  cd /usr/local/src/
 
- ## tterp - russian localization
- git clone https://github.com/tterp/openerp.git tterp &&\
+ git clone https://github.com/odoo-russia/odoo-russia.git &&\
  git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
  git clone https://github.com/odoo/odoo.git
 
  mkdir addons-extra
- ln -s /usr/local/src/tterp/addons/l10n_ru/ /usr/local/src/addons-extra/
+ ln -s /usr/local/src/odoo-russia/addons/l10n_ru/ /usr/local/src/addons-extra/
 
  ### DEPS
  python --version # should be 2.7 or higher
