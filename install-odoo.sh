@@ -127,8 +127,8 @@ head /etc/odoo/odoo-server.conf
  ## log
 tail -f -n 100 /var/log/odoo/odoo-server.log 
 
- ## start from console: 
- #  sudo su - ${ODOO_USER} -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
+ ## start from console (for ODOO_USER=odoo): 
+ #  sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
 
- ## psql
+ ## psql (use name of your database)
  # sudo -u odoo psql DATABASE
