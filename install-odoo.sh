@@ -99,6 +99,7 @@ start odoo-longpolling
 
 
  ### NGINX
+ /etc/init.d/apache2 stop
  apt-get remove apache2 -y
  apt-get install nginx -y
 
