@@ -12,7 +12,7 @@ apt-get install -y emacs23-nox
  git clone https://github.com/odoo-russia/odoo-russia.git &&\
  git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
- git clone https://github.com/odoo/odoo.git
+ git clone https://github.com/odoo/odoo.git -b master
 
  mkdir addons-extra
  ln -s /usr/local/src/odoo-russia/addons/l10n_ru/ /usr/local/src/addons-extra/
@@ -21,7 +21,7 @@ apt-get install -y emacs23-nox
  python --version # should be 2.7 or higher
 
  cd /usr/local/src/odoo
- echo "y" | wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py | python
+ echo "y" | (wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py | python)
 
  ## wkhtmltopdf
  # http://wkhtmltopdf.org/downloads.html
