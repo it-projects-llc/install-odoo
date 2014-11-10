@@ -133,3 +133,6 @@ tail -f -n 100 /var/log/odoo/odoo-server.log
 
  ## psql (use name of your database)
  # sudo -u odoo psql DATABASE
+
+ ## some common issues:
+ ## https://www.odoo.com/forum/help-1/question/dataerror-new-encoding-utf8-is-incompatible-with-the-encoding-of-the-template-database-sql-ascii-52124
