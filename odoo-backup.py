@@ -61,7 +61,8 @@ def dump_sql(db, dump_file):
         raise Exception("Couldn't dump database")
 
 def backup(db, dump_dir):
-    filestore = os.path.join(odoo_config['data_dir'], 'filestore', db)
+    odoo_data_dir = odoo_config.get('data_dir', '~/.local/share/Odoo/')
+    filestore = os.path.join(odoo_data_dir, 'filestore', db)
     if args.save_filestore:
         os.symlink(filestore, os.path.join(dump_dir, 'filestore'))
 
