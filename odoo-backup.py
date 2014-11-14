@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 ### depends on https://github.com/xolox/python-rotate-backups
 import argparse
 
