@@ -99,6 +99,7 @@ start odoo-longpolling
 
  ### BACKUP
  mkdir -p /opt/${ODOO_USER}/backups/
+ chown ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/backups/
  cd /usr/local/bin/
  wget https://gist.githubusercontent.com/${GIST}/raw/odoo-backup.py -O odoo-backup.py
  chmod +x odoo-backup.py
