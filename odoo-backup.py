@@ -58,6 +58,7 @@ def dump_sql(db, dump_file):
     cmd.append(db)
 
     if exec_pg_command(*cmd):
+        print ' '.join(cmd)
         raise Exception("Couldn't dump database")
 
 def backup(db, dump_dir):
