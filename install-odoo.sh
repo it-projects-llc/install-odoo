@@ -35,7 +35,7 @@ apt-get install -y emacs23-nox
 
  ## psycogreen
  pip install psycogreen
-
+ pip install rotate-backups
 
 #### DOWNLOADS done.
 
@@ -97,6 +97,13 @@ export ODOO_DOMAIN=EDIT-ME.example.com
 start odoo
 start odoo-longpolling
 
+ ### BACKUP
+ mkdir -p /opt/${ODOO_USER}/backups/
+ cd /usr/local/bin/
+ wget https://gist.githubusercontent.com/${GIST}/raw/odoo-backup.py -O odoo-backup.py
+ chmod +x odoo-backup.py
+ echo "#11 6	* * *	${ODOO_USER} odoo-backup.py -d DATABASE -p /opt/${ODOO_USER}/backups/ --no-save-filestore --daily 8 --weekly 0 --monthly 0 --yearly 0" >> /etc/crontab
+ echo "#12 4	* * 7	${ODOO_USER} odoo-backup.py -d DATABASE -p /opt/${ODOO_USER}/backups/" >> /etc/crontab
 
  ### NGINX
  /etc/init.d/apache2 stop
