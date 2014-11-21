@@ -94,7 +94,7 @@ def main():
 
         with tempdir() as dump_dir:
             dump_archive = backup(db, dump_dir)
-            shutil.copyfile(dump_archive, os.path.join(backup_dir, dump_archive))
+            shutil.move(dump_archive, os.path.join(backup_dir, dump_archive))
 
         if args.rotate:
             rotate(backup_dir)
