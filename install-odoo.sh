@@ -6,9 +6,9 @@ apt-get upgrade -y && \
 apt-get install -y git python-pip htop postgresql sudo moreutils && \
 apt-get install -y emacs23-nox && \
 apt-get install upstart
-# if your system doesn't support upstart and you don't want to switch to one, 
-# you can find startup scripts here 
-# https://gist.github.com/yelizariev/2abdd91d00dddc4e4fa4/d0ac3bd971e81213d17332647d9a74a580cfde6b
+ # if your system doesn't support upstart and you don't want to switch to one, 
+ # you can find startup scripts here 
+ # https://gist.github.com/yelizariev/2abdd91d00dddc4e4fa4/d0ac3bd971e81213d17332647d9a74a580cfde6b
 
  ### SOURCE
  cd /usr/local/src/
