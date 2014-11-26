@@ -87,7 +87,7 @@ export ODOO_DOMAIN=EDIT-ME.example.com
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
  chmod 600 odoo-server.conf
 
- ## /etc/init/odoo*.conf
+ ## /etc/init/odoo*.conf (for system with "upstart" only)
  cd /etc/init/
 
  wget https://gist.githubusercontent.com/${GIST}/raw/odoo-init.conf -O odoo.conf
