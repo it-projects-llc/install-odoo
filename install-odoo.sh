@@ -52,6 +52,7 @@ export GIST="yelizariev/2abdd91d00dddc4e4fa4"
 export PERL_UPDATE_ENV="perl -p -i -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
 
 export ODOO_DOMAIN=EDIT-ME.example.com
+export ODOO_DATABASE=DATABASE_EDIT_ME
 
  export ODOO_USER=odoo
 
@@ -107,8 +108,10 @@ start odoo-longpolling
  cd /usr/local/bin/
  wget https://gist.githubusercontent.com/${GIST}/raw/odoo-backup.py -O odoo-backup.py
  chmod +x odoo-backup.py
- echo -e "#11 6\t* * *\t${ODOO_USER} odoo-backup.py -d DATABASE -p /opt/${ODOO_USER}/backups/ --no-save-filestore --daily 8 --weekly 0 --monthly 0 --yearly 0" >> /etc/crontab
- echo -e "#12 4\t* * 7\t${ODOO_USER} odoo-backup.py -d DATABASE -p /opt/${ODOO_USER}/backups/" >> /etc/crontab
+ echo -e "#11 6\t* * *\t${ODOO_USER} odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/ --no-save-filestore --daily 8 --weekly 0 --monthly 0 --yearly 0" >> /etc/crontab
+ echo -e "#12 4\t* * 7\t${ODOO_USER} odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/" >> /etc/crontab
+ ## to test run:
+ # sudo su - ${ODOO_USER} -s /bin/bash -c  "odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/"
 
  ### NGINX
  /etc/init.d/apache2 stop
