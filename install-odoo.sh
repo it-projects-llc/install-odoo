@@ -9,6 +9,11 @@ apt-get install upstart
  # if your system doesn't support upstart and you don't want to switch to one, 
  # you can find startup scripts here 
  # https://gist.github.com/yelizariev/2abdd91d00dddc4e4fa4/d0ac3bd971e81213d17332647d9a74a580cfde6b
+ 
+ ## pip
+ pip install psycogreen
+ pip install rotate-backups
+ # pip install Werkzeug --upgrade
 
  ### SOURCE
  cd /usr/local/src/
@@ -33,13 +38,8 @@ apt-get install upstart
  wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.1/wkhtmltox-0.12.1_linux-wheezy-amd64.deb
  dpkg -i wkhtmltox-*.deb
 
- ## Werkzeug
- # apt-get install python-pip -y
- # pip install Werkzeug --upgrade
 
- ## psycogreen
- pip install psycogreen
- pip install rotate-backups
+
 
 #### DOWNLOADS done.
 
