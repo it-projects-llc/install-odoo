@@ -86,7 +86,9 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  chmod 600 odoo-server.conf
 
  ### CONTROL SCRIPTS - upstart
- ## /etc/init/odoo*.conf 
+ ## to check upstart run:
+ # apt-get install upstart
+
  cd /etc/init/
 
  wget https://gist.githubusercontent.com/${GIST}/raw/odoo-init.conf -O odoo.conf
@@ -96,7 +98,7 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
 
 
- ## START - upstart
+ ### START - upstart
 start odoo
 start odoo-longpolling
 
@@ -109,10 +111,15 @@ start odoo-longpolling
  wget https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-supervisor.conf -O odoo-longpolling.conf
  eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
 
+ ### START - supervisor
+supervisorctl reread
+supervisorctl update
 
+supervisorctl restart odoo
+supervisorctl restart odoo-longpolling
 
  ### CONTROL SCRIPTS - /etc/init.d/*
- # Such scripts don't recommended, because you will not get supervision features.
+ # Such scripts are not recommended, because you will not get supervision features.
  # Use this link to find ones: https://gist.github.com/yelizariev/2abdd91d00dddc4e4fa4/d0ac3bd971e81213d17332647d9a74a580cfde6b
  
 
