@@ -5,10 +5,7 @@ apt-get update && \
 apt-get upgrade -y && \
 apt-get install -y git python-pip htop postgresql sudo moreutils && \
 apt-get install -y emacs23-nox && \
-apt-get install upstart
- # if your system doesn't support upstart and you don't want to switch to one, 
- # you can find startup scripts here 
- # https://gist.github.com/yelizariev/2abdd91d00dddc4e4fa4/d0ac3bd971e81213d17332647d9a74a580cfde6b
+apt-get install supervisor
  
  ## pip
  pip install psycogreen
@@ -88,7 +85,8 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
  chmod 600 odoo-server.conf
 
- ## /etc/init/odoo*.conf (for system with "upstart" only)
+ ### CONTROL SCRIPTS - upstart
+ ## /etc/init/odoo*.conf 
  cd /etc/init/
 
  wget https://gist.githubusercontent.com/${GIST}/raw/odoo-init.conf -O odoo.conf
@@ -98,9 +96,25 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
 
 
- ### START
+ ## START - upstart
 start odoo
 start odoo-longpolling
+
+ ### CONTROL SCRIPTS - supervisor
+ cd /etc/supervisor/conf.d/
+
+ wget https://gist.githubusercontent.com/${GIST}/raw/odoo-supervisor.conf -O odoo.conf
+ eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
+
+ wget https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-supervisor.conf -O odoo-longpolling.conf
+ eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
+
+
+
+ ### CONTROL SCRIPTS - /etc/init.d/*
+ # Such scripts don't recommended, because you will not get supervision features.
+ # Use this link to find ones: https://gist.github.com/yelizariev/2abdd91d00dddc4e4fa4/d0ac3bd971e81213d17332647d9a74a580cfde6b
+ 
 
  ### BACKUP
  mkdir -p /opt/${ODOO_USER}/backups/
