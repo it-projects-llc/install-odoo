@@ -99,8 +99,8 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
 
 
  ### START - upstart
-start odoo
-start odoo-longpolling
+restart odoo
+restart odoo-longpolling
 
  ### CONTROL SCRIPTS - supervisor
  cd /etc/supervisor/conf.d/
