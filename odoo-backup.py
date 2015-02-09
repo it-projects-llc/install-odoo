@@ -49,12 +49,12 @@ odoo_config = get_odoo_config()
 #@_set_pg_password_in_environment # see openerp/service/db.py
 def dump_sql(db, dump_file):
     cmd = ['pg_dump', '--format=p', '--no-owner', '--file=' + dump_file]
-    if odoo_config['db_user']:
-        cmd.append('--username=' + odoo_config['db_user'])
-    if odoo_config['db_host']:
-        cmd.append('--host=' + odoo_config['db_host'])
-    if odoo_config['db_port']:
-        cmd.append('--port=' + str(odoo_config['db_port']))
+    if odoo_config.get('db_user'):
+        cmd.append('--username=' + odoo_config.get('db_user'))
+    if odoo_config.get('db_host'):
+        cmd.append('--host=' + odoo_config.get('db_host'))
+    if odoo_config.get('db_port'):
+        cmd.append('--port=' + str(odoo_config.get('db_port')))
     cmd.append(db)
 
     if exec_pg_command(*cmd):
@@ -252,3 +252,4 @@ def which(file, mode=F_OK | X_OK, path=None, pathext=None):
 
 if __name__ == '__main__':
     main()
+
