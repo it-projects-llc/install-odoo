@@ -84,7 +84,7 @@ def rotate(backup_dir):
     for period in ('hourly', 'daily', 'weekly', 'monthly', 'yearly'):
         cmd.extend(['--%s' % period, getattr(args, period) ] )
     cmd.append(backup_dir)
-    cmd.extend(['>', '/dev/null'])
+    cmd.extend(['2>', '/dev/null'])
     os.system(' '.join(cmd))
 
 def main():
