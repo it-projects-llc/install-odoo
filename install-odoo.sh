@@ -37,9 +37,13 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
  echo "y" | (wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py | python)
 
  ## wkhtmltopdf
- # http://wkhtmltopdf.org/downloads.html
  cd /usr/local/src
- wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.1/wkhtmltox-0.12.1_linux-wheezy-amd64.deb
+ lsb_release -a 
+ uname -i
+ # check version of your OS and download appropriate package
+ # http://wkhtmltopdf.org/downloads.html
+ # e.g.
+ wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
  dpkg -i wkhtmltox-*.deb
 
 
