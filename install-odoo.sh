@@ -18,7 +18,6 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
  ## pip
  pip install psycogreen
  pip install rotate-backups
- # pip install Werkzeug --upgrade
 
  ### SOURCE
  cd /usr/local/src/
