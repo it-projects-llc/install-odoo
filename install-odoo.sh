@@ -154,7 +154,7 @@ supervisorctl restart odoo-longpolling
 
  cd /etc/nginx && \
  wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
- #eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
+ eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
 
  cd /etc/nginx/sites-available/ && \
  wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf && \
