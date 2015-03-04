@@ -1,3 +1,11 @@
+ #### CHECK AND UPDATE LANGUAGE
+ env | grep LANG
+
+ export LANG=en_US.UTF-8
+ export LANGUAGE=en_US.UTF-8
+ dpkg-reconfigure locales
+
+
  #### DOWNLOADS...
 
  ### PACKAGES
