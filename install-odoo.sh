@@ -1,3 +1,6 @@
+ #### Check does system use upstart
+echo '' && whereis upstart | grep -q 'upstart: /' && echo 'You can use UPSTART' || echo 'There is no upstart in your system. Use SUPERVISORCTL instead'
+
  #### CHECK AND UPDATE LANGUAGE
  env | grep LANG
 
@@ -97,8 +100,6 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  chmod 600 odoo-server.conf
 
  ### CONTROL SCRIPTS - upstart
- ## to check upstart run:
- # apt-get install upstart
 
  cd /etc/init/
 
