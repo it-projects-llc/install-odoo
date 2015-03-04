@@ -57,7 +57,7 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
 export GIST="yelizariev/2abdd91d00dddc4e4fa4"
 
  ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
-export PERL_UPDATE_ENV="perl -p -i -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
+export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
 
 export ODOO_DOMAIN=EDIT-ME.example.com
 export ODOO_DATABASE=DATABASE_EDIT_ME
