@@ -13,7 +13,7 @@ apt-get update && \
 apt-get upgrade -y && \
 apt-get install -y git python-pip htop postgresql sudo moreutils && \
 apt-get install -y emacs23-nox && \
-apt-get install supervisor
+whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install supervisor if there is upstart
  
  ## pip
  pip install psycogreen
