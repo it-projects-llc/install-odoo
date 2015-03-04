@@ -93,7 +93,7 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  mkdir /etc/odoo
  cd /etc/odoo/
 
- wget https://gist.githubusercontent.com/${GIST}/raw/odoo-server.conf -O odoo-server.conf
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-server.conf -O odoo-server.conf
  eval "${PERL_UPDATE_ENV} < odoo-server.conf" | sponge odoo-server.conf
  
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
@@ -103,10 +103,10 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
 
  cd /etc/init/
 
- wget https://gist.githubusercontent.com/${GIST}/raw/odoo-init.conf -O odoo.conf
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-init.conf -O odoo.conf
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
- wget https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-init.conf -O odoo-longpolling.conf
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-init.conf -O odoo-longpolling.conf
  eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
 
 
@@ -118,10 +118,10 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  ### CONTROL SCRIPTS - supervisor
  cd /etc/supervisor/conf.d/
 
- wget https://gist.githubusercontent.com/${GIST}/raw/odoo-supervisor.conf -O odoo.conf
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-supervisor.conf -O odoo.conf
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
- wget https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-supervisor.conf -O odoo-longpolling.conf
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-supervisor.conf -O odoo-longpolling.conf
  eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
 
  ### START - supervisor
@@ -140,7 +140,7 @@ supervisorctl restart odoo-longpolling
  mkdir -p /opt/${ODOO_USER}/backups/
  chown ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/backups/
  cd /usr/local/bin/
- wget https://gist.githubusercontent.com/${GIST}/raw/odoo-backup.py -O odoo-backup.py
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-backup.py -O odoo-backup.py
  chmod +x odoo-backup.py
  echo -e "#6 6\t* * *\t${ODOO_USER} odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/ --no-save-filestore --daily 8 --weekly 0 --monthly 0 --yearly 0" >> /etc/crontab
  echo -e "#4 4\t* * 7\t${ODOO_USER} odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/" >> /etc/crontab
@@ -153,11 +153,11 @@ supervisorctl restart odoo-longpolling
  apt-get install nginx -y
 
  cd /etc/nginx && \
- wget https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
  #eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
 
  cd /etc/nginx/sites-available/ && \
- wget https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf && \
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf && \
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
  cd /etc/nginx/sites-enabled/ && \
