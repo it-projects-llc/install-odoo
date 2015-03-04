@@ -152,16 +152,16 @@ supervisorctl restart odoo-longpolling
  apt-get remove apache2 -y
  apt-get install nginx -y
 
- cd /etc/nginx
- wget https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params
+ cd /etc/nginx && \
+ wget https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
  #eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
 
- cd /etc/nginx/sites-available/
- wget https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf
+ cd /etc/nginx/sites-available/ && \
+ wget https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf && \
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
- cd /etc/nginx/sites-enabled/
- rm default
+ cd /etc/nginx/sites-enabled/ && \
+ rm default && \
  ln -s ../sites-available/odoo.conf odoo.conf 
  
 service nginx restart
