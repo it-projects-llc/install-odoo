@@ -14,7 +14,7 @@ echo '' && whereis upstart | grep -q 'upstart: /' && echo 'You can use UPSTART' 
  ### PACKAGES
 apt-get update && \
 apt-get upgrade -y && \
-apt-get install -y git python-pip htop postgresql sudo moreutils && \
+apt-get install -y git python-pip htop postgresql sudo moreutils tree && \
 apt-get install -y emacs23-nox && \
 whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install supervisor if there is upstart
  
