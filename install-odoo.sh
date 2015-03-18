@@ -29,7 +29,7 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
  git clone https://github.com/odoo-russia/odoo-russia.git &&\
  git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
- git clone https://github.com/OCA/web.git
+ git clone https://github.com/OCA/web.git &&\
  cd /usr/local/src/ &&\
  git clone https://github.com/odoo/odoo.git
 
