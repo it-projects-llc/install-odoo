@@ -23,15 +23,19 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
  pip install rotate-backups
 
  ### SOURCE
- cd /usr/local/src/
+ mkdir /usr/local/src/odoo-addons -p
+ cd /usr/local/src/odoo-addons/
 
  git clone https://github.com/odoo-russia/odoo-russia.git &&\
  git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
+ git clone https://github.com/OCA/web.git
+ cd /usr/local/src/ &&\
  git clone https://github.com/odoo/odoo.git
 
- mkdir addons-extra
- ln -s /usr/local/src/odoo-russia/addons/l10n_ru/ /usr/local/src/addons-extra/
+ mkdir /usr/local/src/odoo-addons/addons-extra -p
+
+ ln -s /usr/local/src/odoo-addons/odoo-russia/addons/l10n_ru/ /usr/local/src/odoo-addons/addons-extra/
 
  ### DEPS
  python --version # should be 2.7 or higher
