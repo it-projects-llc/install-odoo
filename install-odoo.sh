@@ -33,9 +33,12 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
  cd /usr/local/src/ &&\
  git clone https://github.com/odoo/odoo.git
 
- mkdir /usr/local/src/odoo-addons/addons-extra -p
+ mkdir addons-extra
 
- ln -s /usr/local/src/odoo-addons/odoo-russia/addons/l10n_ru/ /usr/local/src/odoo-addons/addons-extra/
+ ln -s odoo-russia/addons/l10n_ru/ addons-extra/
+
+ cd odoo-russia
+ git checkout 8.0
 
  ### DEPS
  python --version # should be 2.7 or higher
