@@ -33,6 +33,7 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
  cd /usr/local/src/ &&\
  git clone https://github.com/odoo/odoo.git
 
+ cd /usr/local/src/odoo-addons/
  mkdir addons-extra
 
  cd addons-extra
