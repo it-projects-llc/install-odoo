@@ -44,6 +44,8 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
 
  cd /usr/local/src/odoo
  echo "y" | (wget -q -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py | python)
+ #@@@@@@@@@@@@@@@@@@@@ NEED MANUAL WORK HERE (FIXME)
+
 
  ## wkhtmltopdf
  cd /usr/local/src
@@ -57,6 +59,7 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
  wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
  dpkg -i wkhtmltox-*.deb
 
+ #@@@@@@@@@@@@@@@@@@@@ NEED MANUAL WORK HERE (FIXME)
 
 
 
