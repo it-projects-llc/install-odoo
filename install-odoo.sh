@@ -43,7 +43,7 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
  python --version # should be 2.7 or higher
 
  cd /usr/local/src/odoo
- echo "y" | (wget -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py | python)
+ echo "y" | (wget -q -O- https://raw.githubusercontent.com/odoo/odoo/master/odoo.py | python)
 
  ## wkhtmltopdf
  cd /usr/local/src
