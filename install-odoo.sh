@@ -128,8 +128,9 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
 
  ### START - upstart
 
- start odoo
- start odoo-longpolling
+ start odoo && start odoo-longpolling
+ # stop odoo && stop odoo-longpolling
+ # restart odoo && restart odoo-longpolling
 
  ### CONTROL SCRIPTS - supervisor
  else ###################################################### ELSE
@@ -146,8 +147,7 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
 supervisorctl reread
 supervisorctl update
 
-supervisorctl restart odoo
-supervisorctl restart odoo-longpolling
+supervisorctl restart odoo && supervisorctl restart odoo-longpolling
 
  fi ####################################################   END IF
 
