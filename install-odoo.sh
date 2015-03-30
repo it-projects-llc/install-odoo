@@ -52,6 +52,8 @@ whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install s
  # check version of your OS and download appropriate package
  # http://wkhtmltopdf.org/downloads.html
  # e.g.
+ apt-get install xfonts-base xfonts-75dpi
+ apt-get -f install
  wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
  dpkg -i wkhtmltox-*.deb
 
