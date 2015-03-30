@@ -16,7 +16,7 @@ apt-get update && \
 apt-get upgrade -y && \
 apt-get install -y git python-pip htop postgresql sudo moreutils tree && \
 apt-get install -y emacs23-nox && \
-whereis upstart | grep -q 'upstart: /' || apt-get install supervisor # install supervisor if there is upstart
+echo '' && whereis upstart | grep -q 'upstart: /' && echo 'using upstart'|| ( apt-get install supervisor && echo 'supervisor installed' )
  
  ## pip
  pip install psycogreen
@@ -169,9 +169,10 @@ supervisorctl restart odoo-longpolling
  # sudo su - ${ODOO_USER} -s /bin/bash -c  "odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/"
 
  ### NGINX
- /etc/init.d/apache2 stop
- apt-get remove apache2 -y
- apt-get install nginx -y
+ /etc/init.d/apache2 stop && \
+ apt-get remove apache2 -y && \
+ apt-get install nginx -y && \
+ echo "nginx installed"
 
  cd /etc/nginx && \
  wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
