@@ -107,7 +107,12 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
  chmod 600 odoo-server.conf
 
+
+
  ### CONTROL SCRIPTS - upstart
+
+ if whereis upstart | grep -q 'upstart: /' ###################################### IF
+ then
 
  cd /etc/init/
 
@@ -124,6 +129,8 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  start odoo-longpolling
 
  ### CONTROL SCRIPTS - supervisor
+ else ###################################################### ELSE
+
  cd /etc/supervisor/conf.d/
 
  wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-supervisor.conf -O odoo.conf
@@ -138,6 +145,9 @@ supervisorctl update
 
 supervisorctl restart odoo
 supervisorctl restart odoo-longpolling
+
+ fi ####################################################   END IF
+
 
  ### CONTROL SCRIPTS - /etc/init.d/*
  # Such scripts are not recommended, because you will not get supervision features.
