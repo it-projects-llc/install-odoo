@@ -30,6 +30,7 @@ echo '' && whereis upstart | grep -q 'upstart: /' && echo 'using upstart'|| ( ap
  git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
  git clone https://github.com/OCA/web.git &&\
+ git clone https://github.com/OCA/server-tools.git &&\
  cd /usr/local/src/ &&\
  git clone https://github.com/odoo/odoo.git
 
