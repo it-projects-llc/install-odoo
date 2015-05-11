@@ -75,18 +75,16 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  ### SETTINGS
  ## gist url --  update it if you've forked this gist
 export GIST="yelizariev/2abdd91d00dddc4e4fa4"
-
  ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
 export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
-
 export ODOO_DOMAIN=EDIT-ME.example.com
 export ODOO_DATABASE=DATABASE_EDIT_ME
-
  export ODOO_USER=odoo
-
  export ODOO_BRANCH=8.0
-
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
+[[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
+
+
 
  adduser --system --home=/opt/${ODOO_USER} --group ${ODOO_USER}
 
