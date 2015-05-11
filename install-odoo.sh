@@ -44,8 +44,8 @@ echo '' && whereis upstart | grep -q 'upstart: /' && echo 'using upstart'|| ( ap
  python --version # should be 2.7 or higher
 
  cd /usr/local/src/odoo
- echo "y" | (wget -q -O- https://raw.githubusercontent.com/odoo/odoo/8.0/odoo.py | python)
- #@@@@@@@@@@@@@@@@@@@@ NEED MANUAL WORK HERE (FIXME)
+ sed -i "s/'apt-get'/'apt-get', '-y'/" odoo.py
+ cat odoo.py | python
 
 
  ## wkhtmltopdf
