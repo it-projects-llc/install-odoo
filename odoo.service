@@ -2,6 +2,7 @@
 Description=odoo
 Requires=postgresql.service
 After=postgresql.service
+Wants=nginx.service
 
 [Install]
 Alias=odoo.service
