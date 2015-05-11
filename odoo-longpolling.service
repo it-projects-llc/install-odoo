@@ -1,0 +1,26 @@
+[Unit]
+Description=odoo-longpolling
+Requires=postgresql.service
+After=postgresql.service
+
+[Install]
+Alias=odoo.service
+
+[Service]
+Type=simple
+PermissionsStartOnly=true
+EnvironmentFile=-/etc/odoo/odoo-server.conf
+User={{ODOO_USER}}
+Group={{ODOO_USER}}
+SyslogIdentifier=odoo-server
+PIDFile=/run/odoo/odoo-server.pid
+#ExecStartPre=/usr/bin/install -d -m755 -o odoo -g odoo /run/odoo
+ExecStart=/usr/local/src/odoo/openerp-gevent --config=/etc/odoo/odoo-server.conf --logfile=/var/log/odoo/odoo-server-longpolling.log
+#ExecStop=/bin/kill $MAINPID
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+
