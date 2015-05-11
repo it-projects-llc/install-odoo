@@ -1,5 +1,10 @@
- #### Check does system use upstart
-echo '' && whereis upstart | grep -q 'upstart: /' && echo 'You can use UPSTART' || echo 'There is no upstart in your system. Use SUPERVISORCTL instead'
+ #### Detect type of system manager
+
+export SYSTEM=''
+pidof systemd && export SYSTEM='systemd' 
+[[ -z $SYSTEM ]] && whereis upstart | grep -q 'upstart: /' && export SYSTEM='upstart'
+[[ -z $SYSTEM ]] &&  export SYSTEM='supervisor'
+echo "SYSTEM=$SYSTEM"
 
  #### CHECK AND UPDATE LANGUAGE
  env | grep LANG
@@ -16,7 +21,7 @@ apt-get update && \
 apt-get upgrade -y && \
 apt-get install -y git python-pip htop postgresql sudo moreutils tree && \
 apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
-echo '' && whereis upstart | grep -q 'upstart: /' && echo 'using upstart'|| ( apt-get install supervisor && echo 'supervisor installed' )
+[[ "$SYSTEM" == "supervisor" ]] && apt-get install supervisor
  
  ## pip
  pip install psycogreen
@@ -112,10 +117,10 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  chmod 600 odoo-server.conf
 
 
+ if [[ "$SYSTEM" == "systemd" ]] ###################################### IF
 
  ### CONTROL SCRIPTS - upstart
-
- if whereis upstart | grep -q 'upstart: /' ###################################### IF
+ elif [[ "$SYSTEM" == "upstart" ]] ###################################### ELIF
  then
 
  cd /etc/init/
