@@ -130,7 +130,7 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  ### START - systemd
 
  systemctl enable odoo.service && systemctl enable odoo-longpolling.service
- systemctl restart odoo.service && systemctl restart odoo-longpolling.service
+systemctl restart odoo.service && systemctl restart odoo-longpolling.service
 
  ### CONTROL SCRIPTS - upstart
  elif [[ "$SYSTEM" == "upstart" ]] ###################################### ELIF
