@@ -120,10 +120,10 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
 
  cd /lib/systemd/system/
 
- wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo.service
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo.service -O odoo.service
  eval "${PERL_UPDATE_ENV} < odoo.service" | sponge odoo.service
 
- wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling.service
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling.service -O odoo-longpolling.service
  eval "${PERL_UPDATE_ENV} < odoo-longpolling.service" | sponge odoo-longpolling.service
 
 
