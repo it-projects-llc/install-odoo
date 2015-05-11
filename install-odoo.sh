@@ -114,6 +114,27 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
  chmod 600 odoo-server.conf
 
+
+ ### NGINX
+ /etc/init.d/apache2 stop && \
+ apt-get remove apache2 -y && \
+ apt-get install nginx -y && \
+ echo "nginx installed"
+
+ cd /etc/nginx && \
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
+ eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
+
+ cd /etc/nginx/sites-available/ && \
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf && \
+ eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
+
+ cd /etc/nginx/sites-enabled/ && \
+ rm default && \
+ ln -s ../sites-available/odoo.conf odoo.conf 
+
+
+
  ### CONTROL SCRIPTS - systemd
  if [[ "$SYSTEM" == "systemd" ]] ###################################### IF
  then
@@ -187,25 +208,7 @@ supervisorctl restart odoo && supervisorctl restart odoo-longpolling
  ## to test run:
  # sudo su - ${ODOO_USER} -s /bin/bash -c  "odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/"
 
- ### NGINX
- /etc/init.d/apache2 stop && \
- apt-get remove apache2 -y && \
- apt-get install nginx -y && \
- echo "nginx installed"
-
- cd /etc/nginx && \
- wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
- eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
-
- cd /etc/nginx/sites-available/ && \
- wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf && \
- eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
-
- cd /etc/nginx/sites-enabled/ && \
- rm default && \
- ln -s ../sites-available/odoo.conf odoo.conf 
  
-service nginx restart
 
  ### DEBUG
 
