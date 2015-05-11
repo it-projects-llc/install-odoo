@@ -116,8 +116,23 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
  chmod 600 odoo-server.conf
 
-
+ ### CONTROL SCRIPTS - systemd
  if [[ "$SYSTEM" == "systemd" ]] ###################################### IF
+ then
+
+ cd /lib/systemd/system/
+
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo.service
+ eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.service
+
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling.service
+ eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.service
+
+
+ ### START - systemd
+
+ systemctl enable odoo.service && systemctl enable odoo-longpolling.service
+ systemctl restart odoo.service && systemctl restart odoo-longpolling.service
 
  ### CONTROL SCRIPTS - upstart
  elif [[ "$SYSTEM" == "upstart" ]] ###################################### ELIF
