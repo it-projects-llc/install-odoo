@@ -51,6 +51,7 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  cd /usr/local/src/odoo
  sed -i "s/'apt-get'/'apt-get', '-y'/" odoo.py
  cat odoo.py | python
+ git checkout odoo.py
 
 
  ## wkhtmltopdf
@@ -96,6 +97,8 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  cd /usr/local/src/odoo
 
  git checkout -b ${ODOO_BRANCH} origin/${ODOO_BRANCH} 
+ ## delete matches="..." at /web/database/manager
+ sed -i 's/matches="[^"]*"//g' addons/web/static/src/xml/base.xml
 
 
  ### CONFIGS
