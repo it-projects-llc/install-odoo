@@ -35,6 +35,7 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/website-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
+ rm -rf addons-yelizariev/website_* &&\
  git clone https://github.com/OCA/web.git &&\
  git clone https://github.com/OCA/server-tools.git &&\
  cd /usr/local/src/ &&\
