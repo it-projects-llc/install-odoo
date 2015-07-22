@@ -70,8 +70,17 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
 
  #@@@@@@@@@@@@@@@@@@@@ NEED MANUAL WORK HERE (FIXME)
 
-
-
+ ## Less CSS via nodejs
+ ## nodejs:
+ # 14.04 +
+ apt-get install -y npm
+ sudo ln -s /usr/bin/nodejs /usr/bin/node
+ # 13.10-
+ # check https://www.odoo.com/documentation/8.0/setup/install.html
+ 
+ ## less css
+ npm install -g less less-plugin-clean-css
+ 
 #### DOWNLOADS done.
 
 
