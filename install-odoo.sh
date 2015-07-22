@@ -74,7 +74,7 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  ## nodejs:
  # 14.04 +
  apt-get install -y npm
- sudo ln -s /usr/bin/nodejs /usr/bin/node
+ ln -s /usr/bin/nodejs /usr/bin/node
  # 13.10-
  # check https://www.odoo.com/documentation/8.0/setup/install.html
  
