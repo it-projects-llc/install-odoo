@@ -28,17 +28,18 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  pip install rotate-backups
 
  ### SOURCE
- mkdir /usr/local/src/odoo-addons -p
- cd /usr/local/src/odoo-addons/
-
+ cd /usr/local/src/ &&\
+ git clone https://github.com/odoo/odoo.git  &&\
+ mkdir /usr/local/src/odoo-addons -p  &&\
+ cd /usr/local/src/odoo-addons/  &&\
  git clone https://github.com/odoo-russia/odoo-russia.git &&\
  git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/website-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
  git clone https://github.com/OCA/web.git &&\
  git clone https://github.com/OCA/server-tools.git &&\
- cd /usr/local/src/ &&\
- git clone https://github.com/odoo/odoo.git
+ git clone https://github.com/yelizariev/odoo-saas-tools.git
+
 
  cd /usr/local/src/odoo-addons/
  mkdir addons-extra
