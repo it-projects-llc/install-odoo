@@ -65,7 +65,7 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  # e.g.
  apt-get install xfonts-base xfonts-75dpi
  apt-get -f install
- wget http://downloads.sourceforge.net/project/wkhtmltopdf/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
+ wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
  dpkg -i wkhtmltox-*.deb
 
  #@@@@@@@@@@@@@@@@@@@@ NEED MANUAL WORK HERE (FIXME)
