@@ -121,7 +121,7 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
 
 
  ### NGINX
- /etc/init.d/apache2 stop && \
+ /etc/init.d/apache2 stop
  apt-get remove apache2 -y && \
  apt-get install nginx -y && \
  echo "nginx installed"
