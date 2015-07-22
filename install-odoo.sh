@@ -138,6 +138,7 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  rm default && \
  ln -s ../sites-available/odoo.conf odoo.conf 
 
+ /etc/init.d/nginx restart
 
 
  ### CONTROL SCRIPTS - systemd
