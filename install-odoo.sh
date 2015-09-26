@@ -165,14 +165,14 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo.service -O odoo.service
  eval "${PERL_UPDATE_ENV} < odoo.service" | sponge odoo.service
 
- wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling.service -O odoo-longpolling.service
- eval "${PERL_UPDATE_ENV} < odoo-longpolling.service" | sponge odoo-longpolling.service
+ #wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling.service -O odoo-longpolling.service
+ #eval "${PERL_UPDATE_ENV} < odoo-longpolling.service" | sponge odoo-longpolling.service
 
 
  ### START - systemd
 
- systemctl enable odoo.service && systemctl enable odoo-longpolling.service
-systemctl restart odoo.service && systemctl restart odoo-longpolling.service
+ systemctl enable odoo.service #&& systemctl enable odoo-longpolling.service
+systemctl restart odoo.service #&& systemctl restart odoo-longpolling.service
 
  ### CONTROL SCRIPTS - upstart
  elif [[ "$SYSTEM" == "upstart" ]] ###################################### ELIF
@@ -183,15 +183,15 @@ systemctl restart odoo.service && systemctl restart odoo-longpolling.service
  wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-init.conf -O odoo.conf
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
- wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-init.conf -O odoo-longpolling.conf
- eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
+ #wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-init.conf -O odoo-longpolling.conf
+ #eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
 
 
  ### START - upstart
 
- start odoo && start odoo-longpolling
- # stop odoo && stop odoo-longpolling
- # restart odoo && restart odoo-longpolling
+ start odoo #&& start odoo-longpolling
+ # stop odoo #&& stop odoo-longpolling
+ # restart odoo #&& restart odoo-longpolling
 
  ### CONTROL SCRIPTS - supervisor
  else ###################################################### ELSE
@@ -201,14 +201,14 @@ systemctl restart odoo.service && systemctl restart odoo-longpolling.service
  wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-supervisor.conf -O odoo.conf
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
- wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-supervisor.conf -O odoo-longpolling.conf
- eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
+ #wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-supervisor.conf -O odoo-longpolling.conf
+ #eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
 
  ### START - supervisor
 supervisorctl reread
 supervisorctl update
 
-supervisorctl restart odoo && supervisorctl restart odoo-longpolling
+supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
 
  fi ####################################################   END IF
 
