@@ -98,7 +98,7 @@ export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV
 export ODOO_DOMAIN=EDIT-ME.example.com
 export ODOO_DATABASE=DATABASE_EDIT_ME
  export ODOO_USER=odoo
- export ODOO_BRANCH=8.0
+ export ODOO_BRANCH=9.0
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
 [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
 
