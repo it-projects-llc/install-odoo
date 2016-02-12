@@ -59,7 +59,7 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
 
  cd /usr/local/src/odoo
  sed -i "s/'apt-get'/'apt-get', '-y'/" odoo.py
- cat odoo.py | python
+ cat odoo.py | python &&\
  git checkout odoo.py
 
 
