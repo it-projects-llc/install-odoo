@@ -45,7 +45,7 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  git clone https://github.com/yelizariev/website-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
  git clone https://github.com/OCA/web.git &&\
- git clone https://github.com/OCA/e-commerce.git &&\
+ git clone https://github.com/iledarn/e-commerce.git &&\
  git clone https://github.com/OCA/server-tools.git &&\
  git clone https://github.com/yelizariev/odoo-saas-tools.git
 
