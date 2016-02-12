@@ -233,7 +233,12 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
  ## to test run:
  # sudo su - ${ODOO_USER} -s /bin/bash -c  "odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/"
 
- 
+ ### SAAS
+
+ # To deploy saas stop odoo and execure
+ export ODOO_DOMAIN=EDIT-ME
+ python /usr/local/src/odoo-addons/odoo-saas-tools/saas.py --portal-create --server-create --plan-create --run --odoo-script=/usr/local/src/odoo/openerp-server --odoo-config= /etc/odoo/odoo-server.conf --portal-db-name=${ODOO_DOMAIN} --server-db-name=server-1.${ODOO_DOMAIN} --plan-template-db-name=template-1.${ODOO_DOMAIN} --plan-clients=demo-%i.${ODOO_DOMAIN}
+
 
  ### DEBUG
 
@@ -254,3 +259,5 @@ tail -f -n 100 /var/log/odoo/odoo-server.log
 
  ## some common issues:
  ## https://www.odoo.com/forum/help-1/question/dataerror-new-encoding-utf8-is-incompatible-with-the-encoding-of-the-template-database-sql-ascii-52124
+ 
+ 
