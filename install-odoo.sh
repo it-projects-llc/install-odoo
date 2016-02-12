@@ -32,6 +32,8 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  ## pip
  pip install psycogreen
  pip install rotate-backups
+ pip install oauthlib
+ pip install requests --upgrade
 
  ### SOURCE
  cd /usr/local/src/ &&\
