@@ -236,6 +236,7 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
  ### SAAS
 
  # To deploy saas stop odoo and execure
+ emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$
  export ODOO_DOMAIN=EDIT-ME
  echo $ODOO_PASS
  
