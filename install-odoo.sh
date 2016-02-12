@@ -237,11 +237,13 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
 
  # To deploy saas stop odoo and execure
  export ODOO_DOMAIN=EDIT-ME
+ echo $ODOO_PASS
  
  sudo su - ${ODOO_USER} -s /bin/bash -c  "python /usr/local/src/odoo-addons/odoo-saas-tools/saas.py \
   --odoo-script=/usr/local/src/odoo/openerp-server \
   --odoo-config=/etc/odoo/odoo-server.conf \
   --portal-create --server-create --plan-create --run  \
+  --admin-password=${ODOO_PASS} \
   --portal-db-name=${ODOO_DOMAIN} \
   --server-db-name=server-1.${ODOO_DOMAIN} \
   --plan-template-db-name=template-1.${ODOO_DOMAIN} \
