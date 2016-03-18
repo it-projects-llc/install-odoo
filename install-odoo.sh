@@ -40,7 +40,7 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  git clone https://github.com/odoo/odoo.git  &&\
  mkdir /usr/local/src/odoo-addons -p  &&\
  cd /usr/local/src/odoo-addons/  &&\
- git clone https://github.com/odoo-russia/odoo-russia.git &&\
+
  git clone https://github.com/yelizariev/pos-addons.git &&\
  git clone https://github.com/yelizariev/website-addons.git &&\
  git clone https://github.com/yelizariev/addons-yelizariev.git &&\
@@ -95,7 +95,7 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
 
  ### SETTINGS
  ## gist url --  update it if you've forked this gist
-export GIST="yelizariev/2abdd91d00dddc4e4fa4"
+export GIST="bassn/996f8b168f0b1406dd54"
  ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
 export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
 export ODOO_DOMAIN=EDIT-ME.example.com
