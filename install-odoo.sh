@@ -37,22 +37,31 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
 
  ### SOURCE
  cd /usr/local/src/ &&\
- git clone https://github.com/odoo/odoo.git  &&\
- mkdir /usr/local/src/odoo-addons -p  &&\
- cd /usr/local/src/odoo-addons/  &&\
- git clone https://github.com/yelizariev/pos-addons.git &&\
- git clone https://github.com/yelizariev/website-addons.git &&\
- git clone https://github.com/yelizariev/addons-yelizariev.git &&\
- git clone https://github.com/OCA/web.git &&\
- git clone https://github.com/iledarn/e-commerce.git &&\
- git clone https://github.com/OCA/server-tools.git &&\
- git clone https://github.com/yelizariev/odoo-saas-tools.git
+ git clone https://github.com/odoo/odoo.git &&\
+ mkdir /usr/local/src/odoo-addons -p &&\
+ cd /usr/local/src/odoo-addons/ &&\
+ git clone https://github.com/OCA/web.git OCA/web/ &&\
+ git clone https://github.com/OCA/account-financial-reporting.git OCA/account-financial-reporting/ &&\
+ git clone https://github.com/OCA/account-financial-tools.git OCA/account-financial-tools/ &&\
+ git clone https://github.com/OCA/partner-contact.git OCA/partner-contact/ &&\
+ git clone https://github.com/OCA/hr.git OCA/hr/ &&\
+ git clone https://github.com/OCA/pos.git OCA/pos/ &&\
+ git clone https://github.com/OCA/commission.git OCA/commission/ &&\
+ git clone https://github.com/OCA/server-tools.git OCA/server-tools/ &&\
+ git clone https://github.com/yelizariev/pos-addons.git yelizariev/pos-addons/ &&\
+ git clone https://github.com/yelizariev/website-addons.git yelizariev/website-addons/ &&\
+ git clone https://github.com/yelizariev/addons-yelizariev.git yelizariev/addons-yelizariev/ &&\
+ git clone https://github.com/yelizariev/odoo-saas-tools.git yelizariev/odoo-saas-tools/ &&\
+ git clone https://github.com/iledarn/e-commerce.git iledarn/e-commerce/ &&\
+ git clone https://github.com/xpansa/hr.git xpansa/hr/ &&\
+ git clone https://github.com/odoomrp/odoomrp-wip.git odoomrp/odoomrp-wip/ &&\
+ git clone https://github.com/odoomrp/odoomrp-utils.git odoomrp/odoomrp-utils/ &&\
+ # manual collection of modules
+ mkdir ergobit &&\
+ mkdir x-community &&\ 
+ mkdir x-community-p &&\
+ mkdir vauxoo
 
- cd /usr/local/src/odoo-addons/
- mkdir addons-extra
-
- cd addons-extra
- ln -s ../odoo-russia/addons/l10n_ru/ .
 
  ### DEPS
  python --version # should be 2.7 or higher
