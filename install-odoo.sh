@@ -161,10 +161,12 @@ export ODOO_DATABASE=DATABASE_EDIT_ME
  wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
  eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
 
+ mkdir /etc/nginx/sites-available/ -p && \
  cd /etc/nginx/sites-available/ && \
  wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf && \
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
+ mkdir /etc/nginx/sites-enabled/ -p && \
  cd /etc/nginx/sites-enabled/ && \
  rm default && \
  ln -s ../sites-available/odoo.conf odoo.conf 
