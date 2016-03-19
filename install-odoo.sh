@@ -226,7 +226,7 @@ echo "SYSTEM=$SYSTEM"
  ### START - systemd
 
  systemctl enable odoo.service #&& systemctl enable odoo-longpolling.service
-systemctl restart odoo.service #&& systemctl restart odoo-longpolling.service
+ systemctl restart odoo.service #&& systemctl restart odoo-longpolling.service
 
  ### CONTROL SCRIPTS - upstart
  elif [[ "$SYSTEM" == "upstart" ]] ###################################### ELIF
@@ -266,6 +266,7 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
 
  fi ####################################################   END IF
 
+ echo "Do not forget to set server parameter report.url = 0.0.0.0:8069"
 
  ### CONTROL SCRIPTS - /etc/init.d/*
  # Such scripts are not recommended, because you will not get supervision features.
@@ -283,6 +284,7 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
  echo -e "#4 4\t* * 7\t${ODOO_USER} odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/" >> /etc/crontab
  ## to test run:
  # sudo su - ${ODOO_USER} -s /bin/bash -c  "odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/"
+
 
  ### SAAS
 
