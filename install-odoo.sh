@@ -49,7 +49,7 @@ echo "SYSTEM=$SYSTEM"
  export PG_CONF="${PG_MAIN}/postgresql.conf"
  export PG_HBA="${PG_MAIN}/pg_hba.conf"
 
- echo -e "\n---- Installing PGTune ----"
+ echo -e "\n---- Running PGTune ----"
  sudo apt-get install pgtune -y
  sudo pgtune -i ${PG_CONF} -o ${PG_CONF}.tuned
  sudo mv ${PG_CONF} ${PG_CONF}.orig
@@ -59,10 +59,14 @@ echo "SYSTEM=$SYSTEM"
 
  
  ## pip
- pip install psycogreen
+ pip install gdata 
+ pip install psycogreen gevent gevent_psycopg2
+ sudo pip install pysftp
  pip install rotate-backups
  pip install oauthlib
  pip install requests --upgrade
+
+
 
  ### SOURCE
  cd /usr/local/src/ &&\
@@ -142,8 +146,7 @@ echo "SYSTEM=$SYSTEM"
  [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
 
 
-
- adduser --system --home=/opt/${ODOO_USER} --group ${ODOO_USER}
+ adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --gecos '$OE_USER' --group ${ODOO_USER}
 
  # psql --version
  # pg_createcluster 9.3 main --start
