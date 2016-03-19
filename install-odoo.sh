@@ -31,9 +31,32 @@ echo "SYSTEM=$SYSTEM"
  ### PACKAGES
  apt-get update && \
  apt-get upgrade -y && \
- apt-get install -y git python-pip htop postgresql sudo moreutils tree && \
+ apt-get install -y git python-pip htop sudo moreutils tree && \
  apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  [[ "$SYSTEM" == "supervisor" ]] && apt-get install supervisor
+
+
+ ###PostgreSQL
+ 
+ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+ echo 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' >> /etc/apt/sources.list.d/pgdg.list &&\
+ apt-get update &&\
+ apt-get install postgresql postgresql-contrib -y && \
+ echo "postgresql installed"
+ 
+ ###PGTune
+ export PG_MAIN="/etc/postgresql/9.5/main"      #EDIT-ME  ${ODOO_USER}
+ export PG_CONF="${PG_MAIN}/postgresql.conf"
+ export PG_HBA="${PG_MAIN}/pg_hba.conf"
+
+ echo -e "\n---- Installing PGTune ----"
+ sudo apt-get install pgtune -y
+ sudo pgtune -i ${PG_CONF} -o ${PG_CONF}.tuned
+ sudo mv ${PG_CONF} ${PG_CONF}.orig
+ sudo mv ${PG_CONF}.tuned ${PG_CONF}
+ sudo service postgresql restart
+ echo "PGTune is done and PostgreSQL restarted..."
+
  
  ## pip
  pip install psycogreen
