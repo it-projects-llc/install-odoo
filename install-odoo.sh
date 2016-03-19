@@ -1,4 +1,8 @@
- if [ "$(basename $0)" = "install-odoo.sh" ]; then
+#!/bin/bash
+################################################################################
+#
+################################################################################
+if [ "$(basename $0)" = "install-odoo.sh" ]; then
   echo "don't run install-odoo.sh, because it's not fully automated script. Copy, paste and execute commands from this file manually"
   exit 0
  fi
