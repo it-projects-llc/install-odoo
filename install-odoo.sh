@@ -61,7 +61,7 @@ echo "SYSTEM=$SYSTEM"
  ## pip
  pip install gdata 
  pip install psycogreen gevent gevent_psycopg2
- sudo pip install pysftp
+ pip install pysftp
  pip install rotate-backups
  pip install oauthlib
  pip install requests --upgrade
