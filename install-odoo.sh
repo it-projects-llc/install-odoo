@@ -49,21 +49,21 @@ echo "SYSTEM=$SYSTEM"
  export PG_CONF="${PG_MAIN}/postgresql.conf"
  export PG_HBA="${PG_MAIN}/pg_hba.conf"
 
- echo -e "\n---- Running PGTune ----"
- sudo apt-get install pgtune -y
- sudo pgtune -i ${PG_CONF} -o ${PG_CONF}.tuned
- sudo mv ${PG_CONF} ${PG_CONF}.orig
- sudo mv ${PG_CONF}.tuned ${PG_CONF}
- sudo service postgresql restart
- echo "PGTune is done and PostgreSQL restarted..."
-
+ #echo -e "\n---- Running PGTune ----"
+ #sudo apt-get install pgtune -y &&
+ #sudo pgtune -i ${PG_CONF} -o ${PG_CONF}.tuned &&
+ #sudo mv ${PG_CONF} ${PG_CONF}.orig &&
+ #sudo mv ${PG_CONF}.tuned ${PG_CONF} &&
+ #sudo service postgresql restart
+ #echo "PGTune is done and PostgreSQL restarted..."
+ echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
  
  ## pip
- pip install gdata 
- pip install psycogreen gevent gevent_psycopg2
- pip install pysftp
- pip install rotate-backups
- pip install oauthlib
+ pip install gdata &&
+ pip install psycogreen gevent gevent_psycopg2 &&
+ pip install pysftp &&
+ pip install rotate-backups &&
+ pip install oauthlib &&
  pip install requests --upgrade
 
 
