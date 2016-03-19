@@ -23,11 +23,11 @@ echo "SYSTEM=$SYSTEM"
  #### DOWNLOADS...
 
  ### PACKAGES
-apt-get update && \
-apt-get upgrade -y && \
-apt-get install -y git python-pip htop postgresql sudo moreutils tree && \
-apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
-[[ "$SYSTEM" == "supervisor" ]] && apt-get install supervisor
+ apt-get update && \
+ apt-get upgrade -y && \
+ apt-get install -y git python-pip htop postgresql sudo moreutils tree && \
+ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
+ [[ "$SYSTEM" == "supervisor" ]] && apt-get install supervisor
  
  ## pip
  pip install psycogreen
@@ -102,15 +102,15 @@ apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
 
  ### SETTINGS
  ## gist url --  update it if you've forked this gist
-export GIST="bassn/996f8b168f0b1406dd54"
+ export GIST="bassn/996f8b168f0b1406dd54"
  ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
-export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
-export ODOO_DOMAIN=EDIT-ME.example.com
-export ODOO_DATABASE=DATABASE_EDIT_ME
+ export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
+ export ODOO_DOMAIN=EDIT-ME.example.com
+ export ODOO_DATABASE=DATABASE_EDIT_ME
  export ODOO_USER=odoo
  export ODOO_BRANCH=9.0
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
-[[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
+ [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
 
 
 
@@ -250,7 +250,7 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
 
  ### SAAS
 
- # To deploy saas stop odoo and execure
+ # To deploy saas stop odoo and execute
  emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$
  export ODOO_DOMAIN=EDIT-ME
  echo $ODOO_PASS
@@ -270,13 +270,13 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
  ### DEBUG
 
  ## show settings (admin password, addons path)
-head /etc/odoo/odoo-server.conf 
+ head /etc/odoo/odoo-server.conf 
  
  ## show odoo version
  grep '^version_info ' /usr/local/src/odoo/openerp/release.py 
 
  ## log
-tail -f -n 100 /var/log/odoo/odoo-server.log 
+ tail -f -n 100 /var/log/odoo/odoo-server.log 
 
  ## start from console (for ODOO_USER=odoo): 
  #  sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
