@@ -182,11 +182,9 @@ echo "SYSTEM=$SYSTEM"
 
 
  ### NGINX
- /etc/init.d/apache2 stop
- apt-get remove apache2 -y && \
- wget http://nginx.org/keys/nginx_signing.key &&\
- apt-key add nginx_signing.key &&\
- rm nginx_signing.key &&\
+ #/etc/init.d/apache2 stop
+ #apt-get remove apache2 -y && \
+ wget --quiet -O - http://nginx.org/keys/nginx_signing.key | apt-key add - &&\
  echo 'deb http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
  echo 'deb-src http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
  apt-get update &&\
