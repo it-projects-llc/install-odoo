@@ -107,10 +107,10 @@ echo "SYSTEM=$SYSTEM"
  export GIST="bassn/996f8b168f0b1406dd54"
  ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
  export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
- export ODOO_DOMAIN=EDIT-ME.example.com
- export ODOO_DATABASE=DATABASE_EDIT_ME
+ export ODOO_DOMAIN=ergodoo.com
+ export ODOO_DATABASE=ergodoo.com
  export ODOO_USER=odoo
- export ODOO_BRANCH=9.0
+ export ODOO_BRANCH=8.0
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
  [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
 
@@ -120,7 +120,11 @@ echo "SYSTEM=$SYSTEM"
 
  # psql --version
  # pg_createcluster 9.3 main --start
- sudo -iu postgres  createuser -s ${ODOO_USER}
+ #sudo -iu postgres createuser -s ${ODOO_USER}
+ #sudo su - postgres -c "createuser --createdb --username postgres --pwprompt ${ODOO_USER}"
+ #sudo su - postgres -c "createuser --createdb --username postgres ${ODOO_USER}"
+ sudo -u postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD ${ODOO_PASS};\""
+
 
  ### BRANCH
  cd /usr/local/src/odoo
