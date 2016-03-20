@@ -57,8 +57,9 @@
  #echo "PGTune is done and PostgreSQL restarted..."
  echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
  
- ## pip
- pip install gdata &&\
+ ## pythons
+# pip install gdata &&\
+ apt-get install python-gdata -y &&\
  pip install psycogreen &&\
 # pip install gevent &&\              FIX-ME
 # pip install gevent_psycopg2 &&\     FIX-ME
@@ -72,7 +73,13 @@
 
  ## Odoo Saas Tool
  #pip install pysftp Boto FileChunkIO #FIXME
-
+ 
+ #pysftp
+ wget https://pypi.python.org/packages/source/p/pysftp/pysftp-0.2.8.tar.gz
+ tar -xzf pysftp-0.2.8.tar.gz
+ python pysftp-0.2.8/setup.py install
+ 
+ 
  ### SOURCE
  
  export ODOO_BRANCH=8.0
