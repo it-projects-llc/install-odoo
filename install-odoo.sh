@@ -153,7 +153,7 @@ echo "SYSTEM=$SYSTEM"
  #sudo -iu postgres createuser -s ${ODOO_USER}
  #sudo su - postgres -c "createuser --createdb --username postgres --pwprompt ${ODOO_USER}"
  #sudo su - postgres -c "createuser --createdb --username postgres ${ODOO_USER}"
- sudo -u postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD ${ODOO_PASS};\""
+ sudo su - postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD '${ODOO_PASS}';\""
 
 
  ### BRANCH
