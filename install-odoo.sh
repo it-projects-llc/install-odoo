@@ -158,6 +158,7 @@
  export ODOO_USER=odoo
  #export ODOO_BRANCH=x.y  is done above
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
+ export DB_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
  [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
 
 
@@ -168,7 +169,7 @@
  #sudo -iu postgres createuser -s ${ODOO_USER}
  #sudo su - postgres -c "createuser --createdb --username postgres --pwprompt ${ODOO_USER}"
  #sudo su - postgres -c "createuser --createdb --username postgres ${ODOO_USER}"
- sudo su - postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD '${ODOO_PASS}';\""
+ sudo su - postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD '${DB_PASS}';\""
 
 
  ### BRANCH
@@ -304,7 +305,7 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
 
  # To deploy saas stop odoo and execute
  emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$
- export ODOO_DOMAIN=EDIT-ME
+ #export ODOO_DOMAIN=ergodoo.com    #already done above
  echo $ODOO_PASS
  
  sudo su - ${ODOO_USER} -s /bin/bash -c  "python /usr/local/src/odoo-addons/odoo-saas-tools/saas.py \
