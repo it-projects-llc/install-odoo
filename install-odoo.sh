@@ -107,10 +107,10 @@
  git clone -b ${ODOO_BRANCH} https://github.com/odoomrp/odoomrp-wip.git odoomrp/odoomrp-wip/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/odoomrp/odoomrp-utils.git odoomrp/odoomrp-utils/ &&\
  # manual collection of modules
- mkdir ergobit &&\
- mkdir x-community &&\ 
- mkdir x-community-p &&\
- mkdir vauxoo
+ mkdir -p ergobit &&\
+ mkdir -p x-community &&\ 
+ mkdir -p x-community-p &&\
+ mkdir -p vauxoo
  # some OCA module which do not work
 
  ### DEPS
