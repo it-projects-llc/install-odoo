@@ -2,19 +2,18 @@
 ################################################################################
 #
 ################################################################################
-if [ "$(basename $0)" = "install-odoo.sh" ]; then
-  echo "don't run install-odoo.sh, because it's not fully automated script. Copy, paste and execute commands from this file manually"
-  exit 0
- fi
+#if [ "$(basename $0)" = "install-odoo.sh" ]; then
+#  echo "don't run install-odoo.sh, because it's not fully automated script. Copy, paste and execute commands from this file manually"
+#  exit 0
+#fi
 
 
  #### Detect type of system manager
-
-export SYSTEM=''
-pidof systemd && export SYSTEM='systemd' 
-[[ -z $SYSTEM ]] && whereis upstart | grep -q 'upstart: /' && export SYSTEM='upstart'
-[[ -z $SYSTEM ]] &&  export SYSTEM='supervisor'
-echo "SYSTEM=$SYSTEM"
+ export SYSTEM=''
+ pidof systemd && export SYSTEM='systemd' 
+ [[ -z $SYSTEM ]] && whereis upstart | grep -q 'upstart: /' && export SYSTEM='upstart'
+ [[ -z $SYSTEM ]] &&  export SYSTEM='supervisor'
+ echo "SYSTEM=$SYSTEM"
 
  #### CHECK AND UPDATE LANGUAGE
  env | grep LANG
