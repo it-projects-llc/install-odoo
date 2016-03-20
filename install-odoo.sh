@@ -30,7 +30,7 @@
  ### PACKAGES
  apt-get update && \
  apt-get upgrade -y && \
- apt-get install -y git python-pip htop sudo moreutils tree && \
+ apt-get install -y git python-pip moreutils tree && \
  apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  [[ "$SYSTEM" == "supervisor" ]] && apt-get install supervisor
 
@@ -61,21 +61,26 @@
  #pip install gdata &&\
  #apt-get install python-gdata -y &&\
  pip install psycogreen &&\
- pip install rotate-backups &&
- pip install oauthlib &&
+ pip install rotate-backups &&\
+ pip install oauthlib &&\
  pip install requests --upgrade
  #pip install gevent &&\              FIX-ME
  #pip install gevent_psycopg2 &&\     FIX-ME
  
  ## OCA Server tools
- pip install python-ldap unidecode
+ #pip install ldap &&\
+ apt-get install python-ldap &&
+ pip install unidecode &&\
+ pip install unidecode --upgrade
 
  ## Odoo Saas Tool
- pip install Boto FileChunkIO
+ pip install Boto 
+ pip install FileChunkIO
  #pysftp : i had to dwonlaod it from source to get it work!
  wget https://pypi.python.org/packages/source/p/pysftp/pysftp-0.2.8.tar.gz
  tar -xzf pysftp-0.2.8.tar.gz
- python pysftp-0.2.8/setup.py install
+ cd pysftp-0.2.8/ 
+ python setup.py install
  
  
  ### SOURCE
@@ -109,7 +114,7 @@
  # some OCA module which do not work
 
  ### DEPS
- python --version # should be 2.7 or higher
+ python --version        # should be 2.7 or higher
 
  cd /usr/local/src/odoo &&\
  cp odoo.py odoo.py.orig &&\
@@ -169,14 +174,14 @@
  ### BRANCH
  cd /usr/local/src/odoo
 
- git checkout -b ${ODOO_BRANCH} origin/${ODOO_BRANCH} 
+ # git checkout -b ${ODOO_BRANCH} origin/${ODOO_BRANCH}  #branch already exist
  ## delete matches="..." at /web/database/manager
  cp addons/web/static/src/xml/base.xml addons/web/static/src/xml/base.xml.orig
  sed -i 's/matches="[^"]*"//g' addons/web/static/src/xml/base.xml
 
 
  ### CONFIGS
-
+ echo "CONFIG"
  ## /var/log/odoo/
  mkdir /var/log/odoo/
  chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
