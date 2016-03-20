@@ -161,6 +161,7 @@ echo "SYSTEM=$SYSTEM"
 
  git checkout -b ${ODOO_BRANCH} origin/${ODOO_BRANCH} 
  ## delete matches="..." at /web/database/manager
+ cp addons/web/static/src/xml/base.xml addons/web/static/src/xml/base.xml.orig
  sed -i 's/matches="[^"]*"//g' addons/web/static/src/xml/base.xml
 
 
@@ -171,12 +172,9 @@ echo "SYSTEM=$SYSTEM"
  chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
 
  ## /etc/odoo/odoo-server.conf
- mkdir /etc/odoo
- cd /etc/odoo/
-
+ mkdir /etc/odoo && cd /etc/odoo/
  wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-server.conf -O odoo-server.conf
  eval "${PERL_UPDATE_ENV} < odoo-server.conf" | sponge odoo-server.conf
- 
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
  chmod 600 odoo-server.conf
 
@@ -199,11 +197,14 @@ echo "SYSTEM=$SYSTEM"
  cd /etc/nginx/sites-available/ && \
  wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf && \
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
-
  mkdir /etc/nginx/sites-enabled/ -p && \
  cd /etc/nginx/sites-enabled/ && \
- rm default && \
  ln -s ../sites-available/odoo.conf odoo.conf 
+ 
+# cd /etc/nginx/ && \
+ cp -r /etc/nginx/conf.d/ /etc/nginx/conf.d.orig/  
+ rm /etc/nginx/conf.d/default.conf && \
+ rm /etc/nginx/conf.d/example_ssl.conf
 
  /etc/init.d/nginx restart
 
