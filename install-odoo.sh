@@ -63,40 +63,44 @@ echo "SYSTEM=$SYSTEM"
  pip install psycogreen &&\
 # pip install gevent &&\              FIX-ME
 # pip install gevent_psycopg2 &&\     FIX-ME
-# pip install pysftp &&              FIX-ME
+# pip install pysftp &&               FIX-ME
  pip install rotate-backups &&
  pip install oauthlib &&
  pip install requests --upgrade
-
+ 
+ ## OCA Server tools
+ pip install python-ldap unidecode
 
 
  ### SOURCE
+ 
+ export ODOO_BRANCH=8.0
+ 
  cd /usr/local/src/ &&\
- git clone https://github.com/odoo/odoo.git &&\
- mkdir /usr/local/src/odoo-addons -p &&\
- cd /usr/local/src/odoo-addons/ &&\
- git clone https://github.com/OCA/web.git OCA/web/ &&\
- git clone https://github.com/OCA/account-financial-reporting.git OCA/account-financial-reporting/ &&\
- git clone https://github.com/OCA/account-financial-tools.git OCA/account-financial-tools/ &&\
- git clone https://github.com/OCA/partner-contact.git OCA/partner-contact/ &&\
- git clone https://github.com/OCA/hr.git OCA/hr/ &&\
- git clone https://github.com/OCA/pos.git OCA/pos/ &&\
- git clone https://github.com/OCA/commission.git OCA/commission/ &&\
- git clone https://github.com/OCA/server-tools.git OCA/server-tools/ &&\
- git clone https://github.com/yelizariev/pos-addons.git yelizariev/pos-addons/ &&\
- git clone https://github.com/yelizariev/website-addons.git yelizariev/website-addons/ &&\
- git clone https://github.com/yelizariev/addons-yelizariev.git yelizariev/addons-yelizariev/ &&\
- git clone https://github.com/yelizariev/odoo-saas-tools.git yelizariev/odoo-saas-tools/ &&\
- git clone https://github.com/iledarn/e-commerce.git iledarn/e-commerce/ &&\
- git clone https://github.com/xpansa/hr.git xpansa/hr/ &&\
- git clone https://github.com/odoomrp/odoomrp-wip.git odoomrp/odoomrp-wip/ &&\
- git clone https://github.com/odoomrp/odoomrp-utils.git odoomrp/odoomrp-utils/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git &&\
+ mkdir /usr/local/src/odoo-addons -p && cd /usr/local/src/odoo-addons/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/web.git OCA/web/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/account-financial-reporting.git OCA/account-financial-reporting/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/account-financial-tools.git OCA/account-financial-tools/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/partner-contact.git OCA/partner-contact/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/hr.git OCA/hr/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/pos.git OCA/pos/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/commission.git OCA/commission/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/server-tools.git OCA/server-tools/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/pos-addons.git yelizariev/pos-addons/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/website-addons.git yelizariev/website-addons/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/addons-yelizariev.git yelizariev/addons-yelizariev/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/odoo-saas-tools.git yelizariev/odoo-saas-tools/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/iledarn/e-commerce.git iledarn/e-commerce/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/xpansa/hr.git xpansa/hr/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/odoomrp/odoomrp-wip.git odoomrp/odoomrp-wip/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/odoomrp/odoomrp-utils.git odoomrp/odoomrp-utils/ &&\
  # manual collection of modules
  mkdir ergobit &&\
  mkdir x-community &&\ 
  mkdir x-community-p &&\
  mkdir vauxoo
-
+ # some OCA module which do not work
 
  ### DEPS
  python --version # should be 2.7 or higher
@@ -141,7 +145,7 @@ echo "SYSTEM=$SYSTEM"
  export ODOO_DOMAIN=ergodoo.com
  export ODOO_DATABASE=ergodoo.com
  export ODOO_USER=odoo
- export ODOO_BRANCH=8.0
+ #export ODOO_BRANCH=x.y  is done above
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
  [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
 
