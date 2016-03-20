@@ -325,6 +325,7 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
 
  ## Reminders
  echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
+ echo "Do not forget to set correct path to ssl certificats in nginx file odoo.conf and odoo-server.conf"
  
  
  ## log
