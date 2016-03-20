@@ -197,9 +197,8 @@
  echo "nginx installed"
 
  cd /etc/nginx && \
- mv nginx.conf nginx.conf.orig
- wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx.conf -O nginx.conf && \
- eval "${PERL_UPDATE_ENV} < nginx.conf" | sponge nginx.conf
+ mv nginx.conf nginx.conf.orig &&\
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx.conf -O nginx.conf
 
  cd /etc/nginx && \
  wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
