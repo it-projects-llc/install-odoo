@@ -58,15 +58,14 @@
  echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
  
  ## pythons
-# pip install gdata &&\
- apt-get install python-gdata -y &&\
+ #pip install gdata &&\
+ #apt-get install python-gdata -y &&\
  pip install psycogreen &&\
-# pip install gevent &&\              FIX-ME
-# pip install gevent_psycopg2 &&\     FIX-ME
-
  pip install rotate-backups &&
  pip install oauthlib &&
  pip install requests --upgrade
+ #pip install gevent &&\              FIX-ME
+ #pip install gevent_psycopg2 &&\     FIX-ME
  
  ## OCA Server tools
  pip install python-ldap unidecode
