@@ -62,7 +62,7 @@
  pip install psycogreen &&\
 # pip install gevent &&\              FIX-ME
 # pip install gevent_psycopg2 &&\     FIX-ME
-# pip install pysftp &&               FIX-ME
+
  pip install rotate-backups &&
  pip install oauthlib &&
  pip install requests --upgrade
@@ -70,6 +70,8 @@
  ## OCA Server tools
  pip install python-ldap unidecode
 
+ ## Odoo Saas Tool
+ #pip install pysftp Boto FileChunkIO #FIXME
 
  ### SOURCE
  
