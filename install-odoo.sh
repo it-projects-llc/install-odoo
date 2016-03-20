@@ -328,7 +328,8 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
  grep '^version_info ' /usr/local/src/odoo/openerp/release.py 
 
  ## log
- tail -f -n 100 /var/log/odoo/odoo-server.log 
+ #tail -f -n 100 /var/log/odoo/odoo-server.log 
+ tail -f /var/log/odoo/odoo-server.log 
 
  ## start from console (for ODOO_USER=odoo): 
  #  sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
