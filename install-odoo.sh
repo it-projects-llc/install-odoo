@@ -26,7 +26,7 @@
 
 
  #### DOWNLOADS...
-
+ 
  ### PACKAGES
  apt-get update && \
  apt-get upgrade -y && \
@@ -36,7 +36,6 @@
 
 
  ###PostgreSQL
- 
  wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
  echo 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' >> /etc/apt/sources.list.d/pgdg.list &&\
  apt-get update &&\
@@ -59,13 +58,13 @@
  #pip install gevent &&\              FIX-ME
  #pip install gevent_psycopg2 &&\     FIX-ME
  
- ## OCA Server tools
+ ## Deps for OCA Server tools
  #pip install ldap &&\
  apt-get install python-ldap &&
  pip install unidecode &&\
  pip install unidecode --upgrade
 
- ## Odoo Saas Tool
+ ## Deps for Odoo Saas Tool
  pip install Boto 
  pip install FileChunkIO
  #pysftp : i had to dwonlaod it from source to get it work!
@@ -75,7 +74,7 @@
  python setup.py install
  
  
- ### SOURCE
+ ### SOURCE CODE
  
  export ODOO_BRANCH=8.0
  
@@ -126,13 +125,12 @@
  wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
  dpkg -i wkhtmltox-*.deb
 
- #@@@@@@@@@@@@@@@@@@@@ NEED MANUAL WORK HERE (FIXME)
  ## Less CSS via nodejs
  ## nodejs:
- # 14.04 +
+ # for 14.04+
  apt-get install -y npm
  ln -s /usr/bin/nodejs /usr/bin/node
- # 13.10-
+ # for 13.10-
  # check https://www.odoo.com/documentation/8.0/setup/install.html
  ## less css
  npm install -g less less-plugin-clean-css
@@ -156,11 +154,8 @@
 
  adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --gecos '$OE_USER' --group ${ODOO_USER}
 
- # psql --version
- # pg_createcluster 9.3 main --start
- #sudo -iu postgres createuser -s ${ODOO_USER}
- #sudo su - postgres -c "createuser --createdb --username postgres --pwprompt ${ODOO_USER}"
- #sudo su - postgres -c "createuser --createdb --username postgres ${ODOO_USER}"
+
+ ### Odoo DB User
  sudo su - postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD '${DB_PASS}';\""
 
 
@@ -200,6 +195,11 @@
  apt-get update &&\
  apt-get install nginx -y && \
  echo "nginx installed"
+
+ cd /etc/nginx && \
+ mv nginx.conf nginx.conf.orig
+ wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx.conf -O nginx.conf && \
+ eval "${PERL_UPDATE_ENV} < nginx.conf" | sponge nginx.conf
 
  cd /etc/nginx && \
  wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
