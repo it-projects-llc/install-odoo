@@ -43,19 +43,11 @@
  apt-get install postgresql postgresql-contrib -y && \
  echo "postgresql installed"
  
- ###PGTune
- export PG_MAIN="/etc/postgresql/9.5/main"      #EDIT-ME  ${ODOO_USER}
+ ###PG Settings
+ export PG_MAIN="/etc/postgresql/9.5/main"      
  export PG_CONF="${PG_MAIN}/postgresql.conf"
  export PG_HBA="${PG_MAIN}/pg_hba.conf"
-
- #echo -e "\n---- Running PGTune ----"
- #apt-get install pgtune -y &&
- #pgtune -i ${PG_CONF} -o ${PG_CONF}.tuned &&
- #mv ${PG_CONF} ${PG_CONF}.orig &&
- #mv ${PG_CONF}.tuned ${PG_CONF} &&
- #service postgresql restart
- #echo "PGTune is done and PostgreSQL restarted..."
- echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
+ #tbd
  
  ## pythons
  #pip install gdata &&\
@@ -332,9 +324,13 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
  ## show odoo version
  grep '^version_info ' /usr/local/src/odoo/openerp/release.py 
 
+ ## Reminders
+ echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
+ 
+ 
  ## log
- #tail -f -n 100 /var/log/odoo/odoo-server.log 
- tail -f /var/log/odoo/odoo-server.log 
+ tail -f -n 100 /var/log/odoo/odoo-server.log 
+ #tail -f /var/log/odoo/odoo-server.log 
 
  ## start from console (for ODOO_USER=odoo): 
  #  sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
