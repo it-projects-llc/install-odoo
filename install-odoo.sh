@@ -72,9 +72,8 @@
  pip install python-ldap unidecode
 
  ## Odoo Saas Tool
- #pip install pysftp Boto FileChunkIO #FIXME
- 
- #pysftp
+ pip install Boto FileChunkIO
+ #pysftp : i had to dwonlaod it from source to get it work!
  wget https://pypi.python.org/packages/source/p/pysftp/pysftp-0.2.8.tar.gz
  tar -xzf pysftp-0.2.8.tar.gz
  python pysftp-0.2.8/setup.py install
