@@ -50,19 +50,19 @@ echo "SYSTEM=$SYSTEM"
  export PG_HBA="${PG_MAIN}/pg_hba.conf"
 
  #echo -e "\n---- Running PGTune ----"
- #sudo apt-get install pgtune -y &&
- #sudo pgtune -i ${PG_CONF} -o ${PG_CONF}.tuned &&
- #sudo mv ${PG_CONF} ${PG_CONF}.orig &&
- #sudo mv ${PG_CONF}.tuned ${PG_CONF} &&
- #sudo service postgresql restart
+ #apt-get install pgtune -y &&
+ #pgtune -i ${PG_CONF} -o ${PG_CONF}.tuned &&
+ #mv ${PG_CONF} ${PG_CONF}.orig &&
+ #mv ${PG_CONF}.tuned ${PG_CONF} &&
+ #service postgresql restart
  #echo "PGTune is done and PostgreSQL restarted..."
  echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
  
  ## pip
- pip install gdata &&
- pip install psycogreen &&
-# pip install gevent &&              FIX-ME
-# pip install gevent_psycopg2 &&     FIX-ME
+ pip install gdata &&\
+ pip install psycogreen &&\
+# pip install gevent &&\              FIX-ME
+# pip install gevent_psycopg2 &&\     FIX-ME
 # pip install pysftp &&              FIX-ME
  pip install rotate-backups &&
  pip install oauthlib &&
@@ -101,8 +101,9 @@ echo "SYSTEM=$SYSTEM"
  ### DEPS
  python --version # should be 2.7 or higher
 
- cd /usr/local/src/odoo
- sed -i "s/'apt-get'/'apt-get', '-y'/" odoo.py
+ cd /usr/local/src/odoo &&\
+ cp odoo.py odoo.py.orig &&\
+ sed -i "s/'apt-get'/'apt-get', '-y'/" odoo.py &&\
  cat odoo.py | python &&\
  git checkout odoo.py
 
@@ -113,14 +114,12 @@ echo "SYSTEM=$SYSTEM"
  uname -i
  # check version of your OS and download appropriate package
  # http://wkhtmltopdf.org/downloads.html
- # e.g.
  apt-get install -y xfonts-base xfonts-75dpi
  apt-get -f install
  wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
  dpkg -i wkhtmltox-*.deb
 
  #@@@@@@@@@@@@@@@@@@@@ NEED MANUAL WORK HERE (FIXME)
-
  ## Less CSS via nodejs
  ## nodejs:
  # 14.04 +
@@ -128,7 +127,6 @@ echo "SYSTEM=$SYSTEM"
  ln -s /usr/bin/nodejs /usr/bin/node
  # 13.10-
  # check https://www.odoo.com/documentation/8.0/setup/install.html
- 
  ## less css
  npm install -g less less-plugin-clean-css
  
