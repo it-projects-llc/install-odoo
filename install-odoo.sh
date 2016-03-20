@@ -60,8 +60,10 @@ echo "SYSTEM=$SYSTEM"
  
  ## pip
  pip install gdata &&
- pip install psycogreen gevent gevent_psycopg2 &&
- pip install pysftp &&
+ pip install psycogreen &&
+# pip install gevent &&              FIX-ME
+# pip install gevent_psycopg2 &&     FIX-ME
+# pip install pysftp &&              FIX-ME
  pip install rotate-backups &&
  pip install oauthlib &&
  pip install requests --upgrade
