@@ -184,11 +184,11 @@
  ### CONFIGS
  echo "CONFIG"
  ## /var/log/odoo/
- mkdir /var/log/odoo/
+ mkdir -p /var/log/odoo/
  chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
 
  ## /etc/odoo/odoo-server.conf
- mkdir /etc/odoo && cd /etc/odoo/
+ mkdir -p /etc/odoo && cd /etc/odoo/
  wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-server.conf -O odoo-server.conf
  eval "${PERL_UPDATE_ENV} < odoo-server.conf" | sponge odoo-server.conf
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
