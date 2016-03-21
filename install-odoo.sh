@@ -38,14 +38,14 @@
  ## SSL
  export SSL_CERT=/etc/ssl/certs/XXXX.crt;                                    #EDIT-ME
  export SSL_KEY=/etc/ssl/private/XXXX.key;                                   #EDIT-ME
-
  ## Odoo
  export ODOO_DOMAIN=odoo.example.com                                         #EDIT-ME
  export ODOO_DATABASE=odoo.example.com                                       #EDIT-ME
  export ODOO_USER=odoo
  export ODOO_BRANCH=8.0
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`  #EDIT-ME
-
+ ## Odoo SaaS Tool: set "no" if you do want odoo saas tool
+ export ODOO_SAAS_TOOL="yes"    ; "no"
 
  #### DOWNLOADS...
  ### PACKAGES
@@ -294,9 +294,11 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
  # cd /usr/local/bin/ && sudo su - odoo -s /bin/bash -c  "odoo-backup.py -d ergodoo.com -p /opt/odoo/backups/"
 
  ### Odoo Saas Tool
- # Comment if not needed
+ if [[ "$ODOO_SAAS_TOOL" == "yes" ]]  ###################################### IF
+ then
  #emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$ if needed
  echo $ODOO_PASS
+ echo $ODOO_DOMAIN
  stop odoo
  sudo su - ${ODOO_USER} -s /bin/bash -c  "python /usr/local/src/odoo-addons/yelizariev/odoo-saas-tools/saas.py \
   --odoo-script=/usr/local/src/odoo/openerp-server \
@@ -307,7 +309,7 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
   --server-db-name=server-1.${ODOO_DOMAIN} \
   --plan-template-db-name=template-1.${ODOO_DOMAIN} \
   --plan-clients=demo-%i.${ODOO_DOMAIN}"
- ### Odoo Saas Tool - END
+ fi                                 ######################################   END IF
  
  ### DEBUG
  ## show settings (admin password, addons path)
