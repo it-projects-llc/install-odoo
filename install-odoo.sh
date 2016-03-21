@@ -8,26 +8,23 @@
 # * Optional: Install & configure Odoo SaaS Tool
 ################################################################################
 
- #### General Settings: Edit the following settings as needed
- ## Gist url --  update it if you've forked this gist
- export GIST="bassn/996f8b168f0b1406dd54"
+ #### GENERAL SETTINGS : Edit the following settings as needed
+ ## Gist url
+ export GIST="bassn/996f8b168f0b1406dd54"   #update if you've forked this gist
  ## E-Mail
  export EMAIL_SERVER=stmp.example.com                                        
  export EMAIL_USER=mail@example.com                                          
  ## PostgreSQL
  export DB_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`    
- #export PG_MAIN="/etc/postgresql/9.5/main"      
- #export PG_CONF="${PG_MAIN}/postgresql.conf"
- #export PG_HBA="${PG_MAIN}/pg_hba.conf"
- ## SSL
- export SSL_CERT=/etc/ssl/certs/XXXX.crt;                                    
- export SSL_KEY=/etc/ssl/private/XXXX.key;                                   
  ## Odoo
  export ODOO_DOMAIN=odoo.example.com                                         
  export ODOO_DATABASE=odoo.example.com                                       
  export ODOO_USER=odoo
  export ODOO_BRANCH=8.0
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`  
+ ## SSL
+ export SSL_CERT=/etc/ssl/certs/XXXX.crt;                                    
+ export SSL_KEY=/etc/ssl/private/XXXX.key;                                   
  ## Odoo SaaS Tool: set "no" if you do want odoo saas tool
  export ODOO_SAAS_TOOL="yes"    ; "no"
 
@@ -103,8 +100,7 @@
  mkdir -p x-community &&\ 
  mkdir -p x-community-p &&\
  mkdir -p vauxoo
- # some OCA module which do not work
-
+ 
  ### Odoo Deps
  ## python
  python --version                      # should be 2.7 or higher
@@ -298,4 +294,5 @@
 
  ## some common issues:
  ## https://www.odoo.com/forum/help-1/question/dataerror-new-encoding-utf8-is-incompatible-with-the-encoding-of-the-template-database-sql-ascii-52124
+ 
  
