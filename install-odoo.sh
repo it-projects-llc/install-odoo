@@ -177,8 +177,8 @@
  chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
 
  ## /temp import data
- mkdir -p /opt/{{ODOO_USER}}/.local/share/Import/
- chown ${ODOO_USER}:${ODOO_USER} /opt/{{ODOO_USER}}/.local/share/Import
+ mkdir -p /opt/${ODOO_USER}/.local/share/Import/
+ chown ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/.local/share/Import
  
  ## /etc/odoo/odoo-server.conf
  mkdir -p /etc/odoo && cd /etc/odoo/
