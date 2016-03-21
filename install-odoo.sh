@@ -24,6 +24,8 @@
  dpkg-reconfigure locales
  locale
 
+ #### Variables & Settings
+ 
 
  #### DOWNLOADS...
  
@@ -166,8 +168,9 @@
 
  # git checkout -b ${ODOO_BRANCH} origin/${ODOO_BRANCH}  #branch already exist
  ## delete matches="..." at /web/database/manager
- cp addons/web/static/src/xml/base.xml addons/web/static/src/xml/base.xml.orig
  sed -i 's/matches="[^"]*"//g' addons/web/static/src/xml/base.xml
+ ## disable im_odoo_support
+ sed -i "s/'auto_install': True/'auto_install': False/" addons/im_odoo_support/__openerp__.py
 
 
  ### CONFIGS
@@ -302,11 +305,10 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
  ### SAAS
 
  # To deploy saas stop odoo and execute
- emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$
- #export ODOO_DOMAIN=ergodoo.com    #already done above
+ #emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$ if needed
  echo $ODOO_PASS
  
- sudo su - ${ODOO_USER} -s /bin/bash -c  "python /usr/local/src/odoo-addons/odoo-saas-tools/saas.py \
+ sudo su - ${ODOO_USER} -s /bin/bash -c  "python /usr/local/src/odoo-addons/yelizariev/odoo-saas-tools/saas.py \
   --odoo-script=/usr/local/src/odoo/openerp-server \
   --odoo-config=/etc/odoo/odoo-server.conf \
   --portal-create --server-create --plan-create --run  \
