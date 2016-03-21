@@ -30,7 +30,7 @@
  ### PACKAGES
  apt-get update && \
  apt-get upgrade -y && \
- apt-get install -y git python-pip moreutils tree && \
+ apt-get install -y git python-pip moreutils tree python-dev && \
  apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  [[ "$SYSTEM" == "supervisor" ]] && apt-get install supervisor
 
