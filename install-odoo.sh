@@ -67,11 +67,11 @@
  ## Deps for Odoo Saas Tool
  pip install Boto 
  pip install FileChunkIO
- #pysftp : i had to dwonlaod it from source to get it work!
- wget https://pypi.python.org/packages/source/p/pysftp/pysftp-0.2.8.tar.gz
- tar -xzf pysftp-0.2.8.tar.gz
- cd pysftp-0.2.8/ 
- python setup.py install
+ pip install pysftp
+# wget https://pypi.python.org/packages/source/p/pysftp/pysftp-0.2.8.tar.gz
+# tar -xzf pysftp-0.2.8.tar.gz
+# cd pysftp-0.2.8/ 
+# python setup.py install
  
  
  ### SOURCE CODE
