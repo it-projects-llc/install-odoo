@@ -1,8 +1,8 @@
 #!/bin/bash
 ################################################################################
 # Fully automated script to install Odoo (tested on a fresh Ubuntu 14.04 LTS)
-# * Install & configure last version of nginx
-# * Install & configure last version of postgresql
+# * Install & configure last stable version of nginx
+# * Install & configure last stable version of postgresql
 # * Install & configure Odoo
 # * Configure automated backup of Odoo databases
 # * Optional: Install & configure Odoo SaaS Tool
@@ -23,10 +23,12 @@
  export ODOO_BRANCH=8.0
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`  
  ## SSL
- export SSL_CERT=/etc/ssl/certs/XXXX.crt;                                    
- export SSL_KEY=/etc/ssl/private/XXXX.key;                                   
+ export SSL_CERT=/etc/ssl/certs/XXXX.crt                                    
+ export SSL_KEY=/etc/ssl/private/XXXX.key                                   
  ## Odoo SaaS Tool: set "no" if you do want odoo saas tool
  export ODOO_SAAS_TOOL="yes"    ; "no"
+ export SAAS_SERVER=server-1
+ export SAAS_TEMPLATE=template-1
 
  #### Detect type of system manager
  export SYSTEM=''
@@ -270,8 +272,8 @@
   --portal-create --server-create --plan-create --run  \
   --admin-password=${ODOO_PASS} \
   --portal-db-name=${ODOO_DOMAIN} \
-  --server-db-name=server-1.${ODOO_DOMAIN} \
-  --plan-template-db-name=template-1.${ODOO_DOMAIN} \
+  --server-db-name=${SAAS_SERVER}.${ODOO_DOMAIN} \
+  --plan-template-db-name=${SAAS_TEMPLATE}.${ODOO_DOMAIN} \
   --plan-clients=demo-%i.${ODOO_DOMAIN}"
  fi                                         ################################## END IF
  
