@@ -25,10 +25,29 @@
  locale
 
  #### Variables & Settings
- 
+ ## Gist url --  update it if you've forked this gist
+ export GIST="bassn/996f8b168f0b1406dd54"
+ ## E-Mail
+ export EMAIL_SERVER=stmp.example.com   #EDIT-ME
+ export EMAIL_USER=mail@example.com     #EDIT-ME
+ ## PostgreSQL
+ export PG_MAIN="/etc/postgresql/9.5/main"      
+ export PG_CONF="${PG_MAIN}/postgresql.conf"
+ export PG_HBA="${PG_MAIN}/pg_hba.conf"
+ export DB_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`    #EDIT-ME
+ ## SSL
+ export SSL_CERT=/etc/ssl/certs/XXXX.crt;                                    #EDIT-ME
+ export SSL_KEY=/etc/ssl/private/XXXX.key;                                   #EDIT-ME
+
+ ## Odoo
+ export ODOO_DOMAIN=odoo.example.com                                         #EDIT-ME
+ export ODOO_DATABASE=odoo.example.com                                       #EDIT-ME
+ export ODOO_USER=odoo
+ export ODOO_BRANCH=8.0
+ export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`  #EDIT-ME
+
 
  #### DOWNLOADS...
- 
  ### PACKAGES
  apt-get update && \
  apt-get upgrade -y && \
@@ -44,24 +63,13 @@
  apt-get install postgresql postgresql-contrib -y && \
  echo "postgresql installed"
  
- ###PG Settings
- export PG_MAIN="/etc/postgresql/9.5/main"      
- export PG_CONF="${PG_MAIN}/postgresql.conf"
- export PG_HBA="${PG_MAIN}/pg_hba.conf"
- #tbd
- 
  ## pythons
- #pip install gdata &&\
- #apt-get install python-gdata -y &&\
  pip install psycogreen &&\
  pip install rotate-backups &&\
  pip install oauthlib &&\
  pip install requests --upgrade
- #pip install gevent &&\              FIX-ME
- #pip install gevent_psycopg2 &&\     FIX-ME
- 
+
  ## Deps for OCA Server tools
- #pip install ldap &&\
  apt-get install python-ldap &&
  pip install unidecode &&\
  pip install unidecode --upgrade
@@ -70,16 +78,8 @@
  pip install Boto 
  pip install FileChunkIO
  pip install pysftp
-# wget https://pypi.python.org/packages/source/p/pysftp/pysftp-0.2.8.tar.gz
-# tar -xzf pysftp-0.2.8.tar.gz
-# cd pysftp-0.2.8/ 
-# python setup.py install
- 
- 
+
  ### SOURCE CODE
- 
- export ODOO_BRANCH=8.0
- 
  cd /usr/local/src/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git &&\
  mkdir /usr/local/src/odoo-addons -p && cd /usr/local/src/odoo-addons/ &&\
@@ -137,22 +137,13 @@
  ## less css
  npm install -g less less-plugin-clean-css
  
-#### DOWNLOADS done.
+ #### DOWNLOADS done.
 
 
  ### SETTINGS
- ## gist url --  update it if you've forked this gist
- export GIST="bassn/996f8b168f0b1406dd54"
  ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
  export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
- export ODOO_DOMAIN=ergodoo.com
- export ODOO_DATABASE=ergodoo.com
- export ODOO_USER=odoo
- #export ODOO_BRANCH=x.y  is done above
- export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
- export DB_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
- export SSL_CERT=/etc/ssl/certs/XXXX.crt;                                    #EDIT-ME
- export SSL_KEY=/etc/ssl/private/XXXX.key;                                   #EDIT-ME
+
  [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
 
 
@@ -226,7 +217,7 @@
 
 
  ### CONTROL SCRIPTS - systemd
- if [[ "$SYSTEM" == "systemd" ]] ###################################### IF
+ if [[ "$SYSTEM" == "systemd" ]]            ###################################### IF
  then
 
  cd /lib/systemd/system/
@@ -244,7 +235,7 @@
  systemctl restart odoo.service #&& systemctl restart odoo-longpolling.service
 
  ### CONTROL SCRIPTS - upstart
- elif [[ "$SYSTEM" == "upstart" ]] ###################################### ELIF
+ elif [[ "$SYSTEM" == "upstart" ]]        ###################################### ELIF
  then
 
  cd /etc/init/
@@ -263,7 +254,7 @@
  # restart odoo #&& restart odoo-longpolling
 
  ### CONTROL SCRIPTS - supervisor
- else ###################################################### ELSE
+ else                     ###################################################### ELSE
 
  cd /etc/supervisor/conf.d/
 
@@ -279,7 +270,7 @@ supervisorctl update
 
 supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
 
- fi ####################################################   END IF
+ fi                     ####################################################   END IF
 
  echo "Do not forget to set server parameter report.url = 0.0.0.0:8069"
 
@@ -302,12 +293,11 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
  # e.g.
  # cd /usr/local/bin/ && sudo su - odoo -s /bin/bash -c  "odoo-backup.py -d ergodoo.com -p /opt/odoo/backups/"
 
- ### SAAS
-
- # To deploy saas stop odoo and execute
+ ### Odoo Saas Tool
+ # Comment if not needed
  #emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$ if needed
  echo $ODOO_PASS
- 
+ stop odoo
  sudo su - ${ODOO_USER} -s /bin/bash -c  "python /usr/local/src/odoo-addons/yelizariev/odoo-saas-tools/saas.py \
   --odoo-script=/usr/local/src/odoo/openerp-server \
   --odoo-config=/etc/odoo/odoo-server.conf \
@@ -317,25 +307,18 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
   --server-db-name=server-1.${ODOO_DOMAIN} \
   --plan-template-db-name=template-1.${ODOO_DOMAIN} \
   --plan-clients=demo-%i.${ODOO_DOMAIN}"
+ ### Odoo Saas Tool - END
  
-
-
  ### DEBUG
-
  ## show settings (admin password, addons path)
  head /etc/odoo/odoo-server.conf 
- 
  ## show odoo version
  grep '^version_info ' /usr/local/src/odoo/openerp/release.py 
-
  ## Reminders
  echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
  echo "Do not forget to set correct path to ssl certificats in nginx file odoo.conf and odoo-server.conf"
- 
- 
  ## log
  tail -f -n 100 /var/log/odoo/odoo-server.log 
- #tail -f /var/log/odoo/odoo-server.log 
 
  ## start from console (for ODOO_USER=odoo): 
  #  sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
