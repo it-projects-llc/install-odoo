@@ -149,6 +149,8 @@
  #export ODOO_BRANCH=x.y  is done above
  export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
  export DB_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`
+ export SSL_CERT=/etc/ssl/certs/XXXX.crt;                                    #EDIT-ME
+ export SSL_KEY=/etc/ssl/private/XXXX.key;                                   #EDIT-ME
  [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
 
 
