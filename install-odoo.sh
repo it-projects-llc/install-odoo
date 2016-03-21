@@ -1,11 +1,11 @@
 #!/bin/bash
 ################################################################################
 # Fully automated script to install Odoo (tested on a fresh Ubuntu 14.04 LTS)
-# Install & configure last version of nginx
-# Install & configure last version of postgresql
-# Install & configure Odoo
-# Configure automated backup of Odoo databases
-# Install & configure Odoo SaaS Tool
+# * Install & configure last version of nginx
+# * Install & configure last version of postgresql
+# * Install & configure Odoo
+# * Configure automated backup of Odoo databases
+# * Optional: Install & configure Odoo SaaS Tool
 ################################################################################
 
  #### General Settings: Edit the following settings as needed
@@ -215,56 +215,34 @@
  then
 
  cd /lib/systemd/system/
-
  wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo.service -O odoo.service
  eval "${PERL_UPDATE_ENV} < odoo.service" | sponge odoo.service
-
- #wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling.service -O odoo-longpolling.service
- #eval "${PERL_UPDATE_ENV} < odoo-longpolling.service" | sponge odoo-longpolling.service
-
-
- ### START - systemd
-
- systemctl enable odoo.service #&& systemctl enable odoo-longpolling.service
- systemctl restart odoo.service #&& systemctl restart odoo-longpolling.service
+ ## START - systemd
+ systemctl enable odoo.service 
+ systemctl restart odoo.service 
 
  ### CONTROL SCRIPTS - upstart
- elif [[ "$SYSTEM" == "upstart" ]]        ###################################### ELIF
+ elif [[ "$SYSTEM" == "upstart" ]]          #################################### ELIF
  then
 
  cd /etc/init/
-
  wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-init.conf -O odoo.conf
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
-
- #wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-init.conf -O odoo-longpolling.conf
- #eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
-
-
- ### START - upstart
-
- start odoo #&& start odoo-longpolling
- # stop odoo #&& stop odoo-longpolling
- # restart odoo #&& restart odoo-longpolling
+ ## START - upstart
+ start odoo     # alt: stop odoo  / restart odoo 
 
  ### CONTROL SCRIPTS - supervisor
- else                     ###################################################### ELSE
+ else                                       #################################### ELSE
 
  cd /etc/supervisor/conf.d/
-
  wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-supervisor.conf -O odoo.conf
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
+ ## START - supervisor
+ supervisorctl reread
+ supervisorctl update
+ supervisorctl restart odoo 
 
- #wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-longpolling-supervisor.conf -O odoo-longpolling.conf
- #eval "${PERL_UPDATE_ENV} < odoo-longpolling.conf" | sponge odoo-longpolling.conf
-
- ### START - supervisor
-supervisorctl reread
-supervisorctl update
-
-supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
-
- fi                     ####################################################   END IF
+ fi                                         ################################   END IF
 
  echo "Do not forget to set server parameter report.url = 0.0.0.0:8069"
 
@@ -288,7 +266,7 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
  # cd /usr/local/bin/ && sudo su - odoo -s /bin/bash -c  "odoo-backup.py -d ergodoo.com -p /opt/odoo/backups/"
 
  ### Odoo Saas Tool
- if [[ "$ODOO_SAAS_TOOL" == "yes" ]]  ###################################### IF
+ if [[ "$ODOO_SAAS_TOOL" == "yes" ]]        ###################################### IF
  then
  #emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$ if needed
  echo $ODOO_PASS
@@ -303,7 +281,7 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
   --server-db-name=server-1.${ODOO_DOMAIN} \
   --plan-template-db-name=template-1.${ODOO_DOMAIN} \
   --plan-clients=demo-%i.${ODOO_DOMAIN}"
- fi                                 ######################################   END IF
+ fi                                         ################################## END IF
  
  ### DEBUG
  ## show settings (admin password, addons path)
@@ -324,5 +302,4 @@ supervisorctl restart odoo #&& supervisorctl restart odoo-longpolling
 
  ## some common issues:
  ## https://www.odoo.com/forum/help-1/question/dataerror-new-encoding-utf8-is-incompatible-with-the-encoding-of-the-template-database-sql-ascii-52124
- 
  
