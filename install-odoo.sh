@@ -1,12 +1,35 @@
 #!/bin/bash
 ################################################################################
-#
+# Fully automated script to install Odoo (tested on a fresh Ubuntu 14.04 LTS)
+# Install & configure last version of nginx
+# Install & configure last version of postgresql
+# Install & configure Odoo
+# Configure automated backup of Odoo databases
+# Install & configure Odoo SaaS Tool
 ################################################################################
-#if [ "$(basename $0)" = "install-odoo.sh" ]; then
-#  echo "don't run install-odoo.sh, because it's not fully automated script. Copy, paste and execute commands from this file manually"
-#  exit 0
-#fi
 
+ #### General Settings: Edit the following settings as needed
+ ## Gist url --  update it if you've forked this gist
+ export GIST="bassn/996f8b168f0b1406dd54"
+ ## E-Mail
+ export EMAIL_SERVER=stmp.example.com                                        
+ export EMAIL_USER=mail@example.com                                          
+ ## PostgreSQL
+ export DB_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`    
+ #export PG_MAIN="/etc/postgresql/9.5/main"      
+ #export PG_CONF="${PG_MAIN}/postgresql.conf"
+ #export PG_HBA="${PG_MAIN}/pg_hba.conf"
+ ## SSL
+ export SSL_CERT=/etc/ssl/certs/XXXX.crt;                                    
+ export SSL_KEY=/etc/ssl/private/XXXX.key;                                   
+ ## Odoo
+ export ODOO_DOMAIN=odoo.example.com                                         
+ export ODOO_DATABASE=odoo.example.com                                       
+ export ODOO_USER=odoo
+ export ODOO_BRANCH=8.0
+ export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`  
+ ## Odoo SaaS Tool: set "no" if you do want odoo saas tool
+ export ODOO_SAAS_TOOL="yes"    ; "no"
 
  #### Detect type of system manager
  export SYSTEM=''
@@ -23,29 +46,6 @@
  locale-gen en_US.UTF-8 && \
  dpkg-reconfigure locales
  locale
-
- #### Variables & Settings
- ## Gist url --  update it if you've forked this gist
- export GIST="bassn/996f8b168f0b1406dd54"
- ## E-Mail
- export EMAIL_SERVER=stmp.example.com   #EDIT-ME
- export EMAIL_USER=mail@example.com     #EDIT-ME
- ## PostgreSQL
- export PG_MAIN="/etc/postgresql/9.5/main"      
- export PG_CONF="${PG_MAIN}/postgresql.conf"
- export PG_HBA="${PG_MAIN}/pg_hba.conf"
- export DB_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`    #EDIT-ME
- ## SSL
- export SSL_CERT=/etc/ssl/certs/XXXX.crt;                                    #EDIT-ME
- export SSL_KEY=/etc/ssl/private/XXXX.key;                                   #EDIT-ME
- ## Odoo
- export ODOO_DOMAIN=odoo.example.com                                         #EDIT-ME
- export ODOO_DATABASE=odoo.example.com                                       #EDIT-ME
- export ODOO_USER=odoo
- export ODOO_BRANCH=8.0
- export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`  #EDIT-ME
- ## Odoo SaaS Tool: set "no" if you do want odoo saas tool
- export ODOO_SAAS_TOOL="yes"    ; "no"
 
  #### DOWNLOADS...
  ### PACKAGES
@@ -106,15 +106,14 @@
  mkdir -p vauxoo
  # some OCA module which do not work
 
- ### DEPS
- python --version        # should be 2.7 or higher
-
+ #### DEPS
+ ## python
+ python --version                      # should be 2.7 or higher
  cd /usr/local/src/odoo &&\
  cp odoo.py odoo.py.orig &&\
  sed -i "s/'apt-get'/'apt-get', '-y'/" odoo.py &&\
  cat odoo.py | python &&\
  git checkout odoo.py
-
 
  ## wkhtmltopdf
  cd /usr/local/src
@@ -140,24 +139,19 @@
  #### DOWNLOADS done.
 
 
- ### SETTINGS
+ #### SETTINGS
  ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
  export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
-
  [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
 
-
+ ## Odoo System User
  adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --gecos '$OE_USER' --group ${ODOO_USER}
-
-
  ### Odoo DB User
  sudo su - postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD '${DB_PASS}';\""
 
 
- ### BRANCH
+ ### Odoo Code Change
  cd /usr/local/src/odoo
-
- # git checkout -b ${ODOO_BRANCH} origin/${ODOO_BRANCH}  #branch already exist
  ## delete matches="..." at /web/database/manager
  sed -i 's/matches="[^"]*"//g' addons/web/static/src/xml/base.xml
  ## disable im_odoo_support
