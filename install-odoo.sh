@@ -143,18 +143,19 @@
  ## disable im_odoo_support
  sed -i "s/'auto_install': True/'auto_install': False/" addons/im_odoo_support/__openerp__.py
 
- #### SETTINGS
- ## from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
+ #### CONFIGS
+ ### System Config
+ #from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
  export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
  [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
 
- ## Odoo System User
+ ### Odoo System User
  adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --gecos '$OE_USER' --group ${ODOO_USER}
  ### Odoo DB User
  sudo su - postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD '${DB_PASS}';\""
 
- ### CONFIGS
- echo "CONFIG"
+ ### Odoo Config
+ echo "Odoo Config"
  ## /var/log/odoo/
  mkdir -p /var/log/odoo/
  chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
@@ -204,7 +205,7 @@
 
  /etc/init.d/nginx restart
 
-
+ #### START CONTROL
  ### CONTROL SCRIPTS - systemd
  if [[ "$SYSTEM" == "systemd" ]]            ###################################### IF
  then
@@ -246,7 +247,7 @@
  # Use this link to find ones: https://gist.github.com/yelizariev/2abdd91d00dddc4e4fa4/d0ac3bd971e81213d17332647d9a74a580cfde6b
  
 
- #### BACKUP
+ #### ODOO DB BACKUP
  mkdir -p /opt/${ODOO_USER}/backups/
  chown ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/backups/
  cd /usr/local/bin/
