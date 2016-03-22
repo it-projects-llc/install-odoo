@@ -291,7 +291,6 @@
  grep '^version_info ' /usr/local/src/odoo/openerp/release.py 
  ## Reminders
  echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
- echo "Do not forget to set correct path to ssl certificats in nginx file odoo.conf and odoo-server.conf"
  ## log
  tail -f -n 100 /var/log/odoo/odoo-server.log 
 
