@@ -248,7 +248,7 @@
  
 
  #### ODOO DB BACKUP
- if [[ "$DB_BACKUP" == "yes" ]]        ###################################### IF
+ if [[ "$DB_BACKUP" == "yes" ]]             ###################################### IF
  then
  mkdir -p /opt/${ODOO_USER}/backups/
  chown ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/backups/
