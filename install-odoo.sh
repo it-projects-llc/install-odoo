@@ -13,7 +13,8 @@
  export GIST="bassn/996f8b168f0b1406dd54"   #update if you've forked this gist
  ## E-Mail
  export EMAIL_SERVER=stmp.example.com                                        
- export EMAIL_USER=mail@example.com                                          
+ export EMAIL_USER=mail@example.com
+ export EMAIL_PASS=GiveMeYourPassBaby
  ## PostgreSQL
  export DB_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`    
  ## Odoo
