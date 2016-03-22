@@ -91,7 +91,8 @@
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/pos.git OCA/pos/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/commission.git OCA/commission/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/server-tools.git OCA/server-tools/ &&\
- git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/pos-addons.git yelizariev/pos-addons/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/pos-addons.git yelizariev/pos-addons/ &&\  
+ git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/access-addons.git yelizariev/access-addons/ &&\  
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/website-addons.git yelizariev/website-addons/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/addons-yelizariev.git yelizariev/addons-yelizariev/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/odoo-saas-tools.git yelizariev/odoo-saas-tools/ &&\
