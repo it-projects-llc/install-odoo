@@ -21,7 +21,7 @@
  export ODOO_DATABASE=odoo.example.com                                       
  export ODOO_USER=odoo
  export ODOO_BRANCH=8.0
- export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`  
+ export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-8};echo;`  
  ## SSL
  export SSL_CERT=/etc/ssl/certs/XXXX.crt                                    
  export SSL_KEY=/etc/ssl/private/XXXX.key                                   
