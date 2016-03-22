@@ -25,8 +25,10 @@
  ## SSL
  export SSL_CERT=/etc/ssl/certs/XXXX.crt                                    
  export SSL_KEY=/etc/ssl/private/XXXX.key                                   
- ## Odoo SaaS Tool: set "no" if you do want odoo saas tool
- export ODOO_SAAS_TOOL="yes"    ; "no"
+ ## DB Backup 
+ export DB_BACKUP="yes"         #set "no" if you do want to configure backup
+ ## Odoo SaaS Tool 
+ export ODOO_SAAS_TOOL="yes"    #set "no" if you do want odoo saas tool
  export SAAS_SERVER=server-1
  export SAAS_TEMPLATE=template-1
 
@@ -246,6 +248,8 @@
  
 
  #### ODOO DB BACKUP
+ if [[ "$DB_BACKUP" == "yes" ]]        ###################################### IF
+ then
  mkdir -p /opt/${ODOO_USER}/backups/
  chown ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/backups/
  cd /usr/local/bin/
@@ -258,6 +262,8 @@
  # sudo su - ${ODOO_USER} -s /bin/bash -c  "odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/"
  # e.g.
  # cd /usr/local/bin/ && sudo su - odoo -s /bin/bash -c  "odoo-backup.py -d ergodoo.com -p /opt/odoo/backups/"
+ fi                                         ################################## END IF
+
 
  #### Odoo Saas Tool
  if [[ "$ODOO_SAAS_TOOL" == "yes" ]]        ###################################### IF
