@@ -116,11 +116,11 @@
  git clone -b ${ODOO_BRANCH} https://github.com/Vauxoo/addons-vauxoo.git vauxoo/ 
  if [[ "$USE_PRIVATE_GIT" == "yes" ]]        ###################################### IF
  then
- git clone -b ${ODOO_BRANCH} ${PRIVATE_GIT_REMOTE} ${PRIVATE_GIT_LOCALE}/
+ git clone -b ${ODOO_BRANCH} ${PRIVATE_GIT_REMOTE} ${PRIVATE_GIT_LOCAL}/
  export COMMA=","
- export PRIVATE_GIT_LOCALE="$PRIVATE_GIT_LOCALE$COMMA"
+ export PRIVATE_GIT_LOCAL="$PRIVATE_GIT_LOCAL$COMMA"
  else                                        ###################################### ELSE
- export PRIVATE_GIT_LOCALE=""
+ export PRIVATE_GIT_LOCAL=""
  fi                                          ###################################### END IF
  # further module collections
  mkdir -p z-others &&\ 
