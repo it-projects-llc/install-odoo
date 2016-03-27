@@ -110,7 +110,8 @@
  if [[ "$USE_PRIVATE_GIT" == "yes" ]]        ###################################### IF
  then
  git clone -b ${ODOO_BRANCH} {PRIVATE_GIT_REMOTE} {PRIVATE_GIT_LOCALE}/
- export PRIVATE_GIT_LOCALE="$PRIVATE_GIT_LOCALE ,"
+ export COMMA=","
+ export PRIVATE_GIT_LOCALE="$PRIVATE_GIT_LOCALE$COMMA"
  else                                        ###################################### ELSE
  export PRIVATE_GIT_LOCALE=""
  fi                                          ###################################### END IF
