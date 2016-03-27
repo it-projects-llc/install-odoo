@@ -98,7 +98,8 @@
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/commission.git OCA/commission/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/server-tools.git OCA/server-tools/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/reporting-engine.git OCA/reporting-engine/ &&\
- git clone -b ${ODOO_BRANCH} https://github.com/OCA/hr.git OCA/hr/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/hr.git OCA/hr/ &&\   
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/rma.git OCA/rma/ &&\   
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/pos-addons.git yelizariev/pos-addons/ &&\  
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/access-addons.git yelizariev/access-addons/ &&\  
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/website-addons.git yelizariev/website-addons/ &&\
