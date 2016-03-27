@@ -33,7 +33,7 @@
  export SAAS_SERVER=server-1
  export SAAS_TEMPLATE=template-1
  ## Add your private Git
- export USE_PRIVATE_GIT="no"
+ export USE_PRIVATE_GIT="no"           #Set to "yes", if you want to clone a private Git
  export PRIVATE_GIT_REMOTE="https://MY_USER_NAME:MY_PASSWORD@bitbucket.org/MY_REMOTE_USER/MY_REMOTE_REPOSITORY.git"     #remote adress of your private Git
  export PRIVATE_GIT_LOCALE="/usr/local/src/odoo-addons/MY_LOCALE_ADDON_FOLDER"     #locale folder of your private Git
  
