@@ -98,10 +98,12 @@
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/commission.git OCA/commission/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/server-tools.git OCA/server-tools/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/reporting-engine.git OCA/reporting-engine/ &&\
- git clone -b ${ODOO_BRANCH} https://github.com/OCA/hr.git OCA/hr/ &&\   
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/rma.git OCA/rma/ &&\   
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/contract.git OCA/contract/ &&\   
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/sale-workflow.git OCA/sale-workflow/ &&\   
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/bank-payment.git OCA/bank-payment/ &&\   
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/bank-statement-import.git OCA/bank-statement-import/ &&\   
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/bank-statement-reconcile.git OCA/bank-statement-reconcile/ &&\   
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/pos-addons.git yelizariev/pos-addons/ &&\  
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/access-addons.git yelizariev/access-addons/ &&\  
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/website-addons.git yelizariev/website-addons/ &&\
@@ -114,16 +116,16 @@
  git clone -b ${ODOO_BRANCH} https://github.com/Vauxoo/addons-vauxoo.git vauxoo/ 
  if [[ "$USE_PRIVATE_GIT" == "yes" ]]        ###################################### IF
  then
- git clone -b ${ODOO_BRANCH} {PRIVATE_GIT_REMOTE} {PRIVATE_GIT_LOCAL}/
+ git clone -b ${ODOO_BRANCH} ${PRIVATE_GIT_REMOTE} ${PRIVATE_GIT_LOCALE}/
  export COMMA=","
- export PRIVATE_GIT_LOCAL="$PRIVATE_GIT_LOCAL$COMMA"
+ export PRIVATE_GIT_LOCALE="$PRIVATE_GIT_LOCALE$COMMA"
  else                                        ###################################### ELSE
- export PRIVATE_GIT_LOCAL=""
+ export PRIVATE_GIT_LOCALE=""
  fi                                          ###################################### END IF
- # manual collection of modules
- mkdir -p x-community &&\ 
- mkdir -p x-community-p
- 
+ # further module collections
+ mkdir -p z-others &&\ 
+ mkdir -p z-others-p
+
  ### Odoo Deps
  ## python
  python --version                      # should be 2.7 or higher
