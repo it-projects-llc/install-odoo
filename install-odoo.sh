@@ -35,7 +35,7 @@
  ## Add your private Git
  export USE_PRIVATE_GIT="no"           #Set to "yes", if you want to clone a private Git
  export PRIVATE_GIT_REMOTE="https://MY_USER_NAME:MY_PASSWORD@bitbucket.org/MY_REMOTE_USER/MY_REMOTE_REPOSITORY.git"     #remote adress of your private Git
- export PRIVATE_GIT_LOCALE="/usr/local/src/odoo-addons/MY_LOCALE_ADDON_FOLDER"     #locale folder of your private Git
+ export PRIVATE_GIT_LOCAL="/usr/local/src/odoo-addons/MY_LOCAL_ADDON_FOLDER"     #local folder of your private Git
  
 
  #### Detect type of system manager
@@ -114,11 +114,11 @@
  git clone -b ${ODOO_BRANCH} https://github.com/Vauxoo/addons-vauxoo.git vauxoo/ 
  if [[ "$USE_PRIVATE_GIT" == "yes" ]]        ###################################### IF
  then
- git clone -b ${ODOO_BRANCH} {PRIVATE_GIT_REMOTE} {PRIVATE_GIT_LOCALE}/
+ git clone -b ${ODOO_BRANCH} {PRIVATE_GIT_REMOTE} {PRIVATE_GIT_LOCAL}/
  export COMMA=","
- export PRIVATE_GIT_LOCALE="$PRIVATE_GIT_LOCALE$COMMA"
+ export PRIVATE_GIT_LOCAL="$PRIVATE_GIT_LOCAL$COMMA"
  else                                        ###################################### ELSE
- export PRIVATE_GIT_LOCALE=""
+ export PRIVATE_GIT_LOCAL=""
  fi                                          ###################################### END IF
  # manual collection of modules
  mkdir -p x-community &&\ 
