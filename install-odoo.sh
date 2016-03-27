@@ -98,6 +98,7 @@
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/commission.git OCA/commission/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/server-tools.git OCA/server-tools/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/reporting-engine.git OCA/reporting-engine/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/reporting-engine.git OCA/hr/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/pos-addons.git yelizariev/pos-addons/ &&\  
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/access-addons.git yelizariev/access-addons/ &&\  
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/website-addons.git yelizariev/website-addons/ &&\
@@ -176,7 +177,7 @@
  chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
 
  ## /temp import data
- mkdir -p /opt/${ODOO_USER}/.local/share/Import/
+ mkdir -p /opt/${ODOO_USER}/.local/share/User/import/
  chown -R ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/.local
  
  ## /etc/odoo/odoo-server.conf
