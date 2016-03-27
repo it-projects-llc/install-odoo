@@ -32,6 +32,11 @@
  export ODOO_SAAS_TOOL="yes"    #set "no" if you do want odoo saas tool
  export SAAS_SERVER=server-1
  export SAAS_TEMPLATE=template-1
+ ## Add your private Git
+ export USE_PRIVATE_GIT="no"
+ export PRIVATE_GIT_REMOTE="https://MY_USER_NAME:MY_PASSWORD@bitbucket.org/MY_REMOTE_USER/MY_REMOTE_REPOSITORY.git"     #remote adress of your private Git
+ export PRIVATE_GIT_LOCALE="/usr/local/src/odoo-addons/MY_LOCALE_ADDON_FOLDER"     #locale folder of your private Git
+ 
 
  #### Detect type of system manager
  export SYSTEM=''
@@ -101,11 +106,17 @@
  git clone -b ${ODOO_BRANCH} https://github.com/xpansa/hr.git xpansa/hr/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/odoomrp/odoomrp-wip.git odoomrp/odoomrp-wip/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/odoomrp/odoomrp-utils.git odoomrp/odoomrp-utils/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/Vauxoo/addons-vauxoo.git vauxoo/ 
+ if [[ "$USE_PRIVATE_GIT" == "yes" ]]        ###################################### IF
+ then
+ git clone -b ${ODOO_BRANCH} {PRIVATE_GIT_REMOTE} {PRIVATE_GIT_LOCALE}/
+ export PRIVATE_GIT_LOCALE="$PRIVATE_GIT_LOCALE ,"
+ else                                        ###################################### ELSE
+ export PRIVATE_GIT_LOCALE=""
+ fi                                          ###################################### END IF
  # manual collection of modules
- mkdir -p ergobit &&\
  mkdir -p x-community &&\ 
- mkdir -p x-community-p &&\
- mkdir -p vauxoo
+ mkdir -p x-community-p
  
  ### Odoo Deps
  ## python
