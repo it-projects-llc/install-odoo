@@ -74,6 +74,8 @@
  pip install rotate-backups &&\
  pip install oauthlib &&\
  pip install requests --upgrade &&\
+
+ ### Deps for OCA website
  pip install ipwhois
 
  ### Deps for OCA Server tools
