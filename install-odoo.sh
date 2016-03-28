@@ -73,7 +73,8 @@
  pip install psycogreen &&\
  pip install rotate-backups &&\
  pip install oauthlib &&\
- pip install requests --upgrade
+ pip install requests --upgrade &&\
+ pip install ipwhois
 
  ### Deps for OCA Server tools
  apt-get install python-ldap &&
