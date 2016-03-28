@@ -73,7 +73,7 @@
  pip install psycogreen &&\
  pip install rotate-backups &&\
  pip install oauthlib &&\
- pip install requests --upgrade &&\
+ pip install requests --upgrade 
 
  ### Deps for OCA website
  pip install ipwhois
