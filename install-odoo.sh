@@ -90,6 +90,7 @@
  git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git &&\
  mkdir /usr/local/src/odoo-addons -p && cd /usr/local/src/odoo-addons/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/web.git OCA/web/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/website.git OCA/website/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/account-financial-reporting.git OCA/account-financial-reporting/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/account-financial-tools.git OCA/account-financial-tools/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/partner-contact.git OCA/partner-contact/ &&\
