@@ -83,6 +83,9 @@
  pip install unidecode &&\
  pip install unidecode --upgrade
 
+ ### Deps for addons-vauxoo
+ pip install pandas
+
  ### Deps for Odoo Saas Tool
  pip install Boto 
  pip install FileChunkIO
