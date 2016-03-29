@@ -106,14 +106,14 @@
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/commission.git OCA/commission/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/server-tools.git OCA/server-tools/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/OCA/reporting-engine.git OCA/reporting-engine/ &&\
- git clone -b ${ODOO_BRANCH} https://github.com/OCA/rma.git OCA/rma/ &&\   
- git clone -b ${ODOO_BRANCH} https://github.com/OCA/contract.git OCA/contract/ &&\   
- git clone -b ${ODOO_BRANCH} https://github.com/OCA/sale-workflow.git OCA/sale-workflow/ &&\   
- git clone -b ${ODOO_BRANCH} https://github.com/OCA/bank-payment.git OCA/bank-payment/ &&\   
- git clone -b ${ODOO_BRANCH} https://github.com/OCA/bank-statement-import.git OCA/bank-statement-import/ &&\   
- git clone -b ${ODOO_BRANCH} https://github.com/OCA/bank-statement-reconcile.git OCA/bank-statement-reconcile/ &&\   
- git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/pos-addons.git yelizariev/pos-addons/ &&\  
- git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/access-addons.git yelizariev/access-addons/ &&\  
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/rma.git OCA/rma/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/contract.git OCA/contract/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/sale-workflow.git OCA/sale-workflow/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/bank-payment.git OCA/bank-payment/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/bank-statement-import.git OCA/bank-statement-import/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/OCA/bank-statement-reconcile.git OCA/bank-statement-reconcile/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/pos-addons.git yelizariev/pos-addons/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/access-addons.git yelizariev/access-addons/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/website-addons.git yelizariev/website-addons/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/addons-yelizariev.git yelizariev/addons-yelizariev/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/yelizariev/odoo-saas-tools.git yelizariev/odoo-saas-tools/ &&\
@@ -142,6 +142,7 @@
  sed -i "s/'apt-get'/'apt-get', '-y'/" odoo.py &&\
  cat odoo.py | python &&\
  git checkout odoo.py
+ echo "odoo.py checked out"
 
  ## wkhtmltopdf
  cd /usr/local/src
