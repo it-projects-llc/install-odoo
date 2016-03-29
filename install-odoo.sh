@@ -1,12 +1,13 @@
 #!/bin/bash
-################################################################################
+################################################################################################
 # Fully automated script to install Odoo (tested on a fresh Ubuntu 14.04 LTS)
 # * Install & configure last stable version of nginx
 # * Install & configure last stable version of postgresql
 # * Install & configure Odoo
 # * Configure automated backup of Odoo databases
 # * Optional: Install & configure Odoo SaaS Tool
-################################################################################
+# * Optional: Background installation: $ nohup ./odoo_install.sh > nohup.log 2>&1 </dev/null &
+################################################################################################
 
  #### GENERAL SETTINGS : Edit the following settings as needed
  ## Gist url
