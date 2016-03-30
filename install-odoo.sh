@@ -121,7 +121,8 @@
  git clone -b ${ODOO_BRANCH} https://github.com/xpansa/hr.git xpansa/hr/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/odoomrp/odoomrp-wip.git odoomrp/odoomrp-wip/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/odoomrp/odoomrp-utils.git odoomrp/odoomrp-utils/ &&\
- git clone -b ${ODOO_BRANCH} https://github.com/Vauxoo/addons-vauxoo.git vauxoo/ 
+ git clone -b ${ODOO_BRANCH} https://github.com/Vauxoo/addons-vauxoo.git vauxoo/ &&\
+ git clone -b ${ODOO_BRANCH} https://github.com/techreceptives/website_recaptcha.git techreceptives/
  if [[ "$USE_PRIVATE_GIT" == "yes" ]]        ###################################### IF
  then
  git clone -b ${ODOO_BRANCH} ${PRIVATE_GIT_REMOTE} ${PRIVATE_GIT_LOCAL}/
