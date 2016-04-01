@@ -93,6 +93,7 @@
  pip install pysftp
 
  ### Odoo Souce Code
+ # If you change the following directories, you muss also ajust line 2 of file odoo-server.conf below
  cd /usr/local/src/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git &&\
  mkdir /usr/local/src/odoo-addons -p && cd /usr/local/src/odoo-addons/ &&\
