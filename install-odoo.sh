@@ -1,6 +1,6 @@
 #!/bin/bash
 ################################################################################################
-# Fully automated script to install Odoo (tested on a fresh Ubuntu 14.04 LTS)
+# Fully automated script to install Odoo and Odoo SaaS Tool (tested on a fresh Ubuntu 14.04 LTS)
 # * Install & configure last stable version of nginx
 # * Install & configure last stable version of postgresql
 # * Install & configure Odoo
