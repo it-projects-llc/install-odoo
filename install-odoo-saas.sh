@@ -8,6 +8,11 @@
 # * Optional: Install & configure Odoo SaaS Tool
 # * Optional: Background installation: $ nohup ./odoo_install.sh > nohup.log 2>&1 </dev/null &
 ################################################################################################
+ apt-get update && \
+ apt-get upgrade -y && \
+ apt-get install -y python-pip && \
+ pip install -U pip
+ bash
 
  #### GENERAL SETTINGS : Edit the following settings as needed
  ## Github script's repo
@@ -60,9 +65,7 @@
 
  #### DOWNLOADS...
  ### Packages
- apt-get update && \
- apt-get upgrade -y && \
- apt-get install -y git python-pip moreutils tree python-dev && \
+ apt-get install -y moreutils tree python-dev && \
  apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  [[ "$SYSTEM" == "supervisor" ]] && apt-get install supervisor
 
