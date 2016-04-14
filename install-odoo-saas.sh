@@ -12,7 +12,6 @@
  apt-get upgrade -y && \
  apt-get install -y python-pip && \
  pip install -U pip
- bash
 
  #### GENERAL SETTINGS : Edit the following settings as needed
  ## Github script's repo
