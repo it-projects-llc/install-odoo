@@ -10,8 +10,6 @@
 ################################################################################################
  apt-get update && \
  apt-get upgrade -y && \
- apt-get install -y python-pip && \
- pip install -U pip
 
  #### GENERAL SETTINGS : Edit the following settings as needed
  ## Github script's repo
