@@ -32,12 +32,17 @@
  ## SSL
  SSL_CERT=${SSL_CERT:-/etc/ssl/certs/XXXX.crt}
  SSL_KEY=${SSL_KEY:-/etc/ssl/private/XXXX.key}
- ## DB Backup #set "no" if you don't want to configure backup
+ ## DB Backup
+ #set "no" if you don't want to configure backup
  DB_BACKUP=${DB_BACKUP:-"yes"}
- ## Odoo SaaS #set "no" if you don't want odoo saas tool
- ODOO_SAAS_TOOL=${ODOO_SAAS_TOOL:-"yes"}
+ ## Odoo SaaS
+ #set "yes" if you do want odoo saas tool
+ ODOO_SAAS_TOOL=${ODOO_SAAS_TOOL:-"no"}
  SAAS_SERVER=${SAAS_SERVER:-server-1}
  SAAS_TEMPLATE=${SAAS_TEMPLATE:-template-1}
+ ## user /etc/hosts instead of dns server for saas
+ #set "no" if you have dns server with odoo.example.com, server-1.odoo.example.com, template-1.odoo.example.com records
+ SAAS_ADD_HOSTS=${SAAS_ADD_HOSTS:-"yes"}
  ## Add your private Git
  #Set to "yes", if you want to clone a private Git
  USE_PRIVATE_GIT=${USE_PRIVATE_GIT:-"no"}
@@ -306,6 +311,16 @@
  #### Odoo Saas Tool
  if [[ "$ODOO_SAAS_TOOL" == "yes" ]]        ###################################### IF
  then
+ if [[ "$SAAS_ADD_HOSTS" == "yes" ]]
+ then
+ /bin/bash -c  "python /usr/local/src/odoo-addons/yelizariev/odoo-saas-tools/saas.py \
+  --print-local-hosts \
+  --portal-db-name=${ODOO_DOMAIN} \
+  --server-db-name=${SAAS_SERVER}.${ODOO_DOMAIN} \
+  --plan-template-db-name=${SAAS_TEMPLATE}.${ODOO_DOMAIN} \
+  >> /etc/hosts"
+ fi
+
  #emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$ if needed
  echo $ODOO_PASS
  echo $ODOO_DOMAIN
