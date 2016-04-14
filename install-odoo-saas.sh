@@ -34,9 +34,12 @@
  SAAS_SERVER=${SAAS_SERVER:-server-1}
  SAAS_TEMPLATE=${SAAS_TEMPLATE:-template-1}
  ## Add your private Git
- export USE_PRIVATE_GIT="no"           #Set to "yes", if you want to clone a private Git
- export PRIVATE_GIT_REMOTE="https://MY_USER_NAME:MY_PASSWORD@bitbucket.org/MY_REMOTE_USER/MY_REMOTE_REPOSITORY.git"     #remote adress of your private Git
- export PRIVATE_GIT_LOCAL="/usr/local/src/odoo-addons/MY_LOCAL_ADDON_FOLDER"     #local folder of your private Git
+ #Set to "yes", if you want to clone a private Git
+ USE_PRIVATE_GIT=${USE_PRIVATE_GIT:-"no"}
+ #remote adress of your private Git
+ PRIVATE_GIT_REMOTE=${PRIVATE_GIT_REMOTE:-"https://MY_USER_NAME:MY_PASSWORD@bitbucket.org/MY_REMOTE_USER/MY_REMOTE_REPOSITORY.git"}
+ #local folder of your private Git 
+ PRIVATE_GIT_LOCAL=${PRIVATE_GIT_LOCAL:-"/usr/local/src/odoo-addons/MY_LOCAL_ADDON_FOLDER"}
 
 
  #### Detect type of system manager
