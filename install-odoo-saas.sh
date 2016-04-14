@@ -9,7 +9,7 @@
 # * Optional: Background installation: $ nohup ./odoo_install.sh > nohup.log 2>&1 </dev/null &
 ################################################################################################
  apt-get update && \
- apt-get upgrade -y && \
+ apt-get upgrade -y
 
  #### GENERAL SETTINGS : Edit the following settings as needed
  ## Github script's repo
