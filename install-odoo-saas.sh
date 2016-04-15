@@ -8,11 +8,6 @@
 # * Optional: Install & configure Odoo SaaS Tool
 # * Optional: Background installation: $ nohup ./odoo_install.sh > nohup.log 2>&1 </dev/null &
 ################################################################################################
- apt-get update && \
- apt-get upgrade -y
- apt-get install python-pip && \
- pip install -U pip && \
- apt-get purge python-pip
 
  #### GENERAL SETTINGS : Edit the following settings as needed
  ## Github script's repo
@@ -51,7 +46,6 @@
  #local folder of your private Git 
  PRIVATE_GIT_LOCAL=${PRIVATE_GIT_LOCAL:-"/usr/local/src/odoo-addons/MY_LOCAL_ADDON_FOLDER"}
 
-
  #### Detect type of system manager
  export SYSTEM=''
  pidof systemd && export SYSTEM='systemd'
@@ -69,6 +63,16 @@
  locale
 
  #### DOWNLOADS...
+
+ ### upgrade all installed packages
+ apt-get update && \
+     apt-get upgrade -y
+
+ ### upgrade pip
+ apt-get install python-pip && \
+     pip install -U pip && \
+     apt-get purge python-pip
+
  ### Packages
  apt-get install -y moreutils tree python-dev && \
  apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
