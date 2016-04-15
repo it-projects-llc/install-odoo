@@ -7,14 +7,14 @@ Usage
     export SCRIPT_BRANCH = "yelizariev/install-odoo/master"
 
     # download script
-    wget https://raw.githubusercontent.com/${SCRIPT_BRANCH}/install-odoo-saas.sh -O install-odoo.sh
+    wget https://raw.githubusercontent.com/${SCRIPT_BRANCH}/install-odoo-saas.sh
 
     # set parameters, e.g.
     export ODOO_SAAS_TOOL="yes"
-    # (list of all parameters can be found at install-odoo.sh)
+    # (list of all parameters with default values can be found at install-odoo-saas.sh)
 
     # run script
-    /bin/bash -x install-odoo.sh
+    /bin/bash -x install-odoo-saas.sh
 
 # Contributors
 
