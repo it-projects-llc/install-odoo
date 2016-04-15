@@ -1,5 +1,21 @@
 # install-odoo
 
+Usage
+-----
+
+    # install and upgrade pip
+    apt-get install python-pip
+    pip install -U pip
+    apt-get purge python-pip
+
+    # download install script
+    wget https://raw.githubusercontent.com/iledarn/install-odoo/master/install-odoo-saas.sh -O install-odoo.sh
+
+    # set parameters
+    export ODOO_SAAS_TOOL="yes"
+
+    # execute script with debugging
+    /bin/bash -x install-odoo.sh
 
 # Contributors
 
