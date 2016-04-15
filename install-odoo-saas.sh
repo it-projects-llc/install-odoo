@@ -8,58 +8,69 @@
 # * Optional: Install & configure Odoo SaaS Tool
 # * Optional: Background installation: $ nohup ./odoo_install.sh > nohup.log 2>&1 </dev/null &
 ################################################################################################
+ apt-get update && \
+ apt-get upgrade -y
+ apt-get install python-pip && \
+ pip install -U pip && \
+ apt-get purge python-pip
 
  #### GENERAL SETTINGS : Edit the following settings as needed
- ## Gist url
- export GIST="bassn/996f8b168f0b1406dd54"   #update if you've forked this gist
+ ## Github script's repo
+ SCRIPT_BRANCH=${SCRIPT_BRANCH:-"yelizariev/install-odoo/master"}
  ## E-Mail
- export EMAIL_SERVER=stmp.example.com                                        
- export EMAIL_USER=mail@example.com
- export EMAIL_PASS=GiveMeYourPassBaby
+ EMAIL_SERVER=${EMAIL_SERVER:-stmp.example.com}
+ EMAIL_USER=${EMAIL_USER:-mail@example.com}
+ EMAIL_PASS=${EMAIL_PASS:-GiveMeYourPassBaby}
  ## PostgreSQL
- export DB_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`    
+ DB_PASS=${DB_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`}
  ## Odoo
- export ODOO_DOMAIN=odoo.example.com                                         
- export ODOO_DATABASE=odoo.example.com                                       
- export ODOO_USER=odoo
- export ODOO_BRANCH=8.0
- export ODOO_PASS=`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-12};echo;`  
+ ODOO_DOMAIN=${ODOO_DOMAIN:-odoo.example.com}
+ ODOO_DATABASE=${ODOO_DATABASE:-odoo.example.com}
+ ODOO_USER=${ODOO_USER:-odoo}
+ ODOO_BRANCH=${ODOO_BRANCH:-8.0}
+ ODOO_PASS=${ODOO_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-12};echo;`}
  ## SSL
- export SSL_CERT=/etc/ssl/certs/XXXX.crt                                    
- export SSL_KEY=/etc/ssl/private/XXXX.key                                   
- ## DB Backup 
- export DB_BACKUP="yes"         #set "no" if you do want to configure backup
- ## Odoo SaaS Tool 
- export ODOO_SAAS_TOOL="yes"    #set "no" if you do want odoo saas tool
- export SAAS_SERVER=server-1
- export SAAS_TEMPLATE=template-1
+ SSL_CERT=${SSL_CERT:-/etc/ssl/certs/XXXX.crt}
+ SSL_KEY=${SSL_KEY:-/etc/ssl/private/XXXX.key}
+ ## DB Backup
+ #set "no" if you don't want to configure backup
+ DB_BACKUP=${DB_BACKUP:-"yes"}
+ ## Odoo SaaS
+ #set "yes" if you do want odoo saas tool
+ ODOO_SAAS_TOOL=${ODOO_SAAS_TOOL:-"no"}
+ SAAS_SERVER=${SAAS_SERVER:-server-1}
+ SAAS_TEMPLATE=${SAAS_TEMPLATE:-template-1}
+ ## user /etc/hosts instead of dns server for saas
+ #set "no" if you have dns server with odoo.example.com, server-1.odoo.example.com, template-1.odoo.example.com records
+ SAAS_ADD_HOSTS=${SAAS_ADD_HOSTS:-"yes"}
  ## Add your private Git
- export USE_PRIVATE_GIT="no"           #Set to "yes", if you want to clone a private Git
- export PRIVATE_GIT_REMOTE="https://MY_USER_NAME:MY_PASSWORD@bitbucket.org/MY_REMOTE_USER/MY_REMOTE_REPOSITORY.git"     #remote adress of your private Git
- export PRIVATE_GIT_LOCAL="/usr/local/src/odoo-addons/MY_LOCAL_ADDON_FOLDER"     #local folder of your private Git
- 
+ #Set to "yes", if you want to clone a private Git
+ USE_PRIVATE_GIT=${USE_PRIVATE_GIT:-"no"}
+ #remote adress of your private Git
+ PRIVATE_GIT_REMOTE=${PRIVATE_GIT_REMOTE:-"https://MY_USER_NAME:MY_PASSWORD@bitbucket.org/MY_REMOTE_USER/MY_REMOTE_REPOSITORY.git"}
+ #local folder of your private Git 
+ PRIVATE_GIT_LOCAL=${PRIVATE_GIT_LOCAL:-"/usr/local/src/odoo-addons/MY_LOCAL_ADDON_FOLDER"}
+
 
  #### Detect type of system manager
  export SYSTEM=''
- pidof systemd && export SYSTEM='systemd' 
+ pidof systemd && export SYSTEM='systemd'
  [[ -z $SYSTEM ]] && whereis upstart | grep -q 'upstart: /' && export SYSTEM='upstart'
  [[ -z $SYSTEM ]] &&  export SYSTEM='supervisor'
  echo "SYSTEM=$SYSTEM"
 
  #### CHECK AND UPDATE LANGUAGE
  env | grep LANG
- export LANGUAGE=en_US:en && \
- export LANG=en_US.UTF-8 && \
- export LC_ALL=en_US.UTF-8 && \
+ export LANGUAGE=en_US:en
+ export LANG=en_US.UTF-8
+ export LC_ALL=en_US.UTF-8
  locale-gen en_US.UTF-8 && \
  dpkg-reconfigure locales
  locale
 
  #### DOWNLOADS...
  ### Packages
- apt-get update && \
- apt-get upgrade -y && \
- apt-get install -y git python-pip moreutils tree python-dev && \
+ apt-get install -y moreutils tree python-dev && \
  apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
  [[ "$SYSTEM" == "supervisor" ]] && apt-get install supervisor
 
@@ -198,7 +209,7 @@
  
  ## /etc/odoo/odoo-server.conf
  mkdir -p /etc/odoo && cd /etc/odoo/
- wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-server.conf -O odoo-server.conf
+ wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/odoo-server.conf -O odoo-server.conf
  eval "${PERL_UPDATE_ENV} < odoo-server.conf" | sponge odoo-server.conf
  chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
  chmod 600 odoo-server.conf
@@ -216,15 +227,15 @@
 
  cd /etc/nginx && \
  mv nginx.conf nginx.conf.orig &&\
- wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx.conf -O nginx.conf
+ wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/nginx.conf -O nginx.conf
 
  cd /etc/nginx && \
- wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo_params -O odoo_params && \
+ wget -q  https://raw.githubusercontent.com/${SCRIPT_BRANCH}/nginx_odoo_params -O odoo_params && \
  eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
 
  mkdir /etc/nginx/sites-available/ -p && \
  cd /etc/nginx/sites-available/ && \
- wget -q https://gist.githubusercontent.com/${GIST}/raw/nginx_odoo.conf -O odoo.conf && \
+ wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/nginx_odoo.conf -O odoo.conf && \
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
  mkdir /etc/nginx/sites-enabled/ -p && \
  cd /etc/nginx/sites-enabled/ && \
@@ -243,7 +254,7 @@
  then
 
  cd /lib/systemd/system/
- wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo.service -O odoo.service
+ wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/odoo.service -O odoo.service
  eval "${PERL_UPDATE_ENV} < odoo.service" | sponge odoo.service
  ## START - systemd
  systemctl enable odoo.service 
@@ -254,7 +265,7 @@
  then
 
  cd /etc/init/
- wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-init.conf -O odoo.conf
+ wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/odoo-init.conf -O odoo.conf
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
  ## START - upstart
  start odoo     # alt: stop odoo  / restart odoo 
@@ -263,7 +274,7 @@
  else                                       #################################### ELSE
 
  cd /etc/supervisor/conf.d/
- wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-supervisor.conf -O odoo.conf
+ wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/odoo-supervisor.conf -O odoo.conf
  eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
  ## START - supervisor
  supervisorctl reread
@@ -285,7 +296,7 @@
  mkdir -p /opt/${ODOO_USER}/backups/
  chown ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/backups/
  cd /usr/local/bin/
- wget -q https://gist.githubusercontent.com/${GIST}/raw/odoo-backup.py -O odoo-backup.py
+ wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/odoo-backup.py -O odoo-backup.py
  chmod +x odoo-backup.py
  echo "### check url for undestanding time parameters: https://github.com/xolox/python-rotate-backups" >> /etc/crontab
  echo -e "#6 6\t* * *\t${ODOO_USER} odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/ --no-save-filestore --daily 8 --weekly 0 --monthly 0 --yearly 0" >> /etc/crontab
@@ -300,6 +311,16 @@
  #### Odoo Saas Tool
  if [[ "$ODOO_SAAS_TOOL" == "yes" ]]        ###################################### IF
  then
+ if [[ "$SAAS_ADD_HOSTS" == "yes" ]]
+ then
+ /bin/bash -c  "python /usr/local/src/odoo-addons/yelizariev/odoo-saas-tools/saas.py \
+  --print-local-hosts \
+  --portal-db-name=${ODOO_DOMAIN} \
+  --server-db-name=${SAAS_SERVER}.${ODOO_DOMAIN} \
+  --plan-template-db-name=${SAAS_TEMPLATE}.${ODOO_DOMAIN} \
+  >> /etc/hosts"
+ fi
+
  #emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$ if needed
  echo $ODOO_PASS
  echo $ODOO_DOMAIN
