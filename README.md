@@ -6,7 +6,7 @@ Usage
     # specify branch you are going to use
     export SCRIPT_BRANCH = "yelizariev/install-odoo/master"
 
-    # download install script
+    # download script
     wget https://raw.githubusercontent.com/${SCRIPT_BRANCH}/install-odoo-saas.sh -O install-odoo.sh
 
     # set parameters, e.g.
