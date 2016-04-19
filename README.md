@@ -4,7 +4,7 @@ Usage
 -----
 
     # specify branch you are going to use
-    export SCRIPT_BRANCH = "yelizariev/install-odoo/master"
+    export SCRIPT_BRANCH="yelizariev/install-odoo/master"
 
     # download script
     wget https://raw.githubusercontent.com/${SCRIPT_BRANCH}/install-odoo-saas.sh
