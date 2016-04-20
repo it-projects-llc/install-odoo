@@ -171,7 +171,7 @@
  # check version of your OS and download appropriate package
  # http://wkhtmltopdf.org/downloads.html
  apt-get install -y xfonts-base xfonts-75dpi
- apt-get -f install
+ apt-get -f install -y
  wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
  dpkg -i wkhtmltox-*.deb
 
