@@ -69,9 +69,9 @@
      apt-get upgrade -y
 
  ### upgrade pip
- apt-get install python-pip && \
+ apt-get install -y python-pip && \
      pip install -U pip && \
-     apt-get purge python-pip
+     apt-get purge -y python-pip
 
  ### Packages
  apt-get install -y moreutils tree python-dev && \
