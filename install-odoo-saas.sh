@@ -72,6 +72,8 @@
  apt-get install -y python-pip && \
      pip install -U pip && \
      apt-get purge -y python-pip
+ # refresh cash to be able to use new pip
+ hash -r
 
  ### Packages
  apt-get install -y moreutils tree python-dev && \
@@ -109,6 +111,7 @@
 
  ### Odoo Souce Code
  # If you change the following directories, you muss also ajust line 2 of file odoo-server.conf below
+ apt-get install -y git &&\
  cd /usr/local/src/ &&\
  git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git &&\
  mkdir /usr/local/src/odoo-addons -p && cd /usr/local/src/odoo-addons/ &&\
@@ -168,7 +171,7 @@
  # check version of your OS and download appropriate package
  # http://wkhtmltopdf.org/downloads.html
  apt-get install -y xfonts-base xfonts-75dpi
- apt-get -f install
+ apt-get -f install -y
  wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
  dpkg -i wkhtmltox-*.deb
 
