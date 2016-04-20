@@ -342,13 +342,13 @@
  
  #### DEBUG
  ## show settings (admin password, addons path)
- head /etc/odoo/odoo-server.conf 
+ # head /etc/odoo/odoo-server.conf 
  ## show odoo version
- grep '^version_info ' /usr/local/src/odoo/openerp/release.py 
+ # grep '^version_info ' /usr/local/src/odoo/openerp/release.py 
  ## Reminders
- echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
+ # echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
  ## log
- tail -f -n 100 /var/log/odoo/odoo-server.log 
+ # tail -f -n 100 /var/log/odoo/odoo-server.log 
 
  ## start from console (for ODOO_USER=odoo): 
  #  sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
