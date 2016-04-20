@@ -11,40 +11,40 @@
 
  #### GENERAL SETTINGS : Edit the following settings as needed
  ## Github script's repo
- SCRIPT_BRANCH=${SCRIPT_BRANCH:-"yelizariev/install-odoo/master"}
+ export SCRIPT_BRANCH=${SCRIPT_BRANCH:-"yelizariev/install-odoo/master"}
  ## E-Mail
- EMAIL_SERVER=${EMAIL_SERVER:-stmp.example.com}
- EMAIL_USER=${EMAIL_USER:-mail@example.com}
- EMAIL_PASS=${EMAIL_PASS:-GiveMeYourPassBaby}
+ export EMAIL_SERVER=${EMAIL_SERVER:-stmp.example.com}
+ export EMAIL_USER=${EMAIL_USER:-mail@example.com}
+ export EMAIL_PASS=${EMAIL_PASS:-GiveMeYourPassBaby}
  ## PostgreSQL
- DB_PASS=${DB_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`}
+ export DB_PASS=${DB_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`}
  ## Odoo
- ODOO_DOMAIN=${ODOO_DOMAIN:-odoo.example.com}
- ODOO_DATABASE=${ODOO_DATABASE:-odoo.example.com}
- ODOO_USER=${ODOO_USER:-odoo}
- ODOO_BRANCH=${ODOO_BRANCH:-8.0}
- ODOO_PASS=${ODOO_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-12};echo;`}
+ export ODOO_DOMAIN=${ODOO_DOMAIN:-odoo.example.com}
+ export ODOO_DATABASE=${ODOO_DATABASE:-odoo.example.com}
+ export ODOO_USER=${ODOO_USER:-odoo}
+ export ODOO_BRANCH=${ODOO_BRANCH:-8.0}
+ export ODOO_PASS=${ODOO_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-12};echo;`}
  ## SSL
- SSL_CERT=${SSL_CERT:-/etc/ssl/certs/XXXX.crt}
- SSL_KEY=${SSL_KEY:-/etc/ssl/private/XXXX.key}
+ export SSL_CERT=${SSL_CERT:-/etc/ssl/certs/XXXX.crt}
+ export SSL_KEY=${SSL_KEY:-/etc/ssl/private/XXXX.key}
  ## DB Backup
  #set "no" if you don't want to configure backup
- DB_BACKUP=${DB_BACKUP:-"yes"}
+ export DB_BACKUP=${DB_BACKUP:-"yes"}
  ## Odoo SaaS
  #set "yes" if you do want odoo saas tool
- ODOO_SAAS_TOOL=${ODOO_SAAS_TOOL:-"no"}
- SAAS_SERVER=${SAAS_SERVER:-server-1}
- SAAS_TEMPLATE=${SAAS_TEMPLATE:-template-1}
+ export ODOO_SAAS_TOOL=${ODOO_SAAS_TOOL:-"no"}
+ export SAAS_SERVER=${SAAS_SERVER:-server-1}
+ export SAAS_TEMPLATE=${SAAS_TEMPLATE:-template-1}
  ## user /etc/hosts instead of dns server for saas
  #set "no" if you have dns server with odoo.example.com, server-1.odoo.example.com, template-1.odoo.example.com records
- SAAS_ADD_HOSTS=${SAAS_ADD_HOSTS:-"yes"}
+ export SAAS_ADD_HOSTS=${SAAS_ADD_HOSTS:-"yes"}
  ## Add your private Git
  #Set to "yes", if you want to clone a private Git
- USE_PRIVATE_GIT=${USE_PRIVATE_GIT:-"no"}
+ export USE_PRIVATE_GIT=${USE_PRIVATE_GIT:-"no"}
  #remote adress of your private Git
- PRIVATE_GIT_REMOTE=${PRIVATE_GIT_REMOTE:-"https://MY_USER_NAME:MY_PASSWORD@bitbucket.org/MY_REMOTE_USER/MY_REMOTE_REPOSITORY.git"}
+ export PRIVATE_GIT_REMOTE=${PRIVATE_GIT_REMOTE:-"https://MY_USER_NAME:MY_PASSWORD@bitbucket.org/MY_REMOTE_USER/MY_REMOTE_REPOSITORY.git"}
  #local folder of your private Git 
- PRIVATE_GIT_LOCAL=${PRIVATE_GIT_LOCAL:-"/usr/local/src/odoo-addons/MY_LOCAL_ADDON_FOLDER"}
+ export PRIVATE_GIT_LOCAL=${PRIVATE_GIT_LOCAL:-"/usr/local/src/odoo-addons/MY_LOCAL_ADDON_FOLDER"}
 
  #### Detect type of system manager
  export SYSTEM=''
