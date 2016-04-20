@@ -69,9 +69,9 @@
      apt-get upgrade -y
 
  ### upgrade pip
- apt-get install python-pip && \
+ apt-get install -y python-pip && \
      pip install -U pip && \
-     apt-get purge python-pip
+     apt-get purge -y python-pip
 
  ### Packages
  apt-get install -y moreutils tree python-dev && \
@@ -348,7 +348,7 @@
  ## Reminders
  echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
  ## log
- tail -f -n 100 /var/log/odoo/odoo-server.log 
+ # tail -f -n 100 /var/log/odoo/odoo-server.log 
 
  ## start from console (for ODOO_USER=odoo): 
  #  sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
