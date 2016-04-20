@@ -13,20 +13,20 @@
  ## Github script's repo
  SCRIPT_BRANCH=${SCRIPT_BRANCH:-"yelizariev/install-odoo/master"}
  ## E-Mail
- EMAIL_SERVER=${EMAIL_SERVER:-stmp.example.com}
- EMAIL_USER=${EMAIL_USER:-mail@example.com}
- EMAIL_PASS=${EMAIL_PASS:-GiveMeYourPassBaby}
+ export EMAIL_SERVER=${EMAIL_SERVER:-stmp.example.com}
+ export EMAIL_USER=${EMAIL_USER:-mail@example.com}
+ export EMAIL_PASS=${EMAIL_PASS:-GiveMeYourPassBaby}
  ## PostgreSQL
- DB_PASS=${DB_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`}
+ export DB_PASS=${DB_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`}
  ## Odoo
  ODOO_DOMAIN=${ODOO_DOMAIN:-odoo.example.com}
  ODOO_DATABASE=${ODOO_DATABASE:-odoo.example.com}
- ODOO_USER=${ODOO_USER:-odoo}
+ export ODOO_USER=${ODOO_USER:-odoo}
  ODOO_BRANCH=${ODOO_BRANCH:-8.0}
  ODOO_PASS=${ODOO_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-12};echo;`}
  ## SSL
- SSL_CERT=${SSL_CERT:-/etc/ssl/certs/XXXX.crt}
- SSL_KEY=${SSL_KEY:-/etc/ssl/private/XXXX.key}
+ export SSL_CERT=${SSL_CERT:-/etc/ssl/certs/XXXX.crt}
+ export SSL_KEY=${SSL_KEY:-/etc/ssl/private/XXXX.key}
  ## DB Backup
  #set "no" if you don't want to configure backup
  DB_BACKUP=${DB_BACKUP:-"yes"}
