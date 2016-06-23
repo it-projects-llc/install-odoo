@@ -12,7 +12,7 @@
  #### GENERAL SETTINGS : Edit the following settings as needed
 
  ## Github script's repo
- export SCRIPT_BRANCH=${SCRIPT_BRANCH:-"yelizariev/install-odoo/master"}
+ export SCRIPT_BRANCH=${SCRIPT_BRANCH:-"it-projects-llc/install-odoo/master"}
 
  ## Type of installation
  export IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER:-"no"}
