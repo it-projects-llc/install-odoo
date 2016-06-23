@@ -14,8 +14,11 @@
  ## Github script's repo
  export SCRIPT_BRANCH=${SCRIPT_BRANCH:-"yelizariev/install-odoo/master"}
 
- ## Docker
- export IS_DOCKER=${IS_DOCKER:-"no"}
+ ## Type of installation
+ export IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER:-"no"}
+ export IS_DOCKER_HOST=${IS_DOCKER_HOST:-"no"}
+ # IS_LOCAL - local installation for development purpose
+ export IS_LOCAL=${IS_LOCAL:-"no"}
 
  ## E-Mail
  export EMAIL_SERVER=${EMAIL_SERVER:-stmp.example.com}
@@ -30,7 +33,7 @@
  export ODOO_DIR=${ODOO_DIR:-/usr/local/src/odoo}
  export ODOO_CONFIG=${ODOO_CONFIG:-/etc/openerp-server.conf}
  export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"yes"}
- export CLONE_ODOO=${DB_BACKUP:-"yes"}
+ export CLONE_ODOO=${CLONE_ODOO:-"yes"}
  export ODOO_DOMAIN=${ODOO_DOMAIN:-odoo.example.com}
  export ODOO_DATABASE=${ODOO_DATABASE:-odoo.example.com}
  export ODOO_USER=${ODOO_USER:-odoo}
@@ -41,7 +44,7 @@
  export ADDONS_DIR=${ADDONS_DIR:-/usr/local/src/odoo-addons}
  export CLONE_IT_PROJECTS_LLC=${CLONE_IT_PROJECTS_LLC:-"yes"}
  export CLONE_OCA=${CLONE_OCA:-"no"}
- export CLONE_SAAS=${DB_BACKUP:-"yes"}
+ export CLONE_SAAS=${CLONE_SAAS:-"yes"}
 
  ## SSL
  export SSL_CERT=${SSL_CERT:-/etc/ssl/certs/XXXX.crt}
@@ -50,6 +53,7 @@
  ## DB Backup
  #set "no" if you don't want to configure backup
  export DB_BACKUP=${DB_BACKUP:-"yes"}
+ export DB_BACKUP_DIR=${DB_BACKUP_DIR:-""}
 
  ## NGINX
  export INIT_NGINX=${INIT_NGINX:-"yes"}
@@ -57,18 +61,14 @@
  ## wkhtmltopdf
  # check version of your OS and download appropriate package
  # http://wkhtmltopdf.org/downloads.html
- lsb_release -a
- uname -i
+
+ #lsb_release -a
+ #uname -i
  export WKHTMLTOPDF_DEB_URL={WKHTMLTOPDF_DEB_URL:-"http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb"}
 
  ## Odoo SaaS
- #set "yes" if you do want odoo saas tool
+ #set "yes" if you do want odoo saas tool. All parameters of current script are passed to saas.py
  export ODOO_SAAS_TOOL=${ODOO_SAAS_TOOL:-"no"}
- export SAAS_SERVER=${SAAS_SERVER:-server-1}
- export SAAS_TEMPLATE=${SAAS_TEMPLATE:-template-1}
- ## user /etc/hosts instead of dns server for saas
- #set "no" if you have dns server with odoo.example.com, server-1.odoo.example.com, template-1.odoo.example.com records
- export SAAS_ADD_HOSTS=${SAAS_ADD_HOSTS:-"yes"}
 
  #### Detect type of system manager
  export SYSTEM=''
@@ -77,32 +77,91 @@
  [[ -z $SYSTEM ]] &&  export SYSTEM='supervisor'
  echo "SYSTEM=$SYSTEM"
 
- #### CHECK AND UPDATE LANGUAGE
- env | grep LANG
- export LANGUAGE=en_US:en
- export LANG=en_US.UTF-8
- export LC_ALL=en_US.UTF-8
- locale-gen en_US.UTF-8 && \
- dpkg-reconfigure locales
- locale
+ ##### CHECK AND UPDATE LANGUAGE
+ #env | grep LANG
+ #export LANGUAGE=en_US:en
+ #export LANG=en_US.UTF-8
+ #export LC_ALL=en_US.UTF-8
+ #locale-gen en_US.UTF-8 && \
+ #dpkg-reconfigure locales
+ #locale
 
  #### DOWNLOADS...
 
- ### upgrade all installed packages
- apt-get update && \
-     apt-get upgrade -y
+ apt-get install -y moreutils tree git
 
- ### upgrade pip
- apt-get install -y python-pip && \
-     pip install -U pip && \
-     apt-get purge -y python-pip
- # refresh cash to be able to use new pip
- hash -r
+ if [[ "$IS_LOCAL" == "no" ]]
+ then
+     apt-get install -y emacs23-nox || apt-get install -y emacs24-nox
+ fi
 
- ### Packages
- apt-get install -y moreutils tree python-dev && \
- apt-get install -y emacs23-nox || apt-get install -y emacs24-nox  && \
- [[ "$SYSTEM" == "supervisor" ]] && [[ "$IS_DOCKER" == "no" ]] && apt-get install supervisor
+ [[ "$SYSTEM" == "supervisor" ]] && [[ "$INIT_START_SCRIPTS" == "yes" ]] && apt-get install -y supervisor
+
+ if [[ "$IS_DOCKER_HOST" == "no" ]]
+ then
+     ### upgrade all installed packages
+     apt-get update && apt-get upgrade -y
+
+     ### upgrade pip
+     apt-get install -y python-pip && \
+         pip install -U pip && \
+         apt-get purge -y python-pip
+     # refresh cash to be able to use new pip
+     hash -r
+
+     ### Packages
+     apt-get install -y python-dev
+
+     ### Python
+     pip install psycogreen &&\
+         pip install rotate-backups &&\
+         pip install oauthlib &&\
+         pip install requests --upgrade
+
+     ### Deps for OCA website
+     pip install ipwhois
+
+     ### Deps for OCA Server tools
+     apt-get install python-ldap &&
+         pip install unidecode &&\
+         pip install unidecode --upgrade
+
+     ### Deps for addons-vauxoo
+     #pip install pandas
+
+     ### Deps for Odoo Saas Tool
+     pip install Boto
+     pip install FileChunkIO
+     pip install pysftp
+
+     ### Odoo Deps
+     ## python
+     python --version                      # should be 2.7 or higher
+     cd ${ODOO_DIR} &&\
+         cp odoo.py odoo.py.orig &&\
+         sed -i "s/'apt-get'/'apt-get', '-y'/" odoo.py &&\
+         cat odoo.py | python &&\
+         git checkout odoo.py
+     echo "odoo.py checked out"
+
+     ## wkhtmltopdf
+     cd /tmp
+     apt-get install -y xfonts-base xfonts-75dpi
+     apt-get -f install -y
+     wget ${WKHTMLTOPDF_DEB_URL}
+     dpkg -i wkhtmltox-*.deb
+
+     ## Less CSS via nodejs
+     ## nodejs:
+     # for 14.04+
+     apt-get install -y npm
+     ln -s /usr/bin/nodejs /usr/bin/node
+     # for 13.10-
+     # check https://www.odoo.com/documentation/8.0/setup/install.html
+     ## less css
+     npm install -g less less-plugin-clean-css
+     #### ...DOWNLOADS done.
+ fi
 
  if [[ "$INIT_POSTGRESQL" == "yes" ]]
      ### PostgreSQL
@@ -113,39 +172,22 @@
      echo "postgresql installed"
  fi
 
- ### Python
- pip install psycogreen &&\
- pip install rotate-backups &&\
- pip install oauthlib &&\
- pip install requests --upgrade
-
- ### Deps for OCA website
- pip install ipwhois
-
- ### Deps for OCA Server tools
- apt-get install python-ldap &&
- pip install unidecode &&\
- pip install unidecode --upgrade
-
- ### Deps for addons-vauxoo
- pip install pandas
-
- ### Deps for Odoo Saas Tool
- pip install Boto
- pip install FileChunkIO
- pip install pysftp
-
  ### Odoo Souce Code
- # If you change the following directories, you muss also ajust line 2 of file odoo-server.conf below
  if [[ "$CLONE_ODOO" == "yes" ]]
  then
-    apt-get install -y git &&\
-        mkdir -p $ODOO_DIR  &&\
-        git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git $ODOO_DIR
+     mkdir -p $ODOO_DIR
+     git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git $ODOO_DIR
+
+     #### Changes on Odoo Code
+     cd $ODOO_DIR
+     ## delete matches="..." at /web/database/manager
+     sed -i 's/matches="[^"]*"//g' addons/web/static/src/xml/base.xml
+     ## disable im_odoo_support
+     sed -i "s/'auto_install': True/'auto_install': False/" addons/im_odoo_support/__openerp__.py
  fi
 
  REPOS=()
- #REPOS=( "${REPOS[@]}" "new element") - is way to add element to array
+ #Hint: REPOS=( "${REPOS[@]}" "new element") - is way to add element to array
 
  if [[ "$CLONE_OCA" == "yes" ]]
  then
@@ -182,72 +224,39 @@
      git clone -b ${ODOO_BRANCH} $r
  done
 
- ### Odoo Deps
- ## python
- python --version                      # should be 2.7 or higher
- cd ${ODOO_DIR} &&\
- cp odoo.py odoo.py.orig &&\
- sed -i "s/'apt-get'/'apt-get', '-y'/" odoo.py &&\
- cat odoo.py | python &&\
- git checkout odoo.py
- echo "odoo.py checked out"
-
- ## wkhtmltopdf
- cd /tmp
- apt-get install -y xfonts-base xfonts-75dpi
- apt-get -f install -y
- wget ${WKHTMLTOPDF_DEB_URL}
- dpkg -i wkhtmltox-*.deb
-
- ## Less CSS via nodejs
- ## nodejs:
- # for 14.04+
- apt-get install -y npm
- ln -s /usr/bin/nodejs /usr/bin/node
- # for 13.10-
- # check https://www.odoo.com/documentation/8.0/setup/install.html
- ## less css
- npm install -g less less-plugin-clean-css
- #### ...DOWNLOADS done.
-
- #### Changes on Odoo Code
- cd /usr/local/src/odoo
- ## delete matches="..." at /web/database/manager
- sed -i 's/matches="[^"]*"//g' addons/web/static/src/xml/base.xml
- ## disable im_odoo_support
- sed -i "s/'auto_install': True/'auto_install': False/" addons/im_odoo_support/__openerp__.py
-
  #### CONFIGS
  ### System Config
  #from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
  export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
- [[ -z $SYSTEM ]] && echo "Don't forget to define SYSTEM variable"
-
- ### Odoo System User
- adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --gecos '$OE_USER' --group ${ODOO_USER}
 
  if [[ "$INIT_POSTGRESQL" == "yes" ]]
     ### Odoo DB User
     su - postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD '${DB_PASS}';\""
  fi
 
- ### Odoo Config
- echo "Odoo Config"
- ## /var/log/odoo/
- mkdir -p /var/log/odoo/
- chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
+ if [[ "$IS_DOCKER_HOST" == "no" ]]
+ then
 
- ## /temp import data
- mkdir -p /opt/${ODOO_USER}/.local/share/User/import/
- chown -R ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/.local
+     ### Odoo System User
+     adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --gecos '$OE_USER' --group ${ODOO_USER}
 
- ## /etc/odoo/odoo-server.conf
- mkdir -p /etc/odoo && cd /etc/odoo/
- wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/odoo-server.conf -O odoo-server.conf
- eval "${PERL_UPDATE_ENV} < odoo-server.conf" | sponge odoo-server.conf
- chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
- chmod 600 odoo-server.conf
+     ### Odoo Config
+     echo "Odoo Config"
+     ## /var/log/odoo/
+     mkdir -p /var/log/odoo/
+     chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
 
+     ## /temp import data
+     mkdir -p /opt/${ODOO_USER}/.local/share/User/import/
+     chown -R ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/.local
+
+     ## /etc/odoo/odoo-server.conf
+     mkdir -p /etc/odoo && cd /etc/odoo/
+     wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/odoo-server.conf -O odoo-server.conf
+     eval "${PERL_UPDATE_ENV} < odoo-server.conf" | sponge odoo-server.conf
+     chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
+     chmod 600 odoo-server.conf
+ fi
 
  if [[ "$INIT_NGINX" == "yes" ]]
  then
@@ -285,51 +294,61 @@
  fi
 
  #### START CONTROL
- ### CONTROL SCRIPTS - systemd
- if [[ "$IS_DOCKER" == "yes" ]]            ###################################### IF
+ DAEMON_LIST=( "odoo" )
+ DAEMON_CONFIGS="configs"
+ if [[ "$IS_DOCKER_CONTAINER" == "yes" ]]
  then
+     DAEMON_LIST= ( "odoo-docker" "odoo-docker-db" )
+     CONFIG="configs-docker"
+ fi
 
-     # no need for start scripts in docker
-
- elif [[ "$SYSTEM" == "systemd" ]]            ###################################### IF
+ if [[ "$INIT_START_SCRIPTS" == "no" ]]            ###################################### IF
  then
+     # pass
+ elif [[ "$SYSTEM" == "systemd" ]]            ###################################### ELIF
+ then
+     ### CONTROL SCRIPTS - systemd
 
      cd /lib/systemd/system/
-     wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/odoo.service -O odoo.service
-     eval "${PERL_UPDATE_ENV} < odoo.service" | sponge odoo.service
-     ## START - systemd
-     systemctl enable odoo.service
-     systemctl restart odoo.service
 
- ### CONTROL SCRIPTS - upstart
+     for DAEMON in $DAEMON_LIST
+     do
+         wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/${DAEMON_CONFIGS}/${DAEMON}.service -O ${DAEMON}.service
+         eval "${PERL_UPDATE_ENV} < ${DAEMON}.service" | sponge ${DAEMON}.service
+         ## START - systemd
+         systemctl enable ${DAEMON}.service
+         systemctl restart ${DAEMON}.service
+     done
+
  elif [[ "$SYSTEM" == "upstart" ]]          #################################### ELIF
  then
+     ### CONTROL SCRIPTS - upstart
 
      cd /etc/init/
-     wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/odoo-init.conf -O odoo.conf
-     eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
-     ## START - upstart
-     start odoo     # alt: stop odoo  / restart odoo
-
- ### CONTROL SCRIPTS - supervisor
+     for DAEMON in $DAEMON_LIST
+     do
+         wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/${DAEMON_CONFIGS}/${DAEMON}-init.conf -O ${DAEMON}.conf
+         eval "${PERL_UPDATE_ENV} < ${DAEMON}.conf" | sponge ${DAEMON}.conf
+         ## START - upstart
+         start ${DAEMON}     # alt: stop ${DAEMON}  / restart ${DAEMON}
+     done
  else                                       #################################### ELSE
+     ### CONTROL SCRIPTS - supervisor
 
      cd /etc/supervisor/conf.d/
-     wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/odoo-supervisor.conf -O odoo.conf
-     eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
-     ## START - supervisor
-     supervisorctl reread
-     supervisorctl update
-     supervisorctl restart odoo
-
+     for DAEMON in $DAEMON_LIST
+     do
+         wget -q https://raw.githubusercontent.com/${SCRIPT_BRANCH}/${DAEMON_CONFIGS}/${DAEMON}-supervisor.conf -O ${DAEMON}.conf
+         eval "${PERL_UPDATE_ENV} < ${DAEMON}.conf" | sponge ${DAEMON}.conf
+         ## START - supervisor
+         supervisorctl reread
+         supervisorctl update
+         supervisorctl restart ${DAEMON}
+     done
  fi                                         ################################   END IF
 
- echo "Do not forget to set server parameter report.url = 0.0.0.0:8069"
-
- ### CONTROL SCRIPTS - /etc/init.d/*
- # Such scripts are not recommended, because you will not get supervision features.
- # Use this link to find ones: https://gist.github.com/yelizariev/2abdd91d00dddc4e4fa4/d0ac3bd971e81213d17332647d9a74a580cfde6b
-
+ # What?
+ #echo "Do not forget to set server parameter report.url = 0.0.0.0:8069"
 
  #### ODOO DB BACKUP
  if [[ "$DB_BACKUP" == "yes" ]]             ###################################### IF
@@ -352,36 +371,15 @@
  #### Odoo Saas Tool
  if [[ "$ODOO_SAAS_TOOL" == "yes" ]]        ###################################### IF
  then
- if [[ "$SAAS_ADD_HOSTS" == "yes" ]]
- then
- /bin/bash -c  "python /usr/local/src/odoo-addons/yelizariev/odoo-saas-tools/saas.py \
-  --print-local-hosts \
-  --portal-db-name=${ODOO_DOMAIN} \
-  --server-db-name=${SAAS_SERVER}.${ODOO_DOMAIN} \
-  --plan-template-db-name=${SAAS_TEMPLATE}.${ODOO_DOMAIN} \
-  >> /etc/hosts"
+     #stop odoo
+     sudo su - ${ODOO_USER} -s /bin/bash -c  "python $ADDONS_DIR/it-projects-llc/odoo-saas-tools/saas.py $@"
  fi
-
- #emacs /etc/odoo/odoo-server.conf # change dbfilter to ^%h$ if needed
- echo $ODOO_PASS
- echo $ODOO_DOMAIN
- stop odoo
- sudo su - ${ODOO_USER} -s /bin/bash -c  "python /usr/local/src/odoo-addons/yelizariev/odoo-saas-tools/saas.py \
-  --odoo-script=/usr/local/src/odoo/openerp-server \
-  --odoo-config=/etc/odoo/odoo-server.conf \
-  --portal-create --server-create --plan-create --run  \
-  --admin-password=${ODOO_PASS} \
-  --portal-db-name=${ODOO_DOMAIN} \
-  --server-db-name=${SAAS_SERVER}.${ODOO_DOMAIN} \
-  --plan-template-db-name=${SAAS_TEMPLATE}.${ODOO_DOMAIN} \
-  --plan-clients=demo-%i.${ODOO_DOMAIN}"
- fi                                         ################################## END IF
 
  #### DEBUG
  ## show settings (admin password, addons path)
  head /etc/odoo/odoo-server.conf
  ## show odoo version
- grep '^version_info ' /usr/local/src/odoo/openerp/release.py
+ grep '^version_info ' $ODOO_DIR/openerp/release.py
  ## Reminders
  echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
  ## log
