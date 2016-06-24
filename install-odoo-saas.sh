@@ -30,7 +30,7 @@
 
  ## Odoo
  export ODOO_DIR=${ODOO_DIR:-/usr/local/src/odoo}
- export ODOO_CONFIG=${ODOO_CONFIG:-/etc/openerp-server.conf}
+ export OPENERP_SERVER=${OPENERP_SERVER:-/etc/openerp-server.conf}
  export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"yes"}
  export CLONE_ODOO=${CLONE_ODOO:-"yes"}
  export ODOO_DOMAIN=${ODOO_DOMAIN:-odoo.example.com}
