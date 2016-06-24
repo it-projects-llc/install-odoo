@@ -17,8 +17,7 @@
  ## Type of installation
  export IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER:-"no"}
  export IS_DOCKER_HOST=${IS_DOCKER_HOST:-"no"}
- # IS_LOCAL - local installation for development purpose
- export IS_LOCAL=${IS_LOCAL:-"no"}
+ export INIT_START_SCRIPTS=${INIT_START_SCRIPTS:-"yes"}
 
  ## E-Mail
  export EMAIL_SERVER=${EMAIL_SERVER:-stmp.example.com}
@@ -88,61 +87,26 @@
 
  #### DOWNLOADS...
 
- apt-get install -y moreutils tree git
+ apt-get update
 
- if [[ "$IS_LOCAL" == "no" ]]
+ if [[ "$IS_DOCKER_CONTAINER" == "no" ]]
  then
      apt-get install -y emacs23-nox || apt-get install -y emacs24-nox
+     # moreutils is installed for sponge util
+     apt-get install -y moreutils tree
  fi
 
  [[ "$SYSTEM" == "supervisor" ]] && [[ "$INIT_START_SCRIPTS" == "yes" ]] && apt-get install -y supervisor
 
  if [[ "$IS_DOCKER_HOST" == "no" ]]
  then
-     ### upgrade all installed packages
-     apt-get update && apt-get upgrade -y
+     apt-get install -y python-pip
 
-     ### upgrade pip
-     apt-get install -y python-pip && \
-         pip install -U pip && \
-         apt-get purge -y python-pip
-     # refresh cash to be able to use new pip
-     hash -r
-
-     ### Packages
-     apt-get install -y python-dev
-
-     ### Python
-     pip install psycogreen &&\
-         pip install rotate-backups &&\
-         pip install oauthlib &&\
-         pip install requests --upgrade
-
-     ### Deps for OCA website
-     pip install ipwhois
-
-     ### Deps for OCA Server tools
-     apt-get install python-ldap &&
-         pip install unidecode &&\
-         pip install unidecode --upgrade
-
-     ### Deps for addons-vauxoo
-     #pip install pandas
-
-     ### Deps for Odoo Saas Tool
-     pip install Boto
-     pip install FileChunkIO
-     pip install pysftp
-
-     ### Odoo Deps
-     ## python
-     python --version                      # should be 2.7 or higher
-     cd ${ODOO_DIR} &&\
-         cp odoo.py odoo.py.orig &&\
-         sed -i "s/'apt-get'/'apt-get', '-y'/" odoo.py &&\
-         cat odoo.py | python &&\
-         git checkout odoo.py
-     echo "odoo.py checked out"
+     # install dependencies:
+     wget http://nightly.odoo.com/9.0/nightly/deb/odoo_9.0.latest_all.deb
+     sudo dpkg -i odoo_9.0.latest_all.deb  # shows errors -- just ignore them and execute next command:
+     apt-get -f install
+     apt-get remove odoo
 
      ## wkhtmltopdf
      cd /tmp
@@ -150,6 +114,19 @@
      apt-get -f install -y
      wget ${WKHTMLTOPDF_DEB_URL}
      dpkg -i wkhtmltox-*.deb
+
+     # requirements.txt
+     cd $ODOO_DIR
+     pip install -r requirements.txt
+
+     # fix error with jpeg (if you get it)
+     # uninstall PIL
+     pip uninstall PIL
+     # install libjpeg-dev with apt
+     apt-get install libjpeg-dev
+     # reinstall pillow
+     pip install -I pillow
+     # (from here https://github.com/odoo/odoo/issues/612 )
 
      ## Less CSS via nodejs
      ## nodejs:
@@ -160,16 +137,27 @@
      # check https://www.odoo.com/documentation/8.0/setup/install.html
      ## less css
      npm install -g less less-plugin-clean-css
-     #### ...DOWNLOADS done.
+
+
+     if [[ "$ODOO_SAAS_TOOL" == "yes" ]]
+     then
+         ### Deps for Odoo Saas Tool
+         pip install Boto
+         pip install FileChunkIO
+         pip install pysftp
+         pip install rotate-backups
+         pip install oauthlib
+         pip install requests --upgrade
+     fi
  fi
 
  if [[ "$INIT_POSTGRESQL" == "yes" ]]
-     ### PostgreSQL
-     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-     echo 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' >> /etc/apt/sources.list.d/pgdg.list &&\
-     apt-get update &&\
-     apt-get install postgresql postgresql-contrib -y && \
-     echo "postgresql installed"
+    ### PostgreSQL
+    apt-get install postgresql
+    #wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+    #echo 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' >> /etc/apt/sources.list.d/pgdg.list &&\
+    #    apt-get install postgresql postgresql-contrib -y && \
+    echo "postgresql installed"
  fi
 
  ### Odoo Souce Code
@@ -219,6 +207,11 @@
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/odoo-saas-tools.git it-projects-llc/odoo-saas-tools")
  fi
 
+ if [[ "${REPOS}" != ""]]
+ then
+     apt-get install git
+ fi
+
  for r in "${REPOS[@]}"
  do
      git clone -b ${ODOO_BRANCH} $r
@@ -266,7 +259,6 @@
      wget --quiet -O - http://nginx.org/keys/nginx_signing.key | apt-key add - &&\
      echo 'deb http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
      echo 'deb-src http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
-     apt-get update &&\
      apt-get install nginx -y && \
      echo "nginx installed"
 
@@ -296,10 +288,10 @@
  #### START CONTROL
  DAEMON_LIST=( "odoo" )
  DAEMON_CONFIGS="configs"
- if [[ "$IS_DOCKER_CONTAINER" == "yes" ]]
+ if [[ "$IS_DOCKER_HOST" == "yes" ]]
  then
      DAEMON_LIST= ( "odoo-docker" "odoo-docker-db" )
-     CONFIG="configs-docker"
+     CONFIG="configs-docker-host"
  fi
 
  if [[ "$INIT_START_SCRIPTS" == "no" ]]            ###################################### IF
