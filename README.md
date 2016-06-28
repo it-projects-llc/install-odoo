@@ -1,6 +1,6 @@
 # install-odoo
 
-Install odoo from git with\without using docker for developement\production.
+Install developement / production [odoo](https://www.odoo.com/) from [git](https://github.com/odoo/odoo) with / without using docker .
 
 ## Basic usage
 
@@ -19,7 +19,7 @@ Install odoo from git with\without using docker for developement\production.
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
     CLONE_SAAS=yes \
-    OPENERP_SERVER=/etc/openerp-server.conf
+    OPENERP_SERVER=/etc/openerp-server.conf \
     UPDATE_ADDONS_PATH=yes \
     /bin/bash -x install-odoo-saas.sh
 
