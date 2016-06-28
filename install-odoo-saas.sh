@@ -304,11 +304,11 @@
      cp $INSTALL_ODOO_DIR/$CONFIGS/nginx.conf nginx.conf
 
      cd /etc/nginx && \
-         cp $ $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo_params -O odoo_params && \
+         cp $ $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo_params odoo_params && \
      eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
      mkdir /etc/nginx/sites-available/ -p && \
      cd /etc/nginx/sites-available/ && \
-     cp $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo.conf -O odoo.conf && \
+     cp $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo.conf odoo.conf && \
      eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
      mkdir /etc/nginx/sites-enabled/ -p && \
      cd /etc/nginx/sites-enabled/ && \
@@ -353,7 +353,7 @@
 
      for DAEMON in $DAEMON_LIST
      do
-         cp ./${CONFIGS}/${DAEMON}.service -O ${DAEMON}.service
+         cp ./${CONFIGS}/${DAEMON}.service ${DAEMON}.service
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.service" | sponge ${DAEMON}.service
          ## START - systemd
          systemctl enable ${DAEMON}.service
@@ -367,7 +367,7 @@
      cd /etc/init/
      for DAEMON in $DAEMON_LIST
      do
-         cp ./${CONFIGS}/${DAEMON}-init.conf -O ${DAEMON}.conf
+         cp ./${CONFIGS}/${DAEMON}-init.conf ${DAEMON}.conf
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.conf" | sponge ${DAEMON}.conf
          ## START - upstart
          echo "start ${DAEMON}"
@@ -380,7 +380,7 @@
      cd /etc/supervisor/conf.d/
      for DAEMON in $DAEMON_LIST
      do
-         cp ./${CONFIGS}/${DAEMON}-supervisor.conf -O ${DAEMON}.conf
+         cp ./${CONFIGS}/${DAEMON}-supervisor.conf ${DAEMON}.conf
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.conf" | sponge ${DAEMON}.conf
          ## START - supervisor
          supervisorctl reread
@@ -400,7 +400,7 @@
      mkdir -p /opt/${ODOO_USER}/backups/
      chown ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/backups/
      cd /usr/local/bin/
-     cp ./odoo-backup.py -O odoo-backup.py
+     cp $INSTALL_ODOO_DIR/odoo-backup.py odoo-backup.py
      chmod +x odoo-backup.py
      echo "### check url for undestanding time parameters: https://github.com/xolox/python-rotate-backups" >> /etc/crontab
      echo -e "#6 6\t* * *\t${ODOO_USER} odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/ --no-save-filestore --daily 8 --weekly 0 --monthly 0 --yearly 0" >> /etc/crontab
