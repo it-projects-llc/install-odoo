@@ -22,6 +22,7 @@
  export INIT_ODOO_CONFIG=${INIT_ODOO_CONFIG:-"no"} # no | yes | docker-container
  export INIT_DIRS=${INIT_DIRS:-"yes"}
  export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"no"}
+ export CLEAN=${CLEAN:-"no"}
 
  ## Dirs
  export ODOO_SOURCE_DIR=${ODOO_SOURCE_DIR:-"/usr/local/src/odoo-source"}
@@ -96,10 +97,9 @@
 
  [[ "$SYSTEM" == "supervisor" ]] && [[ "$INIT_START_SCRIPTS" != "no" ]] && apt-get install -y supervisor
 
- PIP="pip || apt-get install -y python-pip && pip"
-
  if [[ "$INSTALL_DEPENDENCIES" == "yes" ]]
  then
+     apt-get install -y python-pip
      apt-get install -y --no-install-recommends \
              ca-certificates \
              curl \
@@ -117,32 +117,34 @@
          curl -o wkhtmltox.deb -SL http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb \
          && echo '40e8b906de658a2221b15e4e8cd82565a47d7ee8 wkhtmltox.deb' | sha1sum -c - || echo 'cannot download wkhtmltox.deb'
      fi
-     dpkg --force-depends -i wkhtmltox.deb \
-         && apt-get -y install -f --no-install-recommends \
-         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
-         && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
+     dpkg --force-depends -i wkhtmltox.deb
+     apt-get install -y xfonts-base xfonts-75dpi libjpeg62-turbo
+     apt-get -y install -f --no-install-recommends
+     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm
+     rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
      # install dependencies and delete odoo deb package:
-     curl -o odoo.deb -SL http://nightly.odoo.com/9.0/nightly/deb/odoo_9.0.latest_all.deb \
-         && dpkg --force-depends -i odoo.deb \
-         && apt-get update \
-         && apt-get -y install -f --no-install-recommends \
-         && rm -rf /var/lib/apt/lists/* odoo.deb \
-         && apt-get remove -y odoo
+     curl -o odoo.deb -SL http://nightly.odoo.com/9.0/nightly/deb/odoo_9.0.latest_all.deb
+     dpkg --force-depends -i odoo.deb
+     apt-get update
+     apt-get -y install -f --no-install-recommends
+     rm -rf /var/lib/apt/lists/* odoo.deb
+     apt-get purge -y odoo
 
-
+     apt-get install psycogreen
      # requirements.txt
+     #apt-get install -y postgresql-server-dev-all python-dev  build-essential libxml2-dev libxslt1-dev 
      #cd $ODOO_SOURCE_DIR
      #pip install -r requirements.txt
 
-     # # fix error with jpeg (if you get it)
-     # # uninstall PIL
-     # eval "$PIP uninstall PIL"
-     # # install libjpeg-dev with apt
-     # apt-get install libjpeg-dev
-     # # reinstall pillow
-     # eval "$PIP pip install -I pillow"
-     # # (from here https://github.com/odoo/odoo/issues/612 )
+     # fix error with jpeg (if you get it)
+     # uninstall PIL
+     pip uninstall PIL || echo "PIL is not installed"
+     # install libjpeg-dev with apt
+     apt-get install libjpeg-dev -y
+     # reinstall pillow
+     pip install -I pillow
+     # (from here https://github.com/odoo/odoo/issues/612 )
 
      # ## Less CSS via nodejs
      # ## nodejs:
@@ -159,12 +161,12 @@
      then
          ### Deps for Odoo Saas Tool
          # TODO replace it with deb packages
-         eval "$PIP install Boto"
-         eval "$PIP install FileChunkIO"
-         eval "$PIP install pysftp"
-         eval "$PIP install rotate-backups"
-         eval "$PIP install oauthlib"
-         eval "$PIP install requests --upgrade"
+         pip install Boto
+         pip install FileChunkIO
+         pip install pysftp
+         pip install rotate-backups
+         pip install oauthlib
+         pip install requests --upgrade
      fi
  fi
 
@@ -281,7 +283,15 @@
 
  if [[ "$UPDATE_ADDONS_PATH" == "yes" ]]
  then
-     ADDONS_PATH=`ls -d1 /mnt/files/git//* | tr '\n' ','`
+     # $ADDONS_DIR:
+     #
+     # it-projects-llc/
+     #  -> pos-addons/
+     #  -> ...
+     # OCA/
+     #  -> pos/
+     #  -> ...
+     ADDONS_PATH=`ls -d1 $ADDONS_DIR/*/* | tr '\n' ','`
      ADDONS_PATH=`echo $ODOO_SOURCE_DIR/openerp/addons,$ODOO_SOURCE_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" `
      sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $OPENERP_SERVER
 
@@ -425,6 +435,11 @@
      # cd /usr/local/bin/ && sudo su - odoo -s /bin/bash -c  "odoo-backup.py -d ergodoo.com -p /opt/odoo/backups/"
  fi                                         ################################## END IF
 
+if [[ "$CLEAN" == "yes" ]]
+then
+    apt-get remove -y python-pip libjpeg-dev
+fi
+
  #### DEBUG
  ## show settings (admin password, addons path)
  # head /etc/odoo/odoo-server.conf
@@ -436,7 +451,7 @@
  # tail -f -n 100 /var/log/odoo/odoo-server.log
 
  ## start from console (for ODOO_USER=odoo):
- #  sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo/openerp-server -c /etc/odoo/odoo-server.conf"
+ #  sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo-source/openerp-server -c /etc/odoo/odoo-server.conf"
 
  ## psql (use name of your database)
  # sudo -u odoo psql DATABASE

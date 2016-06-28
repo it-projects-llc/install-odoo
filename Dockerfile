@@ -12,6 +12,10 @@ ENV OPENERP_SERVER=/mnt/config/openerp-server.conf \
 RUN INSTALL_DEPENDENCIES=yes \
     bash -x /install-odoo-saas.sh
 
+#Clean
+RUN CLEAN=yes \
+    bash -x /install-odoo-saas.sh
+
 RUN mkdir -p /mnt/odoo-source && chown odoo /mnt/odoo-source && \
     mkdir -p /mnt/extra-addons && chown odoo /mnt/extra-addons && \
     mkdir -p /mnt/data-dir && chown odoo /mnt/data-dir && \

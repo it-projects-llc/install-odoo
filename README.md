@@ -19,7 +19,6 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
     CLONE_ODOO=yes \
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
-    CLONE_SAAS=yes \
     UPDATE_ADDONS_PATH=yes \
     /bin/bash -x install-odoo-saas.sh
 
@@ -79,6 +78,32 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
     # add start scripts
     INIT_START_SCRIPTS=docker-host \
     install-odoo-saas.sh
+
+## SaaS Tools
+
+To prepare [saas tools](https://github.com/it-projects-llc/odoo-saas-tools) specify params for ``saas.py`` script, e.g.:
+
+    INIT_SAAS_TOOLS_VALUE="\
+    --portal-create \
+    --server-create \
+    --plan-create \
+    --odoo-script=/usr/local/src/odoo-source/openerp-server \
+    --odoo-config=/etc/openerp-server.conf \
+    --admin-password=${ODOO_MASTER_PASS} \
+    --portal-db-name=${ODOO_DOMAIN} \
+    --server-db-name=server-1.${ODOO_DOMAIN} \
+    --plan-template-db-name=template-1.${ODOO_DOMAIN} \
+    --plan-clients=demo-%i.${ODOO_DOMAIN} \
+    "
+
+Then run script.
+
+    # for base installation
+    INIT_SAAS_TOOLS=$INIT_SAAS_TOOLS_VALUE install-odoo-saas.sh
+
+    # for docker installation:
+    docker exec INIT_SAAS_TOOLS=$INIT_SAAS_TOOLS_VALUE /bin/bash /install-odoo-saas.sh
+    
 
 # Contributors
 
