@@ -8,19 +8,20 @@
 # * Optional: Install & configure Odoo SaaS Tool
 # * Optional: Background installation: $ nohup ./odoo_install.sh > nohup.log 2>&1 </dev/null &
 ################################################################################################
+set -e
 
  #### GENERAL SETTINGS : Edit the following settings as needed
-
- ## Type of installation
- export IS_DOCKER_HOST=${IS_DOCKER_HOST:-"no"}
 
  # Actions
  export INSTALL_DEPENDENCIES=${INSTALL_DEPENDENCIES:-"no"}
  export INIT_POSTGRESQL=${INIT_POSTGRESQL:-"no"}
  export INIT_BACKUPS=${INIT_BACKUPS:-"no"}
  export INIT_NGINX=${INIT_NGINX:-"no"}
- export INIT_START_SCRIPTS=${INIT_START_SCRIPTS:-"no"}
- export INIT_SAAS_TOOLS=${INIT_SAAS_TOOLS:-"no"}
+ export INIT_START_SCRIPTS=${INIT_START_SCRIPTS:-"no"} # yes | no | docker-host
+ export INIT_SAAS_TOOLS=${INIT_SAAS_TOOLS:-"no"} # no | list of parameters to saas.py script
+ export INIT_ODOO_CONFIG=${INIT_ODOO_CONFIG:-"no"}
+ export INIT_DIRS=${INIT_DIRS:-"yes"}
+ export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"no"}
 
  ## Dirs
  export ODOO_SOURCE_DIR=${ODOO_SOURCE_DIR:-"/usr/local/src/odoo-source"}
@@ -28,6 +29,7 @@
  export ODOO_DATA_DIR=${ODOO_DATA_DIR:-"/opt/odoo/data/"}
  export BACKUPS_DIR=${BACKUPS_DIR:-"/opt/odoo/backups/"}
  export LOGS_DIR=${LOGS_DIR:-"/var/log/odoo/"}
+ export OPENERP_SERVER=${OPENERP_SERVER:-/etc/openerp-server.conf}
 
  ## Cloning
  export CLONE_IT_PROJECTS_LLC=${CLONE_IT_PROJECTS_LLC:-"no"}
@@ -44,33 +46,26 @@
  export DB_PASS=${DB_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`}
 
  ## Odoo
- export OPENERP_SERVER=${OPENERP_SERVER:-/etc/openerp-server.conf}
- export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"no"}
  export ODOO_DOMAIN=${ODOO_DOMAIN:-odoo.example.com}
  export ODOO_DATABASE=${ODOO_DATABASE:-odoo.example.com}
  export ODOO_USER=${ODOO_USER:-odoo}
  export ODOO_BRANCH=${ODOO_BRANCH:-9.0}
  export ODOO_MASTER_PASS=${ODOO_MASTER_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-12};echo;`}
 
- ## SSL
+ ## Nginx SSL
  export SSL_CERT=${SSL_CERT:-/etc/ssl/certs/XXXX.crt}
  export SSL_KEY=${SSL_KEY:-/etc/ssl/private/XXXX.key}
-
- ## DB Backup
- #set "no" if you don't want to configure backup
-
- ## NGINX
 
  ## wkhtmltopdf
  # check version of your OS and download appropriate package
  # http://wkhtmltopdf.org/downloads.html
+ # run to get information about your OS
+ # lsb_release -a
+ # uname -i
+ export WKHTMLTOPDF_DEB_URL=${WKHTMLTOPDF_DEB_URL:-""}
 
- #lsb_release -a
- #uname -i
- export WKHTMLTOPDF_DEB_URL={WKHTMLTOPDF_DEB_URL:-"http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb"}
 
- ## Odoo SaaS
- #set "yes" if you do want odoo saas tool. All parameters of current script are passed to saas.py
+
 
  #### Detect type of system manager
  export SYSTEM=''
@@ -92,69 +87,89 @@
 
  apt-get update
 
- if [[ "$INIT_NGINX" == "yes" ]] || [[ "$INIT_START_SCRIPTS" == "yes" ]]
+ if [[ "$INIT_NGINX" == "yes" ]] || [[ "$INIT_START_SCRIPTS" != "no" ]]
  then
      apt-get install -y emacs23-nox || apt-get install -y emacs24-nox
      # moreutils is installed for sponge util
      apt-get install -y moreutils tree
  fi
 
- [[ "$SYSTEM" == "supervisor" ]] && [[ "$INIT_START_SCRIPTS" == "yes" ]] && apt-get install -y supervisor
+ [[ "$SYSTEM" == "supervisor" ]] && [[ "$INIT_START_SCRIPTS" != "no" ]] && apt-get install -y supervisor
+
+ PIP="pip || apt-get install -y python-pip && pip"
 
  if [[ "$INSTALL_DEPENDENCIES" == "yes" ]]
  then
-     apt-get install -y python-pip
-
-     # install dependencies:
-     wget http://nightly.odoo.com/9.0/nightly/deb/odoo_9.0.latest_all.deb
-     sudo dpkg -i odoo_9.0.latest_all.deb  # shows errors -- just ignore them and execute next command:
-     apt-get -f install
-     apt-get remove odoo
+     apt-get install -y --no-install-recommends \
+             ca-certificates \
+             curl \
+             node-less \
+             node-clean-css \
+             python-pyinotify \
+             python-renderpm \
+             python-support
 
      ## wkhtmltopdf
-     cd /tmp
-     apt-get install -y xfonts-base xfonts-75dpi
-     apt-get -f install -y
-     wget ${WKHTMLTOPDF_DEB_URL}
-     dpkg -i wkhtmltox-*.deb
+     if [[ "$WKHTMLTOPDF_DEB_URL" != "" ]]
+     then
+         curl -o wkhtmltox.deb -SL ${WKHTMLTOPDF_DEB_URL}
+     else
+         curl -o wkhtmltox.deb -SL http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb \
+         && echo '40e8b906de658a2221b15e4e8cd82565a47d7ee8 wkhtmltox.deb' | sha1sum -c - || echo 'cannot download wkhtmltox.deb'
+     fi
+     dpkg --force-depends -i wkhtmltox.deb \
+         && apt-get -y install -f --no-install-recommends \
+         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
+         && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
+
+     # install dependencies and delete odoo deb package:
+     curl -o odoo.deb -SL http://nightly.odoo.com/9.0/nightly/deb/odoo_9.0.latest_all.deb \
+         && dpkg --force-depends -i odoo.deb \
+         && apt-get update \
+         && apt-get -y install -f --no-install-recommends \
+         && rm -rf /var/lib/apt/lists/* odoo.deb \
+         && apt-get remove odoo
+
 
      # requirements.txt
-     cd $ODOO_DIR
-     pip install -r requirements.txt
+     #cd $ODOO_DIR
+     #pip install -r requirements.txt
 
-     # fix error with jpeg (if you get it)
-     # uninstall PIL
-     pip uninstall PIL
-     # install libjpeg-dev with apt
-     apt-get install libjpeg-dev
-     # reinstall pillow
-     pip install -I pillow
-     # (from here https://github.com/odoo/odoo/issues/612 )
+     # # fix error with jpeg (if you get it)
+     # # uninstall PIL
+     # eval "$PIP uninstall PIL"
+     # # install libjpeg-dev with apt
+     # apt-get install libjpeg-dev
+     # # reinstall pillow
+     # eval "$PIP pip install -I pillow"
+     # # (from here https://github.com/odoo/odoo/issues/612 )
 
-     ## Less CSS via nodejs
-     ## nodejs:
-     # for 14.04+
-     apt-get install -y npm
-     ln -s /usr/bin/nodejs /usr/bin/node
-     # for 13.10-
-     # check https://www.odoo.com/documentation/8.0/setup/install.html
-     ## less css
-     npm install -g less less-plugin-clean-css
+     # ## Less CSS via nodejs
+     # ## nodejs:
+     # # for 14.04+
+     # apt-get install -y npm
+     # ln -s /usr/bin/nodejs /usr/bin/node
+     # # for 13.10-
+     # # check https://www.odoo.com/documentation/8.0/setup/install.html
+     # ## less css
+     # npm install -g less less-plugin-clean-css
 
 
      if [[ "$ODOO_SAAS_TOOLS" == "yes" ]]
      then
          ### Deps for Odoo Saas Tool
-         pip install Boto
-         pip install FileChunkIO
-         pip install pysftp
-         pip install rotate-backups
-         pip install oauthlib
-         pip install requests --upgrade
+         # TODO replace it with deb packages
+         eval "$PIP install Boto"
+         eval "$PIP install FileChunkIO"
+         eval "$PIP install pysftp"
+         eval "$PIP install rotate-backups"
+         eval "$PIP install oauthlib"
+         eval "$PIP install requests --upgrade"
      fi
  fi
 
  if [[ "$INIT_POSTGRESQL" == "yes" ]]
+ then
     ### PostgreSQL
     apt-get install postgresql
     #wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
@@ -210,7 +225,7 @@
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/odoo-saas-tools.git it-projects-llc/odoo-saas-tools")
  fi
 
- if [[ "${REPOS}" != ""]]
+ if [[ "${REPOS}" != "" ]]
  then
      apt-get install git
  fi
@@ -220,25 +235,32 @@
      git clone -b ${ODOO_BRANCH} $r
  done
 
- #### CONFIGS
- ### System Config
+ if [[ "$UPDATE_ADDONS_PATH" == "yes" ]]
+ then
+     ADDONS_PATH=`ls -d1 /mnt/files/git//* | tr '\n' ','`
+     ADDONS_PATH=`echo $ODOO_DIR/openerp/addons,$ODOO_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" `
+     OPENERP_SERVER=/mnt/files/tmp/openerp_serverrc-9
+     sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $OPENERP_SERVER
+
+ fi
+
+
  #from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
  export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
 
  if [[ "$INIT_POSTGRESQL" == "yes" ]]
+ then
     ### Odoo DB User
     su - postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD '${DB_PASS}';\""
  fi
 
- if [[ "$IS_DOCKER_HOST" == "no" ]]
+ if [[ "$INIT_DIRS" == "yes" ]]
  then
 
      ### Odoo System User
      #adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --gecos '$OE_USER' --group ${ODOO_USER}
 
      ### Odoo Config
-     echo "Odoo Config"
-     ## /var/log/odoo/
      mkdir -p /var/log/odoo/
      chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
 
@@ -246,6 +268,10 @@
      mkdir -p /opt/${ODOO_USER}/.local/share/User/import/
      chown -R ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/.local
 
+ fi
+
+ if [[ "$INIT_ODOO_CONFIG" == "yes" ]]
+ then
      ## /etc/odoo/odoo-server.conf
      mkdir -p /etc/odoo && cd /etc/odoo/
      cp ./odoo-server.conf -O odoo-server.conf
@@ -291,15 +317,20 @@
  #### START CONTROL
  DAEMON_LIST=( "odoo" )
  CONFIGS="./configs"
- if [[ "$IS_DOCKER_HOST" == "yes" ]]
+ if [[ "$INIT_START_SCRIPTS" == "docker-host" ]]
  then
-     DAEMON_LIST= ( "odoo-docker" "odoo-docker-db" )
+     DAEMON_LIST=( "odoo-docker" "odoo-docker-db" )
      CONFIGS="./configs-docker-host"
  fi
 
- if [[ "$INIT_START_SCRIPTS" == "no" ]]            ###################################### IF
+ if [[ "$INIT_START_SCRIPTS" != "no" ]]
  then
-     # pass
+    echo "Control commands:"
+ fi
+
+ if [[ "$INIT_START_SCRIPTS" == "no" ]]
+ then
+     true
  elif [[ "$SYSTEM" == "systemd" ]]            ###################################### ELIF
  then
      ### CONTROL SCRIPTS - systemd
@@ -312,7 +343,7 @@
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.service" | sponge ${DAEMON}.service
          ## START - systemd
          systemctl enable ${DAEMON}.service
-         systemctl restart ${DAEMON}.service
+         echo "systemctl restart ${DAEMON}.service"
      done
 
  elif [[ "$SYSTEM" == "upstart" ]]          #################################### ELIF
@@ -325,7 +356,9 @@
          cp ./${CONFIGS}/${DAEMON}-init.conf -O ${DAEMON}.conf
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.conf" | sponge ${DAEMON}.conf
          ## START - upstart
-         start ${DAEMON}     # alt: stop ${DAEMON}  / restart ${DAEMON}
+         echo "start ${DAEMON}"
+         echo "stop ${DAEMON}"
+         echo "restart ${DAEMON}"
      done
  else                                       #################################### ELSE
      ### CONTROL SCRIPTS - supervisor
@@ -338,7 +371,9 @@
          ## START - supervisor
          supervisorctl reread
          supervisorctl update
-         supervisorctl restart ${DAEMON}
+         echo "supervisorctl start ${DAEMON}"
+         echo "supervisorctl stop ${DAEMON}"
+         echo "supervisorctl restart ${DAEMON}"
      done
  fi                                         ################################   END IF
 
@@ -372,11 +407,11 @@
 
  #### DEBUG
  ## show settings (admin password, addons path)
- head /etc/odoo/odoo-server.conf
+ # head /etc/odoo/odoo-server.conf
  ## show odoo version
- grep '^version_info ' $ODOO_DIR/openerp/release.py
+ # grep '^version_info ' $ODOO_DIR/openerp/release.py
  ## Reminders
- echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
+ # echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
  ## log
  # tail -f -n 100 /var/log/odoo/odoo-server.log
 
