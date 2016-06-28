@@ -303,18 +303,18 @@
      #mv nginx.conf nginx.conf.orig &&\
      #cp $INSTALL_ODOO_DIR/$CONFIGS/nginx.conf nginx.conf
 
-     cd /etc/nginx && \
-         cp $ $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo_params odoo_params && \
+     cd /etc/nginx
+     cp $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo_params odoo_params
      eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
 
-     mkdir /etc/nginx/sites-available/ -p && \
-     cd /etc/nginx/sites-available/ && \
-     cp $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo.conf odoo.conf && \
+     #mkdir /etc/nginx/sites-available/ -p
+     cd /etc/nginx/sites-available/
+     cp $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo.conf odoo.conf
      eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
-     mkdir /etc/nginx/sites-enabled/ -p && \
-     cd /etc/nginx/sites-enabled/ && \
-     rm default && \
+     #mkdir /etc/nginx/sites-enabled/ -p
+     cd /etc/nginx/sites-enabled/
+     rm default
      ln -s ../sites-available/odoo.conf odoo.conf
 
      #cd /etc/nginx/ && \
