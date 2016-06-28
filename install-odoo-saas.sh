@@ -8,7 +8,7 @@
 # * Optional: Install & configure Odoo SaaS Tool
 # * Optional: Background installation: $ nohup ./odoo_install.sh > nohup.log 2>&1 </dev/null &
 ################################################################################################
-set -e
+ set -e
 
  #### GENERAL SETTINGS : Edit the following settings as needed
 
@@ -34,7 +34,6 @@ set -e
  ## Cloning
  export CLONE_IT_PROJECTS_LLC=${CLONE_IT_PROJECTS_LLC:-"no"}
  export CLONE_OCA=${CLONE_OCA:-"no"}
- export CLONE_SAAS=${CLONE_SAAS:-"no"}
  export CLONE_ODOO=${CLONE_ODOO:-"no"}
 
  ## E-Mail
@@ -128,7 +127,7 @@ set -e
          && apt-get update \
          && apt-get -y install -f --no-install-recommends \
          && rm -rf /var/lib/apt/lists/* odoo.deb \
-         && apt-get remove odoo
+         && apt-get remove -y odoo
 
 
      # requirements.txt
@@ -171,11 +170,12 @@ set -e
  if [[ "$INIT_POSTGRESQL" == "yes" ]]
  then
     ### PostgreSQL
-    apt-get install postgresql
-    #wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-    #echo 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' >> /etc/apt/sources.list.d/pgdg.list &&\
-    #    apt-get install postgresql postgresql-contrib -y && \
-    echo "postgresql installed"
+     POSTGRES_PACKAGES="postgresql postgresql-contrib"
+     apt-get install $POSTGRES_PACKAGES -y || \
+         wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+         echo 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' >> /etc/apt/sources.list.d/pgdg.list && \
+         apt-get update && \
+         apt-get install $POSTGRES_PACKAGES -y
  fi
 
  ### Odoo Souce Code
@@ -232,7 +232,7 @@ set -e
 
  for r in "${REPOS[@]}"
  do
-     git clone -b ${ODOO_BRANCH} $r
+     eval "git clone -b ${ODOO_BRANCH} $r" || echo "Cannot clone: git clone -b ${ODOO_BRANCH} $r"
  done
 
  if [[ "$UPDATE_ADDONS_PATH" == "yes" ]]
@@ -312,6 +312,12 @@ set -e
      rm /etc/nginx/conf.d/example_ssl.conf
 
      /etc/init.d/nginx restart
+ fi
+
+ #### Odoo Saas Tool
+ if [[ "$INIT_SAAS_TOOLS" != "no" ]]        ###################################### IF
+ then
+     sudo su - ${ODOO_USER} -s /bin/bash -c  "python $ADDONS_DIR/it-projects-llc/odoo-saas-tools/saas.py $INIT_SAAS_TOOLS"
  fi
 
  #### START CONTROL
@@ -396,14 +402,6 @@ set -e
      # e.g.
      # cd /usr/local/bin/ && sudo su - odoo -s /bin/bash -c  "odoo-backup.py -d ergodoo.com -p /opt/odoo/backups/"
  fi                                         ################################## END IF
-
-
- #### Odoo Saas Tool
- if [[ "$ODOO_SAAS_TOOLS" == "yes" ]]        ###################################### IF
- then
-     #stop odoo
-     sudo su - ${ODOO_USER} -s /bin/bash -c  "python $ADDONS_DIR/it-projects-llc/odoo-saas-tools/saas.py $@"
- fi
 
  #### DEBUG
  ## show settings (admin password, addons path)

@@ -1,9 +1,10 @@
 # install-odoo
 
-Install developement / production [odoo](https://www.odoo.com/) from [git](https://github.com/odoo/odoo) with / without using docker .
+Install developement / production [odoo](https://www.odoo.com/) from [git](https://github.com/odoo/odoo) with / without using [docker](https://www.docker.com/).
 
 ## Basic usage
 
+    apt-get install git -y
     git clone https://github.com/yelizariev/install-odoo.git
 
     # run script with parameters you need
@@ -19,7 +20,6 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
     CLONE_SAAS=yes \
-    OPENERP_SERVER=/etc/openerp-server.conf \
     UPDATE_ADDONS_PATH=yes \
     /bin/bash -x install-odoo-saas.sh
 
