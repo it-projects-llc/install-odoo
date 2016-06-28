@@ -51,7 +51,8 @@
  export ODOO_BRANCH=${ODOO_BRANCH:-9.0}
  export ODOO_MASTER_PASS=${ODOO_MASTER_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-12};echo;`}
 
- ## Nginx SSL
+ ## Nginx
+ export NGINX_SSL=${NGINX_SSL:-"no"}
  export SSL_CERT=${SSL_CERT:-/etc/ssl/certs/XXXX.crt}
  export SSL_KEY=${SSL_KEY:-/etc/ssl/private/XXXX.key}
 
@@ -312,10 +313,20 @@
      cp $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo.conf odoo.conf
      eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
 
+     cd /etc/nginx/sites-available/
+     cp $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo_ssl.conf odoo_ssl.conf
+     eval "${PERL_UPDATE_ENV} < odoo_ssl.conf" | sponge odoo_ssl.conf
+
      #mkdir /etc/nginx/sites-enabled/ -p
      cd /etc/nginx/sites-enabled/
      rm default
      ln -s ../sites-available/odoo.conf odoo.conf
+
+
+     if [[ "$NGINX_SSL" == "yes" ]]
+     then
+         ln -s ../sites-available/odoo_ssl.conf odoo_ssl.conf
+     fi
 
      #cd /etc/nginx/ && \
      #cp -r /etc/nginx/conf.d/ /etc/nginx/conf.d.orig/
