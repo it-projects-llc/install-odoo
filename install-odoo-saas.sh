@@ -9,7 +9,7 @@
 # * Optional: Background installation: $ nohup ./odoo_install.sh > nohup.log 2>&1 </dev/null &
 ################################################################################################
  set -e
-
+ INSTALL_ODOO_DIR=`pwd`
  #### GENERAL SETTINGS : Edit the following settings as needed
 
  # Actions
@@ -251,7 +251,7 @@
  then
 
      ### Odoo System User
-     #adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --gecos '$OE_USER' --group ${ODOO_USER}
+     adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --gecos '$OE_USER' --group ${ODOO_USER} || echo 'cannot adduser'
 
      ### Odoo Config
      mkdir -p /var/log/odoo/
@@ -265,6 +265,7 @@
 
  if [[ "$INIT_ODOO_CONFIG" != "no" ]]
  then
+     cd $INSTALL_ODOO_DIR
      CONFIGS="./configs"
      if [[ "$INIT_ODOO_CONFIG" == "docker-container" ]]
      then
@@ -289,8 +290,9 @@
  if [[ "$INIT_NGINX" == "yes" ]]
  then
      #### NGINX
+     CONFIGS="configs"
      #/etc/init.d/apache2 stop
-     #apt-get remove apache2 -y && \
+     apt-get remove apache2 -y && \
      wget --quiet -O - http://nginx.org/keys/nginx_signing.key | apt-key add - &&\
      echo 'deb http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
      echo 'deb-src http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
@@ -299,14 +301,14 @@
 
      cd /etc/nginx && \
      mv nginx.conf nginx.conf.orig &&\
-     cp ./nginx.conf -O nginx.conf
+     cp $INSTALL_ODOO_DIR/$CONFIGS/nginx.conf nginx.conf
 
      cd /etc/nginx && \
-     cp ${CONFIGS}/nginx_odoo_params -O odoo_params && \
+         cp $ $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo_params -O odoo_params && \
      eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
      mkdir /etc/nginx/sites-available/ -p && \
      cd /etc/nginx/sites-available/ && \
-     cp ./nginx_odoo.conf -O odoo.conf && \
+     cp $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo.conf -O odoo.conf && \
      eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
      mkdir /etc/nginx/sites-enabled/ -p && \
      cd /etc/nginx/sites-enabled/ && \
