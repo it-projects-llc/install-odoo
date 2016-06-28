@@ -293,9 +293,9 @@
      CONFIGS="configs"
      #/etc/init.d/apache2 stop
      apt-get remove apache2 -y && \
-     wget --quiet -O - http://nginx.org/keys/nginx_signing.key | apt-key add - &&\
-     echo 'deb http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
-     echo 'deb-src http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
+     #wget --quiet -O - http://nginx.org/keys/nginx_signing.key | apt-key add - &&\
+     #echo 'deb http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
+     #echo 'deb-src http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
      apt-get install nginx -y && \
      echo "nginx installed"
 
