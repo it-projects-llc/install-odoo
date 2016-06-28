@@ -1,0 +1,13 @@
+# /lib/systemd/system
+[Unit]
+Description=DB container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a db
+ExecStop=/usr/bin/docker stop -t 2 db
+
+[Install]
+WantedBy=local.target
