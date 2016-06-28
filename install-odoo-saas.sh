@@ -154,7 +154,7 @@
      # npm install -g less less-plugin-clean-css
 
 
-     if [[ "$ODOO_SAAS_TOOLS" == "yes" ]]
+     if [[ "$ODOO_SAAS_TOOLS" != "no" ]]
      then
          ### Deps for Odoo Saas Tool
          # TODO replace it with deb packages
@@ -353,7 +353,7 @@
 
      for DAEMON in $DAEMON_LIST
      do
-         cp ./${CONFIGS}/${DAEMON}.service ${DAEMON}.service
+         cp $INSTALL_ODOO_DIR/${CONFIGS}/${DAEMON}.service ${DAEMON}.service
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.service" | sponge ${DAEMON}.service
          ## START - systemd
          systemctl enable ${DAEMON}.service
@@ -367,7 +367,7 @@
      cd /etc/init/
      for DAEMON in $DAEMON_LIST
      do
-         cp ./${CONFIGS}/${DAEMON}-init.conf ${DAEMON}.conf
+         cp $INSTALL_ODOO_DIR/${CONFIGS}/${DAEMON}-init.conf ${DAEMON}.conf
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.conf" | sponge ${DAEMON}.conf
          ## START - upstart
          echo "start ${DAEMON}"
@@ -380,7 +380,7 @@
      cd /etc/supervisor/conf.d/
      for DAEMON in $DAEMON_LIST
      do
-         cp ./${CONFIGS}/${DAEMON}-supervisor.conf ${DAEMON}.conf
+         cp $INSTALL_ODOO_DIR/${CONFIGS}/${DAEMON}-supervisor.conf ${DAEMON}.conf
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.conf" | sponge ${DAEMON}.conf
          ## START - supervisor
          supervisorctl reread
