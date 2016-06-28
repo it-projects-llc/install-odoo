@@ -19,7 +19,7 @@
  export INIT_NGINX=${INIT_NGINX:-"no"}
  export INIT_START_SCRIPTS=${INIT_START_SCRIPTS:-"no"} # yes | no | docker-host
  export INIT_SAAS_TOOLS=${INIT_SAAS_TOOLS:-"no"} # no | list of parameters to saas.py script
- export INIT_ODOO_CONFIG=${INIT_ODOO_CONFIG:-"no"}
+ export INIT_ODOO_CONFIG=${INIT_ODOO_CONFIG:-"no"} # no | yes | docker-container
  export INIT_DIRS=${INIT_DIRS:-"yes"}
  export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"no"}
 
@@ -192,6 +192,8 @@
      sed -i "s/'auto_install': True/'auto_install': False/" addons/im_odoo_support/__openerp__.py
  fi
 
+ mkdir -p $ADDONS_DIR
+ cd $ADDONS_DIR
  REPOS=()
  #Hint: REPOS=( "${REPOS[@]}" "new element") - is way to add element to array
 
@@ -270,14 +272,17 @@
 
  fi
 
- if [[ "$INIT_ODOO_CONFIG" == "yes" ]]
+ if [[ "$INIT_ODOO_CONFIG" != "no" ]]
  then
-     ## /etc/odoo/odoo-server.conf
-     mkdir -p /etc/odoo && cd /etc/odoo/
-     cp ./odoo-server.conf -O odoo-server.conf
-     eval "${PERL_UPDATE_ENV} < odoo-server.conf" | sponge odoo-server.conf
-     chown ${ODOO_USER}:${ODOO_USER} odoo-server.conf
-     chmod 600 odoo-server.conf
+     CONFIGS="./configs"
+     if [[ "$INIT_ODOO_CONFIG" == "docker-container" ]]
+     then
+         CONFIGS="./configs-docker-container"
+     fi
+     cp ${CONFIGS}/odoo-server.conf $OPENERP_SERVER
+     eval "${PERL_UPDATE_ENV} < $OPENERP_SERVER" | sponge $OPENERP_SERVER
+     chown ${ODOO_USER}:${ODOO_USER} $OPENERP_SERVER
+     chmod 600 $OPENERP_SERVER
  fi
 
  if [[ "$INIT_NGINX" == "yes" ]]
