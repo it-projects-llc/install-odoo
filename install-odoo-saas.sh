@@ -131,7 +131,7 @@
 
 
      # requirements.txt
-     #cd $ODOO_DIR
+     #cd $ODOO_SOURCE_DIR
      #pip install -r requirements.txt
 
      # # fix error with jpeg (if you get it)
@@ -181,11 +181,11 @@
  ### Odoo Souce Code
  if [[ "$CLONE_ODOO" == "yes" ]]
  then
-     mkdir -p $ODOO_DIR
-     git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git $ODOO_DIR
+     mkdir -p $ODOO_SOURCE_DIR
+     git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git $ODOO_SOURCE_DIR
 
      #### Changes on Odoo Code
-     cd $ODOO_DIR
+     cd $ODOO_SOURCE_DIR
      ## delete matches="..." at /web/database/manager
      sed -i 's/matches="[^"]*"//g' addons/web/static/src/xml/base.xml
      ## disable im_odoo_support
@@ -238,7 +238,7 @@
  if [[ "$UPDATE_ADDONS_PATH" == "yes" ]]
  then
      ADDONS_PATH=`ls -d1 /mnt/files/git//* | tr '\n' ','`
-     ADDONS_PATH=`echo $ODOO_DIR/openerp/addons,$ODOO_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" `
+     ADDONS_PATH=`echo $ODOO_SOURCE_DIR/openerp/addons,$ODOO_SOURCE_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" `
      OPENERP_SERVER=/mnt/files/tmp/openerp_serverrc-9
      sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $OPENERP_SERVER
 
@@ -407,7 +407,7 @@
  ## show settings (admin password, addons path)
  # head /etc/odoo/odoo-server.conf
  ## show odoo version
- # grep '^version_info ' $ODOO_DIR/openerp/release.py
+ # grep '^version_info ' $ODOO_SOURCE_DIR/openerp/release.py
  ## Reminders
  # echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
  ## log
