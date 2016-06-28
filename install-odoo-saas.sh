@@ -237,14 +237,6 @@
      eval "git clone -b ${ODOO_BRANCH} $r" || echo "Cannot clone: git clone -b ${ODOO_BRANCH} $r"
  done
 
- if [[ "$UPDATE_ADDONS_PATH" == "yes" ]]
- then
-     ADDONS_PATH=`ls -d1 /mnt/files/git//* | tr '\n' ','`
-     ADDONS_PATH=`echo $ODOO_SOURCE_DIR/openerp/addons,$ODOO_SOURCE_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" `
-     sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $OPENERP_SERVER
-
- fi
-
 
  #from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
  export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
@@ -283,6 +275,16 @@
      chown ${ODOO_USER}:${ODOO_USER} $OPENERP_SERVER
      chmod 600 $OPENERP_SERVER
  fi
+
+
+ if [[ "$UPDATE_ADDONS_PATH" == "yes" ]]
+ then
+     ADDONS_PATH=`ls -d1 /mnt/files/git//* | tr '\n' ','`
+     ADDONS_PATH=`echo $ODOO_SOURCE_DIR/openerp/addons,$ODOO_SOURCE_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" `
+     sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $OPENERP_SERVER
+
+ fi
+
 
  if [[ "$INIT_NGINX" == "yes" ]]
  then
