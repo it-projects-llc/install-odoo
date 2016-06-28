@@ -99,7 +99,7 @@ To prepare [saas tools](https://github.com/it-projects-llc/odoo-saas-tools) spec
 Then run script.
 
     # for base installation
-    INIT_SAAS_TOOLS=$INIT_SAAS_TOOLS_VALUE install-odoo-saas.sh
+    INIT_SAAS_TOOLS=$INIT_SAAS_TOOLS_VALUE bash -x install-odoo-saas.sh
 
     # for docker installation:
     docker exec INIT_SAAS_TOOLS=$INIT_SAAS_TOOLS_VALUE /bin/bash /install-odoo-saas.sh

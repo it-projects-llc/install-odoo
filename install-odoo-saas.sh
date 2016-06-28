@@ -126,7 +126,7 @@
      # install dependencies and delete odoo deb package:
      curl -o odoo.deb -SL http://nightly.odoo.com/9.0/nightly/deb/odoo_9.0.latest_all.deb
      dpkg --force-depends -i odoo.deb
-     apt-get update
+     #apt-get update
      apt-get -y install -f --no-install-recommends
      rm -rf /var/lib/apt/lists/* odoo.deb
      apt-get purge -y odoo
