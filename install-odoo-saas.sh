@@ -299,25 +299,28 @@
      apt-get install nginx -y && \
      echo "nginx installed"
 
-     cd /etc/nginx && \
-     mv nginx.conf nginx.conf.orig &&\
-     cp $INSTALL_ODOO_DIR/$CONFIGS/nginx.conf nginx.conf
+     #cd /etc/nginx && \
+     #mv nginx.conf nginx.conf.orig &&\
+     #cp $INSTALL_ODOO_DIR/$CONFIGS/nginx.conf nginx.conf
 
      cd /etc/nginx && \
          cp $ $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo_params odoo_params && \
      eval "${PERL_UPDATE_ENV} < odoo_params" | sponge odoo_params
+
      mkdir /etc/nginx/sites-available/ -p && \
      cd /etc/nginx/sites-available/ && \
      cp $INSTALL_ODOO_DIR/$CONFIGS/nginx_odoo.conf odoo.conf && \
      eval "${PERL_UPDATE_ENV} < odoo.conf" | sponge odoo.conf
+
      mkdir /etc/nginx/sites-enabled/ -p && \
      cd /etc/nginx/sites-enabled/ && \
+     rm default && \
      ln -s ../sites-available/odoo.conf odoo.conf
 
      #cd /etc/nginx/ && \
-     cp -r /etc/nginx/conf.d/ /etc/nginx/conf.d.orig/
-     rm /etc/nginx/conf.d/default.conf && \
-     rm /etc/nginx/conf.d/example_ssl.conf
+     #cp -r /etc/nginx/conf.d/ /etc/nginx/conf.d.orig/
+     #rm /etc/nginx/conf.d/default.conf && \
+     #rm /etc/nginx/conf.d/example_ssl.conf
 
      /etc/init.d/nginx restart
  fi
