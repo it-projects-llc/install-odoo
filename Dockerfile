@@ -10,6 +10,8 @@ ENV OPENERP_SERVER=/mnt/config/openerp-server.conf \
     LOGS_DIR=/mnt/logs
 
 RUN INSTALL_DEPENDENCIES=yes \
+    WKHTMLTOPDF_DEB_URL="http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb" \
+    WKHTMLTOPDF_DEPENDENCIES="xfonts-base xfonts-75dpi libjpeg62-turbo"
     bash -x /install-odoo-saas.sh
 
 #Clean

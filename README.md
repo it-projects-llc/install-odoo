@@ -6,6 +6,7 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
 
     apt-get install git -y
     git clone https://github.com/yelizariev/install-odoo.git
+    cd install-odoo
 
     # run script with parameters you need
     # (list of all parameters with default values can be found at install-odoo-saas.sh)

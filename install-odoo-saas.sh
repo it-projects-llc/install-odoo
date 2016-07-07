@@ -58,15 +58,8 @@
  export SSL_KEY=${SSL_KEY:-/etc/ssl/private/XXXX.key}
 
  ## wkhtmltopdf
- # check version of your OS and download appropriate package
- # http://wkhtmltopdf.org/downloads.html
- # run to get information about your OS
- # lsb_release -a
- # uname -i
  export WKHTMLTOPDF_DEB_URL=${WKHTMLTOPDF_DEB_URL:-""}
-
-
-
+ export WKHTMLTOPDF_DEPENDENCIES=${WKHTMLTOPDF_DEPENDENCIES:-""}
 
  #### Detect type of system manager
  export SYSTEM=''
@@ -110,15 +103,41 @@
              python-support
 
      ## wkhtmltopdf
-     if [[ "$WKHTMLTOPDF_DEB_URL" != "" ]]
+     if [[ "$WKHTMLTOPDF_DEB_URL" == "" ]] || [[ "$WKHTMLTOPDF_DEPENDENCIES" == "" ]]
      then
-         curl -o wkhtmltox.deb -SL ${WKHTMLTOPDF_DEB_URL}
-     else
-         curl -o wkhtmltox.deb -SL http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb \
-         && echo '40e8b906de658a2221b15e4e8cd82565a47d7ee8 wkhtmltox.deb' | sha1sum -c - || echo 'cannot download wkhtmltox.deb'
+         WK_DEPS="xfonts-base xfonts-75dpi libjpeg62-turbo"
+
+         # try to guess about the system
+         WK_PLATFORM="i386"
+         PLATFORM=`uname -i`
+         if [[ "$PLATFORM" == "x86_64" ]]
+         then
+             WK_PLATFORM="amd64"
+         fi
+
+         WK_OS='trusty'
+         source /etc/os-release
+         # TODO rest systems
+         if [[ $VERSION == *"Trusty"* ]]
+         then
+             WK_OS='trusty'
+             WK_DEPS="xfonts-base xfonts-75dpi libjpeg-turbo8"
+         fi
+
+         if [[ "$WKHTMLTOPDF_DEB_URL" == "" ]]
+         then
+             WKHTMLTOPDF_DEB_URL="http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-${WK_OS}-${WK_PLATFORM}.deb"
+         fi
+
+         if [[ "$WKHTMLTOPDF_DEPENDENCIES" == "" ]]
+         then
+             WKHTMLTOPDF_DEPENDENCIES=$WK_DEPS
+         fi
+
      fi
+     curl -o wkhtmltox.deb -SL ${WKHTMLTOPDF_DEB_URL}
      dpkg --force-depends -i wkhtmltox.deb
-     apt-get install -y xfonts-base xfonts-75dpi libjpeg62-turbo
+     apt-get install -y ${WKHTMLTOPDF_DEPENDENCIES}
      apt-get -y install -f --no-install-recommends
      apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm
      rm -rf /var/lib/apt/lists/* wkhtmltox.deb
@@ -131,7 +150,7 @@
      rm -rf /var/lib/apt/lists/* odoo.deb
      apt-get purge -y odoo
 
-     apt-get install psycogreen
+     pip install psycogreen
      # requirements.txt
      #apt-get install -y postgresql-server-dev-all python-dev  build-essential libxml2-dev libxslt1-dev 
      #cd $ODOO_SOURCE_DIR
