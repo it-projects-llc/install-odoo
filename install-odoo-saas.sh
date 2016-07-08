@@ -46,8 +46,8 @@
 
  ## Nginx
  export NGINX_SSL=${NGINX_SSL:-"no"}
- export SSL_CERT=${SSL_CERT:-/etc/ssl/certs/XXXX.crt}
- export SSL_KEY=${SSL_KEY:-/etc/ssl/private/XXXX.key}
+ export SSL_CERT=${SSL_CERT:-/etc/nginx/XXXX.crt}
+ export SSL_KEY=${SSL_KEY:-/etc/nginx/XXXX.key}
 
  ## wkhtmltopdf
  export WKHTMLTOPDF_DEB_URL=${WKHTMLTOPDF_DEB_URL:-""}
@@ -361,7 +361,7 @@
 
      #mkdir /etc/nginx/sites-enabled/ -p
      cd /etc/nginx/sites-enabled/
-     rm default
+     rm default || true
      ln -s ../sites-available/odoo.conf odoo.conf
 
 
