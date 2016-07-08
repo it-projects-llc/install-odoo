@@ -6,6 +6,7 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
 
     apt-get install git -y
     git clone https://github.com/yelizariev/install-odoo.git
+    cd install-odoo
 
     # run script with parameters you need
     # (list of all parameters with default values can be found at install-odoo-saas.sh)
@@ -22,11 +23,53 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
     UPDATE_ADDONS_PATH=yes \
     /bin/bash -x install-odoo-saas.sh
 
+## After installation
+
+    # show settings (admin password, addons path)
+    head /etc/openerp-server.conf
+    # show odoo version
+    grep '^version_info ' $ODOO_SOURCE_DIR/openerp/release.py
+
+    # PGTune: http://pgtune.leopard.in.ua/"
+
+    # log
+    tail -f -n 100 /var/log/odoo/odoo-server.log
+    
+    # start from console (for ODOO_USER=odoo):
+    sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo-source/openerp-server -c /etc/openerp-server.conf"
+    
+    # psql (use name of your database)
+    sudo -u odoo psql DATABASE
+    
+    # some common issues:
+    # https://www.odoo.com/forum/help-1/question/dataerror-new-encoding-utf8-is-incompatible-with-the-encoding-of-the-template-database-sql-ascii-52124
+
+
+
 ## Install in Docker
+
+    # Install docker
+    # see https://docs.docker.com/engine/installation/
+    apt-get install -y apt-transport-https ca-certificates
+    apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+
+    # Ubuntu 12.04
+    echo "deb https://apt.dockerproject.org/repo ubuntu-precise main" > /etc/apt/sources.list.d/docker.list
+
+    # Ubunto 14.04
+    echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" > /etc/apt/sources.list.d/docker.list
+
+    apt-get update
+
+    apt-get install -y linux-image-extra-$(uname -r)
+
+    apt-get install -y docker-engine
+
 
     # build image
     cd /path/to/install-odoo/
-    docker build -t install-odoo-dev -f .
+    docker build -t install-odoo-dev .
+
 
     mkdir odoo
     cd odoo
