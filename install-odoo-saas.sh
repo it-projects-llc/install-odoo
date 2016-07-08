@@ -154,7 +154,9 @@
      #apt-get -y install -f --no-install-recommends
      #rm -rf /var/lib/apt/lists/* odoo.deb
      #apt-get purge -y odoo
-     apt-get install adduser node-less node-clean-css postgresql-client python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-pybabel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml
+
+     apt-get install -y adduser node-less node-clean-css postgresql-client python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-pybabel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml
+     apt-get install -y python-gevent python-simplejson
 
      pip install psycogreen
      # requirements.txt
@@ -469,23 +471,3 @@ if [[ "$CLEAN" == "yes" ]]
 then
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false python-pip *-dev
 fi
-
- #### DEBUG
- ## show settings (admin password, addons path)
- # head /etc/odoo/odoo-server.conf
- ## show odoo version
- # grep '^version_info ' $ODOO_SOURCE_DIR/openerp/release.py
- ## Reminders
- # echo "Do not forget PGTune: http://pgtune.leopard.in.ua/"
- ## log
- # tail -f -n 100 /var/log/odoo/odoo-server.log
-
- ## start from console (for ODOO_USER=odoo):
- #  sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo-source/openerp-server -c /etc/odoo/odoo-server.conf"
-
- ## psql (use name of your database)
- # sudo -u odoo psql DATABASE
-
- ## some common issues:
- ## https://www.odoo.com/forum/help-1/question/dataerror-new-encoding-utf8-is-incompatible-with-the-encoding-of-the-template-database-sql-ascii-52124
-

@@ -23,6 +23,29 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
     UPDATE_ADDONS_PATH=yes \
     /bin/bash -x install-odoo-saas.sh
 
+## After installation
+
+    # show settings (admin password, addons path)
+    head /etc/openerp-server.conf
+    # show odoo version
+    grep '^version_info ' $ODOO_SOURCE_DIR/openerp/release.py
+
+    # PGTune: http://pgtune.leopard.in.ua/"
+
+    # log
+    tail -f -n 100 /var/log/odoo/odoo-server.log
+    
+    # start from console (for ODOO_USER=odoo):
+    sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo-source/openerp-server -c /etc/openerp-server.conf"
+    
+    # psql (use name of your database)
+    sudo -u odoo psql DATABASE
+    
+    # some common issues:
+    # https://www.odoo.com/forum/help-1/question/dataerror-new-encoding-utf8-is-incompatible-with-the-encoding-of-the-template-database-sql-ascii-52124
+
+
+
 ## Install in Docker
 
     # Install docker
