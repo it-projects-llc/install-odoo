@@ -1,13 +1,5 @@
 #!/bin/bash
-################################################################################################
-# Fully automated script to install Odoo and Odoo SaaS Tool (tested on a fresh Ubuntu 14.04 LTS)
-# * Install & configure last stable version of nginx
-# * Install & configure last stable version of postgresql
-# * Install & configure Odoo
-# * Configure automated backup of Odoo databases
-# * Optional: Install & configure Odoo SaaS Tool
-# * Optional: Background installation: $ nohup ./odoo_install.sh > nohup.log 2>&1 </dev/null &
-################################################################################################
+# See README.md
  set -e
  INSTALL_ODOO_DIR=`pwd`
  #### GENERAL SETTINGS : Edit the following settings as needed
@@ -68,6 +60,22 @@
  [[ -z $SYSTEM ]] &&  export SYSTEM='supervisor'
  echo "SYSTEM=$SYSTEM"
 
+ PLATFORM=`uname -i`
+ echo "PLATFORM=$PLATFORM"
+
+ OS_RELEASE="trusty"
+ # TODO rest systems
+ source /etc/os-release
+ if [[ $VERSION == *"Trusty"* ]]
+ then
+     OS_RELEASE="trusty"
+ elif [[ $VERSION == *"jessie"* ]]
+ then
+     OS_RELEASE="jessie"
+ fi
+ echo "OS_RELEASE=$OS_RELEASE"
+
+
  ##### CHECK AND UPDATE LANGUAGE
  #env | grep LANG
  #export LANGUAGE=en_US:en
@@ -109,16 +117,13 @@
 
          # try to guess about the system
          WK_PLATFORM="i386"
-         PLATFORM=`uname -i`
          if [[ "$PLATFORM" == "x86_64" ]]
          then
              WK_PLATFORM="amd64"
          fi
 
          WK_OS='trusty'
-         source /etc/os-release
-         # TODO rest systems
-         if [[ $VERSION == *"Trusty"* ]]
+         if [[ $OS_RELEASE == "trusty" ]]
          then
              WK_OS='trusty'
              WK_DEPS="xfonts-base xfonts-75dpi libjpeg-turbo8"
@@ -137,18 +142,19 @@
      fi
      curl -o wkhtmltox.deb -SL ${WKHTMLTOPDF_DEB_URL}
      dpkg --force-depends -i wkhtmltox.deb
-     apt-get install -y ${WKHTMLTOPDF_DEPENDENCIES}
+     apt-get install -y ${WKHTMLTOPDF_DEPENDENCIES} || true
      apt-get -y install -f --no-install-recommends
      apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm
      rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
      # install dependencies and delete odoo deb package:
-     curl -o odoo.deb -SL http://nightly.odoo.com/9.0/nightly/deb/odoo_9.0.latest_all.deb
-     dpkg --force-depends -i odoo.deb
+     #curl -o odoo.deb -SL http://nightly.odoo.com/9.0/nightly/deb/odoo_9.0.latest_all.deb
+     #dpkg --force-depends -i odoo.deb
      #apt-get update
-     apt-get -y install -f --no-install-recommends
-     rm -rf /var/lib/apt/lists/* odoo.deb
-     apt-get purge -y odoo
+     #apt-get -y install -f --no-install-recommends
+     #rm -rf /var/lib/apt/lists/* odoo.deb
+     #apt-get purge -y odoo
+     apt-get install adduser node-less node-clean-css postgresql-client python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-pybabel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml
 
      pip install psycogreen
      # requirements.txt
@@ -157,10 +163,18 @@
      #pip install -r requirements.txt
 
      # fix error with jpeg (if you get it)
+     apt-get install python-dev build-essential libxml2-dev libxslt1-dev
      # uninstall PIL
      pip uninstall PIL || echo "PIL is not installed"
-     # install libjpeg-dev with apt
-     apt-get install libjpeg-dev -y
+     if [[ "$OS_RELEASE" == "jessie" ]]
+     then
+         apt-get install libjpeg62-turbo-dev zlib1g-dev -y
+     elif [[ "$OS_RELEASE" == "trusty" ]]
+     then
+         apt-get install libjpeg-dev zlib1g-dev -y
+     else
+         apt-get install libjpeg-dev zlib1g-dev -y
+     fi
      # reinstall pillow
      pip install -I pillow
      # (from here https://github.com/odoo/odoo/issues/612 )
@@ -176,17 +190,14 @@
      # npm install -g less less-plugin-clean-css
 
 
-     if [[ "$ODOO_SAAS_TOOLS" != "no" ]]
-     then
-         ### Deps for Odoo Saas Tool
-         # TODO replace it with deb packages
-         pip install Boto
-         pip install FileChunkIO
-         pip install pysftp
-         pip install rotate-backups
-         pip install oauthlib
-         pip install requests --upgrade
-     fi
+     ### Deps for Odoo Saas Tool
+     # TODO replace it with deb packages
+     pip install Boto
+     pip install FileChunkIO
+     pip install pysftp
+     pip install rotate-backups
+     pip install oauthlib
+     pip install requests --upgrade
  fi
 
  if [[ "$INIT_POSTGRESQL" == "yes" ]]
@@ -456,7 +467,7 @@
 
 if [[ "$CLEAN" == "yes" ]]
 then
-    apt-get remove -y python-pip libjpeg-dev
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false python-pip *-dev
 fi
 
  #### DEBUG
