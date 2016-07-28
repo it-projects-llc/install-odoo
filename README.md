@@ -5,7 +5,7 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
 ## Basic usage
 
     apt-get install git -y
-    git clone https://github.com/yelizariev/install-odoo.git
+    git clone https://github.com/it-projects-llc/install-odoo.git
     cd install-odoo
 
     # run script with parameters you need
