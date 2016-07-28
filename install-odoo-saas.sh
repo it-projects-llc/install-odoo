@@ -194,6 +194,7 @@
 
      ### Deps for Odoo Saas Tool
      # TODO replace it with deb packages
+     apt-get install libffi-dev
      pip install Boto
      pip install FileChunkIO
      pip install pysftp

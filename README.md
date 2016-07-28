@@ -2,11 +2,19 @@
 
 Install developement / production [odoo](https://www.odoo.com/) from [git](https://github.com/odoo/odoo) with / without using [docker](https://www.docker.com/).
 
-## Basic usage
+## Preparation
 
+    apt-get update | grep "Hit http" -C 10000 && echo "Some packages are not loaded"
     apt-get install git -y
     git clone https://github.com/yelizariev/install-odoo.git
     cd install-odoo
+
+    # if you got error after apt-get update, you probably need to update source list:
+    sed -i 's/\/\/.*\.ec2\.//g' /etc/apt/sources.list
+    apt-get update | grep "Hit http" -C 10000 && echo "Some packages are not loaded"
+    
+
+## Basic usage
 
     # run script with parameters you need
     # (list of all parameters with default values can be found at install-odoo-saas.sh)
