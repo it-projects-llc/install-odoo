@@ -165,7 +165,7 @@
      #pip install -r requirements.txt
 
      # fix error with jpeg (if you get it)
-     apt-get install python-dev build-essential libxml2-dev libxslt1-dev
+     apt-get install -y python-dev build-essential libxml2-dev libxslt1-dev
      # uninstall PIL
      pip uninstall PIL || echo "PIL is not installed"
      if [[ "$OS_RELEASE" == "jessie" ]]
@@ -194,7 +194,7 @@
 
      ### Deps for Odoo Saas Tool
      # TODO replace it with deb packages
-     apt-get install libffi-dev
+     apt-get install -y libffi-dev
      pip install Boto
      pip install FileChunkIO
      pip install pysftp
@@ -265,7 +265,7 @@
 
  if [[ "${REPOS}" != "" ]]
  then
-     apt-get install git
+     apt-get install -y git
  fi
 
  for r in "${REPOS[@]}"
