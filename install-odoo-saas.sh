@@ -142,7 +142,7 @@
          fi
 
      fi
-     if [[ "$WKHTMLTOPDF_INSTALLED" == "no"]]
+     if [[ "$WKHTMLTOPDF_INSTALLED" == "no" ]]
      then
          curl -o wkhtmltox.deb -SL ${WKHTMLTOPDF_DEB_URL}
          dpkg --force-depends -i wkhtmltox.deb
