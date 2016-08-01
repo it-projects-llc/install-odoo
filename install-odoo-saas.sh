@@ -111,6 +111,8 @@
              python-support
 
      ## wkhtmltopdf
+     WKHTMLTOPDF_INSTALLED="no"
+     whereis wkhtmltopdf | grep -q 'wkhtmltopdf: /' && export WKHTMLTOPDF_INSTALLED='yes'
      if [[ "$WKHTMLTOPDF_DEB_URL" == "" ]] || [[ "$WKHTMLTOPDF_DEPENDENCIES" == "" ]]
      then
          WK_DEPS="xfonts-base xfonts-75dpi libjpeg62-turbo"
@@ -140,12 +142,15 @@
          fi
 
      fi
-     curl -o wkhtmltox.deb -SL ${WKHTMLTOPDF_DEB_URL}
-     dpkg --force-depends -i wkhtmltox.deb
-     apt-get install -y ${WKHTMLTOPDF_DEPENDENCIES} || true
-     apt-get -y install -f --no-install-recommends
-     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm
-     rm -rf /var/lib/apt/lists/* wkhtmltox.deb
+     if [[ "$WKHTMLTOPDF_INSTALLED" == "no"]]
+     then
+         curl -o wkhtmltox.deb -SL ${WKHTMLTOPDF_DEB_URL}
+         dpkg --force-depends -i wkhtmltox.deb
+         apt-get install -y ${WKHTMLTOPDF_DEPENDENCIES} || true
+         apt-get -y install -f --no-install-recommends
+         apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm
+         rm -rf /var/lib/apt/lists/* wkhtmltox.deb
+     fi
 
      # install dependencies and delete odoo deb package:
      #curl -o odoo.deb -SL http://nightly.odoo.com/9.0/nightly/deb/odoo_9.0.latest_all.deb
