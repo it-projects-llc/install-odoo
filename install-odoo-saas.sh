@@ -13,6 +13,7 @@
  export INIT_SAAS_TOOLS=${INIT_SAAS_TOOLS:-"no"} # no | list of parameters to saas.py script
  export INIT_ODOO_CONFIG=${INIT_ODOO_CONFIG:-"no"} # no | yes | docker-container
  export INIT_DIRS=${INIT_DIRS:-"yes"}
+ export GIT_PULL=${GIT_PULL:-"no"}
  export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"no"}
  export CLEAN=${CLEAN:-"no"}
 
@@ -87,8 +88,6 @@
 
  #### DOWNLOADS...
 
- apt-get update
-
  if [[ "$INIT_NGINX" == "yes" ]] || [[ "$INIT_START_SCRIPTS" != "no" ]]
  then
      apt-get install -y emacs23-nox || apt-get install -y emacs24-nox
@@ -151,14 +150,6 @@
          apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm
          rm -rf /var/lib/apt/lists/* wkhtmltox.deb
      fi
-
-     # install dependencies and delete odoo deb package:
-     #curl -o odoo.deb -SL http://nightly.odoo.com/9.0/nightly/deb/odoo_9.0.latest_all.deb
-     #dpkg --force-depends -i odoo.deb
-     #apt-get update
-     #apt-get -y install -f --no-install-recommends
-     #rm -rf /var/lib/apt/lists/* odoo.deb
-     #apt-get purge -y odoo
 
      apt-get install -y adduser node-less node-clean-css postgresql-client python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-pybabel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml
      apt-get install -y python-gevent python-simplejson
@@ -223,8 +214,10 @@
  ### Odoo Souce Code
  if [[ "$CLONE_ODOO" == "yes" ]]
  then
+     apt-get install -y git
+
      mkdir -p $ODOO_SOURCE_DIR
-     git clone -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git $ODOO_SOURCE_DIR
+     git clone -vv -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git $ODOO_SOURCE_DIR
 
      #### Changes on Odoo Code
      cd $ODOO_SOURCE_DIR
@@ -276,7 +269,7 @@
 
  for r in "${REPOS[@]}"
  do
-     eval "git clone -b ${ODOO_BRANCH} $r" || echo "Cannot clone: git clone -b ${ODOO_BRANCH} $r"
+     eval "git clone -v -b ${ODOO_BRANCH} $r" || echo "Cannot clone: git clone -b ${ODOO_BRANCH} $r"
  done
 
 
@@ -334,6 +327,16 @@
      ADDONS_PATH=`echo $ODOO_SOURCE_DIR/openerp/addons,$ODOO_SOURCE_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" `
      sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $OPENERP_SERVER
 
+ fi
+
+ if [[ "$GIT_PULL" == "yes" ]]
+ then
+     git -C $ODOO_SOURCE_DIR pull
+
+     for repo in `ls -d1 $ADDONS_DIR/*/*`
+     do
+         git -C $repo pull
+     done
  fi
 
 
