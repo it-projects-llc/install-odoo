@@ -24,6 +24,7 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
     INIT_NGINX=yes \
     INIT_START_SCRIPTS=yes \
     INIT_ODOO_CONFIG=yes \
+    INIT_USER=yes \
     INIT_DIRS=yes \
     CLONE_ODOO=yes \
     CLONE_IT_PROJECTS_LLC=yes \

@@ -12,7 +12,8 @@
  export INIT_START_SCRIPTS=${INIT_START_SCRIPTS:-"no"} # yes | no | docker-host
  export INIT_SAAS_TOOLS=${INIT_SAAS_TOOLS:-"no"} # no | list of parameters to saas.py script
  export INIT_ODOO_CONFIG=${INIT_ODOO_CONFIG:-"no"} # no | yes | docker-container
- export INIT_DIRS=${INIT_DIRS:-"yes"}
+ export INIT_USER=${INIT_USER:-"no"}
+ export INIT_DIRS=${INIT_DIRS:-"no"}
  export GIT_PULL=${GIT_PULL:-"no"}
  export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"no"}
  export CLEAN=${CLEAN:-"no"}
@@ -211,6 +212,25 @@
          apt-get install $POSTGRES_PACKAGES -y
  fi
 
+ if [[ "$INIT_USER" == "yes" ]]
+ then
+     ### Odoo System User
+     adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --group ${ODOO_USER} || echo 'cannot adduser'
+
+ fi
+
+ if [[ "$INIT_DIRS" == "yes" ]]
+ then
+     ### Odoo logs
+     mkdir -p /var/log/odoo/
+     chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
+
+     ## /temp import data
+     mkdir -p /opt/${ODOO_USER}/.local/share/User/import/
+     chown -R ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/.local
+
+ fi
+
  ### Odoo Souce Code
  if [[ "$CLONE_ODOO" == "yes" ]]
  then
@@ -218,6 +238,7 @@
 
      mkdir -p $ODOO_SOURCE_DIR
      git clone -vv -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git $ODOO_SOURCE_DIR
+     chown -R ${ODOO_USER}:${ODOO_USER} $ODOO_SOURCE_DIR
 
      #### Changes on Odoo Code
      cd $ODOO_SOURCE_DIR
@@ -271,6 +292,7 @@
  do
      eval "git clone -v -b ${ODOO_BRANCH} $r" || echo "Cannot clone: git clone -b ${ODOO_BRANCH} $r"
  done
+ chown -R ${ODOO_USER}:${ODOO_USER} $ADDONS_DIR
 
 
  #from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
@@ -282,31 +304,13 @@
     su - postgres bash -c "psql -c \"CREATE USER ${ODOO_USER} WITH CREATEDB PASSWORD '${DB_PASS}';\""
  fi
 
- if [[ "$INIT_DIRS" == "yes" ]]
- then
-
-     ### Odoo System User
-     adduser --system --quiet --shell=/bin/bash --home=/opt/${ODOO_USER} --gecos '$OE_USER' --group ${ODOO_USER} || echo 'cannot adduser'
-
-     ### Odoo Config
-     mkdir -p /var/log/odoo/
-     chown ${ODOO_USER}:${ODOO_USER} /var/log/odoo
-
-     ## /temp import data
-     mkdir -p /opt/${ODOO_USER}/.local/share/User/import/
-     chown -R ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/.local
-
- fi
-
  if [[ "$INIT_ODOO_CONFIG" != "no" ]]
  then
      cd $INSTALL_ODOO_DIR
-     CONFIGS="./configs"
-     if [[ "$INIT_ODOO_CONFIG" == "docker-container" ]]
+     if [[ "$INIT_ODOO_CONFIG" != "docker-container" ]]
      then
-         CONFIGS="./configs-docker-container"
+         cp ./configs/odoo-server.conf $OPENERP_SERVER
      fi
-     cp ${CONFIGS}/odoo-server.conf $OPENERP_SERVER
      eval "${PERL_UPDATE_ENV} < $OPENERP_SERVER" | sponge $OPENERP_SERVER
      chown ${ODOO_USER}:${ODOO_USER} $OPENERP_SERVER
      chmod 600 $OPENERP_SERVER
