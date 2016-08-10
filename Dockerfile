@@ -46,7 +46,7 @@ run INSTALL_DEPENDENCIES=yes \
     WKHTMLTOPDF_DEPENDENCIES="xfonts-base xfonts-75dpi libjpeg62-turbo" \
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
-    INIT_ODOO_CONFIG=yes \
+    INIT_ODOO_CONFIG=docker-container \
     UPDATE_ADDONS_PATH=yes \
     bash -x install-odoo-saas.sh
 
