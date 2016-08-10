@@ -2,6 +2,7 @@ FROM debian:jessie
 
 # install python and other common packages to have base layer
 RUN apt-get update && \
+    apt-get install -y moreutils && \
     apt-get install -y git && \
     apt-get install -y python-pip && \
     apt-get install -y libffi-dev libssl-dev && \

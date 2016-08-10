@@ -89,11 +89,11 @@
 
  #### DOWNLOADS...
 
- if [[ "$INIT_NGINX" == "yes" ]] || [[ "$INIT_START_SCRIPTS" != "no" ]]
+ if [[ "$INIT_NGINX" == "yes" ]] || [[ "$INIT_START_SCRIPTS" != "no" ]] || [[ "$INIT_ODOO_CONFIG" != "no" ]]
  then
      apt-get install -y emacs23-nox || apt-get install -y emacs24-nox
      # moreutils is installed for sponge util
-     apt-get install -y moreutils tree
+     apt-get install -y moreutils
  fi
 
  [[ "$SYSTEM" == "supervisor" ]] && [[ "$INIT_START_SCRIPTS" != "no" ]] && apt-get install -y supervisor
