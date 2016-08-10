@@ -36,7 +36,7 @@ ENV ODOO_BRANCH=9.0 \
     CLONE_DATE=2016_08_05
 
 # Make a separate layer for odoo source, because it's too heavy
-RUN git clone -v -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git /mnt/odoo-source && \
+RUN git clone --depth=1 -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git /mnt/odoo-source && \
     chown -R odoo:odoo /mnt/odoo-source
 
 COPY install-odoo-saas.sh /
