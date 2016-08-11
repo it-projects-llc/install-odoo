@@ -60,3 +60,4 @@ EXPOSE 8069 8071
 USER odoo
 
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/mnt/odoo-source/openerp-server"]

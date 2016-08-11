@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 set -e
 
@@ -12,10 +12,10 @@ export PGHOST PGPORT PGUSER PGPASSWORD
 case "$1" in
 	  --)
 		    shift
-		    exec openerp-server "$@"
+		    exec /mnt/odoo-source/openerp-server "$@"
 		    ;;
 	  -*)
-		    exec openerp-server "$@"
+		    exec /mnt/odoo-source/openerp-server "$@"
 		    ;;
 	  *)
 		    exec "$@"
