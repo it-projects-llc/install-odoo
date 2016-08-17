@@ -45,16 +45,38 @@ odoo_config = get_odoo_config()
 
 ### EXECUTE
 
+def exec_pg_environ():
+    """
+    Force the database PostgreSQL environment variables to the database
+    configuration of Odoo.
 
-#@_set_pg_password_in_environment # see openerp/service/db.py
+    Note: On systems where pg_restore/pg_dump require an explicit password
+    (i.e.  on Windows where TCP sockets are used), it is necessary to pass the
+    postgres user password in the PGPASSWORD environment variable or in a
+    special .pgpass file.
+
+    See also http://www.postgresql.org/docs/8.4/static/libpq-envars.html
+    """
+    env = os.environ.copy()
+    db_user = odoo_config.get('db_user') or os.getenv('DB_ENV_POSTGRES_USER')
+    if db_user:
+        env['PGUSER'] = db_user
+    db_host = odoo_config.get('db_host') or os.getenv('DB_PORT_5432_TCP_ADDR')
+    if db_host:
+        env['PGHOST'] = db_host
+    db_port = odoo_config.get('db_port') or os.getenv('DB_PORT_5432_TCP_PORT')
+    if db_port:
+        env['PGPORT'] = db_port
+
+    db_password = odoo_config.get('db_password') or os.getenv('DB_ENV_POSTGRES_PASSWORD')
+    if db_password:
+        env['PGPASSWORD'] = db_password
+
+    return env
+
 def dump_sql(db, dump_file):
     cmd = ['pg_dump', '--format=p', '--no-owner', '--file=' + dump_file]
-    if odoo_config.get('db_user'):
-        cmd.append('--username=' + odoo_config.get('db_user'))
-    if odoo_config.get('db_host'):
-        cmd.append('--host=' + odoo_config.get('db_host'))
-    if odoo_config.get('db_port'):
-        cmd.append('--port=' + str(odoo_config.get('db_port')))
+
     cmd.append(db)
 
     if exec_pg_command(*cmd):
@@ -113,12 +135,13 @@ def find_pg_tool(name):
 
 def exec_pg_command(name, *args):
     prog = find_pg_tool(name)
+    env = exec_pg_environ()
     if not prog:
         raise Exception('Couldn\'t find %s' % name)
     args2 = (prog,) + args
 
     with open(os.devnull) as dn:
-        return subprocess.call(args2, stdout=dn, stderr=subprocess.STDOUT)
+        return subprocess.call(args2, stdout=dn, stderr=subprocess.STDOUT, env=env)
 
 def zip_dir(path, stream, include_dir=True):      # TODO add ignore list
     path = os.path.normpath(path)
