@@ -6,8 +6,8 @@
 
  # Actions
  export INSTALL_DEPENDENCIES=${INSTALL_DEPENDENCIES:-"no"}
- export INIT_POSTGRESQL=${INIT_POSTGRESQL:-"no"}
- export INIT_BACKUPS=${INIT_BACKUPS:-"no"}
+ export INIT_POSTGRESQL=${INIT_POSTGRESQL:-"no"} # yes | no | docker-container
+ export INIT_BACKUPS=${INIT_BACKUPS:-"no"} # yes | no | docker-host
  export INIT_NGINX=${INIT_NGINX:-"no"}
  export INIT_START_SCRIPTS=${INIT_START_SCRIPTS:-"no"} # yes | no | docker-host
  export INIT_SAAS_TOOLS=${INIT_SAAS_TOOLS:-"no"} # no | list of parameters to saas.py script
@@ -152,8 +152,14 @@
          rm -rf /var/lib/apt/lists/* wkhtmltox.deb
      fi
 
-     apt-get install -y adduser node-less node-clean-css postgresql-client python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-pybabel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml
+     apt-get install -y adduser node-less node-clean-css python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-pybabel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml
      apt-get install -y python-gevent python-simplejson
+
+     if [[ "$ODOO_BRANCH" == "8.0" ]]
+     then
+         apt-get install -y python-unittest2
+     fi
+
 
      pip install psycogreen
      # requirements.txt
@@ -200,12 +206,12 @@
      pip install requests --upgrade
  fi
 
- if [[ "$INIT_POSTGRESQL" == "yes" ]]
+ if [[ "$INIT_POSTGRESQL" != "no" ]]
  then
     ### PostgreSQL
-     POSTGRES_PACKAGES="postgresql postgresql-contrib"
+     POSTGRES_PACKAGES="postgresql-9.5 postgresql-contrib-9.5 postgresql-client-9.5"
      apt-get install $POSTGRES_PACKAGES -y || \
-         wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+         curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
          apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 7FCC7D46ACCC4CF8 && \
          echo 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' >> /etc/apt/sources.list.d/pgdg.list && \
          apt-get update && \
@@ -280,6 +286,7 @@
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/access-addons.git it-projects-llc/access-addons")
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/website-addons.git it-projects-llc/website-addons")
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/misc-addons.git it-projects-llc/misc-addons")
+     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/mail-addons.git it-projects-llc/mail-addons")
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/odoo-saas-tools.git it-projects-llc/odoo-saas-tools")
  fi
 
@@ -465,16 +472,27 @@
  #echo "Do not forget to set server parameter report.url = 0.0.0.0:8069"
 
  #### ODOO DB BACKUP
- if [[ "$INIT_BACKUPS" == "yes" ]]             ###################################### IF
+ if [[ "$INIT_BACKUPS" != "no" ]]             ###################################### IF
  then
-     mkdir -p /opt/${ODOO_USER}/backups/
-     chown ${ODOO_USER}:${ODOO_USER} /opt/${ODOO_USER}/backups/
-     cd /usr/local/bin/
-     cp $INSTALL_ODOO_DIR/odoo-backup.py odoo-backup.py
-     chmod +x odoo-backup.py
+     if [[ "$INIT_BACKUPS" == "yes" ]]
+     then
+         mkdir -p ${BACKUPS_DIR}
+         chown ${ODOO_USER}:${ODOO_USER} ${BACKUPS_DIR}
+         cd /usr/local/bin/
+         cp $INSTALL_ODOO_DIR/odoo-backup.py odoo-backup.py
+         chmod +x odoo-backup.py
+     fi
+
+     if [[ "$INIT_BACKUPS" == "yes" ]]
+     then
+         BACKUP_EXEC="${ODOO_USER} odoo-backup.py"
+     elif [[ "$INIT_BACKUPS" == "docker-host" ]]
+     then
+         BACKUP_EXEC="root docker exec -u root -i -t DOCKER_NAME /usr/local/bin/odoo-backup.py -d ${ODOO_DATABASE} -c ${OPENERP_SERVER} -p ${BACKUPS_DIR}"
+     fi
      echo "### check url for undestanding time parameters: https://github.com/xolox/python-rotate-backups" >> /etc/crontab
-     echo -e "#6 6\t* * *\t${ODOO_USER} odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/ --no-save-filestore --daily 8 --weekly 0 --monthly 0 --yearly 0" >> /etc/crontab
-     echo -e "#4 4\t* * 7\t${ODOO_USER} odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/" >> /etc/crontab
+     echo -e "#6 6\t* * *\t${BACKUP_EXEC} --no-save-filestore --daily 8 --weekly 0 --monthly 0 --yearly 0" >> /etc/crontab
+     echo -e "#4 4\t* * 7\t${BACKUP_EXEC}" >> /etc/crontab
      ## to test run:
      # sudo su - ${ODOO_USER} -s /bin/bash -c  "odoo-backup.py -d ${ODOO_DATABASE} -p /opt/${ODOO_USER}/backups/"
      # e.g.
