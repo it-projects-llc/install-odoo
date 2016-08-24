@@ -8,7 +8,7 @@
  export INSTALL_DEPENDENCIES=${INSTALL_DEPENDENCIES:-"no"}
  export INIT_POSTGRESQL=${INIT_POSTGRESQL:-"no"} # yes | no | docker-container
  export INIT_BACKUPS=${INIT_BACKUPS:-"no"} # yes | no | docker-host
- export INIT_NGINX=${INIT_NGINX:-"no"}
+ export INIT_NGINX=${INIT_NGINX:-"no"} # yes | no | docker-host
  export INIT_START_SCRIPTS=${INIT_START_SCRIPTS:-"no"} # yes | no | docker-host
  export INIT_SAAS_TOOLS=${INIT_SAAS_TOOLS:-"no"} # no | list of parameters to saas.py script
  export INIT_ODOO_CONFIG=${INIT_ODOO_CONFIG:-"no"} # no | yes | docker-container
@@ -89,7 +89,7 @@
 
  #### DOWNLOADS...
 
- if [[ "$INIT_NGINX" == "yes" ]] || [[ "$INIT_START_SCRIPTS" != "no" ]] || [[ "$INIT_ODOO_CONFIG" != "no" ]]
+ if [[ "$INIT_NGINX" != "no" ]] || [[ "$INIT_START_SCRIPTS" != "no" ]] || [[ "$INIT_ODOO_CONFIG" != "no" ]]
  then
      apt-get install -y emacs23-nox || apt-get install -y emacs24-nox
      # moreutils is installed for sponge util
@@ -351,12 +351,15 @@
  fi
 
 
- if [[ "$INIT_NGINX" == "yes" ]]
+ if [[ "$INIT_NGINX" != "no" ]]
  then
      #### NGINX
      CONFIGS="configs"
-     #/etc/init.d/apache2 stop
-     apt-get remove apache2 -y && \
+
+     /etc/init.d/apache2 stop && \
+         apt-get remove apache2 -y || \
+             echo "apache2 was not installed"
+
      #wget --quiet -O - http://nginx.org/keys/nginx_signing.key | apt-key add - &&\
      #echo 'deb http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\
      #echo 'deb-src http://nginx.org/packages/ubuntu/ trusty nginx' >> /etc/apt/sources.list.d/nginx.list &&\

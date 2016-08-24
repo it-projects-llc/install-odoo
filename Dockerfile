@@ -26,7 +26,7 @@ RUN apt-get install -y python-unittest2
 RUN adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --group odoo
 
 RUN mkdir -p /mnt/odoo-source && chown odoo /mnt/odoo-source && \
-    mkdir -p /mnt/addons/extra && chown odoo /mnt/addons && \
+    mkdir -p /mnt/addons/extra && chown -R odoo /mnt/addons && \
     mkdir -p /mnt/data-dir && chown odoo /mnt/data-dir && \
     mkdir -p /mnt/config && chown odoo /mnt/config && \
     mkdir -p /mnt/backups && chown odoo /mnt/backups && \
@@ -70,10 +70,10 @@ EXPOSE 8069 8071
 # Set default user when running the container
 USER odoo
 
-VOLUME ["/mnt/data-dir",
-       "/mnt/config",
-       "/mnt/backups",
-       "/mnt/logs",
+VOLUME ["/mnt/data-dir", \
+       "/mnt/config", \
+       "/mnt/backups", \
+       "/mnt/logs", \
        "/mnt/addons/extra"]
 # /mnt/addons/extra is used for manually added addons.
 # Expected structure is:
