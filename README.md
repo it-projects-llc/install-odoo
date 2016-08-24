@@ -65,11 +65,8 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
     # Ubuntu 12.04
     echo "deb https://apt.dockerproject.org/repo ubuntu-precise main" > /etc/apt/sources.list.d/docker.list
 
-    # Ubuntu 14.04
+    # Ubunto 14.04
     echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" > /etc/apt/sources.list.d/docker.list
-
-    # Ubuntu 16.04
-    echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" > /etc/apt/sources.list.d/docker.list
 
     apt-get update
 
