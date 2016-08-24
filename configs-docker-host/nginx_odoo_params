@@ -23,11 +23,3 @@ proxy_next_upstream error timeout invalid_header http_500 http_502 http_503;
 # by default, do not forward anything
 proxy_redirect       off;
 proxy_buffering      off;
-
-location ~* /web/static/ {
-    proxy_cache_valid 200 90m;
-    proxy_buffering    on;
-    expires 864000;
-    proxy_pass http://127.0.0.1:8069;
-}
-
