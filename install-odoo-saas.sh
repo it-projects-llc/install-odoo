@@ -31,6 +31,10 @@
  export CLONE_OCA=${CLONE_OCA:-"no"}
  export CLONE_ODOO=${CLONE_ODOO:-"no"}
 
+ ## Docker Names
+ export ODOO_DOCKER=${ODOO_DOCKER:-"odoo"}
+ export DB_ODOO_DOCKER=${DB_ODOO_DOCKER:-"db-odoo"}
+
  ## E-Mail
  export EMAIL_SERVER=${EMAIL_SERVER:-stmp.example.com}
  export EMAIL_USER=${EMAIL_USER:-mail@example.com}
@@ -386,12 +390,12 @@
      #mkdir /etc/nginx/sites-enabled/ -p
      cd /etc/nginx/sites-enabled/
      rm default || true
-     ln -s ../sites-available/odoo.conf odoo.conf
+     ln -s ../sites-available/odoo.conf odoo.conf || true
 
 
      if [[ "$NGINX_SSL" == "yes" ]]
      then
-         ln -s ../sites-available/odoo_ssl.conf odoo_ssl.conf
+         ln -s ../sites-available/odoo_ssl.conf odoo_ssl.conf || true
      fi
 
      #cd /etc/nginx/ && \
@@ -431,7 +435,7 @@
 
      cd /lib/systemd/system/
 
-     for DAEMON in $DAEMON_LIST
+     for DAEMON in ${DAEMON_LIST[@]}
      do
          cp $INSTALL_ODOO_DIR/${CONFIGS}/${DAEMON}.service ${DAEMON}.service
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.service" | sponge ${DAEMON}.service
@@ -445,7 +449,7 @@
      ### CONTROL SCRIPTS - upstart
 
      cd /etc/init/
-     for DAEMON in $DAEMON_LIST
+     for DAEMON in ${DAEMON_LIST[@]}
      do
          cp $INSTALL_ODOO_DIR/${CONFIGS}/${DAEMON}-init.conf ${DAEMON}.conf
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.conf" | sponge ${DAEMON}.conf
@@ -458,7 +462,7 @@
      ### CONTROL SCRIPTS - supervisor
 
      cd /etc/supervisor/conf.d/
-     for DAEMON in $DAEMON_LIST
+     for DAEMON in ${DAEMON_LIST[@]}
      do
          cp $INSTALL_ODOO_DIR/${CONFIGS}/${DAEMON}-supervisor.conf ${DAEMON}.conf
          eval "${PERL_UPDATE_ENV} < ${DAEMON}.conf" | sponge ${DAEMON}.conf
@@ -491,7 +495,7 @@
          BACKUP_EXEC="${ODOO_USER} odoo-backup.py"
      elif [[ "$INIT_BACKUPS" == "docker-host" ]]
      then
-         BACKUP_EXEC="root docker exec -u root -i -t DOCKER_NAME /usr/local/bin/odoo-backup.py -d ${ODOO_DATABASE} -c ${OPENERP_SERVER} -p ${BACKUPS_DIR}"
+         BACKUP_EXEC="root docker exec -u root -i -t ${ODOO_DOCKER} /usr/local/bin/odoo-backup.py -d ${ODOO_DATABASE} -c ${OPENERP_SERVER} -p ${BACKUPS_DIR}"
      fi
      echo "### check url for undestanding time parameters: https://github.com/xolox/python-rotate-backups" >> /etc/crontab
      echo -e "#6 6\t* * *\t${BACKUP_EXEC} --no-save-filestore --daily 8 --weekly 0 --monthly 0 --yearly 0" >> /etc/crontab
