@@ -57,6 +57,8 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
 
 ## Installation in Docker
 
+### Install Docker engine
+
     # Install docker
     # see https://docs.docker.com/engine/installation/
     apt-get install -y apt-transport-https ca-certificates
@@ -77,15 +79,19 @@ Install developement / production [odoo](https://www.odoo.com/) from [git](https
 
     apt-get install -y docker-engine
 
+### Create postgres container 
+
     # create postgres container
     docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo --name db-odoo postgres:9.5
 
+### Create odoo container
 
 Simplest way to create odoo container is as following:
 
     # run (create) container
     docker run \
     -p 8069:8069 \
+    -p 8072:8072 \
     --name odoo \
     --link db-odoo:db
     -t itprojectsllc/install-odoo
