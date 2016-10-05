@@ -20,9 +20,6 @@ RUN apt-get update && \
             python-renderpm \
             python-support
 
-# 8.0 specific depenencies:
-RUN apt-get install -y python-unittest2
-
 RUN adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --group odoo
 
 RUN mkdir -p /mnt/odoo-source && chown odoo /mnt/odoo-source && \
@@ -32,7 +29,7 @@ RUN mkdir -p /mnt/odoo-source && chown odoo /mnt/odoo-source && \
     mkdir -p /mnt/backups && chown odoo /mnt/backups && \
     mkdir -p /mnt/logs && chown odoo /mnt/logs
 
-ENV ODOO_BRANCH=8.0 \
+ENV ODOO_BRANCH=9.0 \
     OPENERP_SERVER=/mnt/config/odoo-server.conf \
     ODOO_SOURCE_DIR=/mnt/odoo-source \
     ADDONS_DIR=/mnt/addons \
