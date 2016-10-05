@@ -1,14 +1,14 @@
 # /lib/systemd/system
 
 [Unit]
-Description=Runbot container
-Requires=docker.service docker-db.service
-After=docker-db.service
+Description=Odoo container
+Requires=docker.service odoo-docker-db.service
+After=odoo-docker-db.service
 
 [Service]
 Restart=always
-ExecStart=/usr/bin/docker start -a odoo-runbot
-ExecStop=/usr/bin/docker stop -t 2 odoo-runbot
+ExecStart=/usr/bin/docker start -a {{ODOO_DOCKER}}
+ExecStop=/usr/bin/docker stop -t 2 {{ODOO_DOCKER}}
 
 [Install]
 WantedBy=local.target
