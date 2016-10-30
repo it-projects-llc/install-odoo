@@ -1,6 +1,5 @@
-=========================
- Odoo remote development
-=========================
+Odoo remote development
+=======================
 
 This docker allows to run odoo and chromium remotely.
 
@@ -9,27 +8,27 @@ This docker allows to run odoo and chromium remotely.
 * Terminal sharing (via tmux)
 * Pair programming (via tmux + emacs\vim)
 
-==============
- Installation 
-==============
+
+Installation
+============
 
 Connect to your remote server
 
     docker run \
-    -d
-    --link db-odoo:db
+    -d \
+    --link db-odoo:db \
     -p 1001:8069 \
     -p 1002:8072 \
     -p 1003:22 \
+    --name odoo-dev \
     -t itprojectsllc/install-odoo:8.0-remote-dev
 
 
-===============
- Configuration
-===============
+Configuration
+=============
 
 Adding ssh keys
-===============
+---------------
 
 To add initial ssh keys connect to the docker directly via ssh or via ``docker exec ... /bin/bash``. 
 
@@ -38,17 +37,16 @@ Then exec something like
      curl --silent https://github.com/yelizariev.keys >> /opt/odoo/.ssh/authorized_keys
 
 
-==========
- Workflow
-==========
+Workflow
+========
 
 Connecting to remote environment
-================================
+--------------------------------
 
     ssh -X odoo@YOUSERVER
 
 Run odoo
-========
+--------
 
     /odoo.sh
 
@@ -59,14 +57,14 @@ All parameters are passed to odoo script, e.g.
 
 
 Remote browser
-==============
+--------------
 
 To run chromium simply execute
 
      /chromium.sh
 
 Shared emacs session
-====================
+--------------------
 
 connect to a docker an execute
 
@@ -77,7 +75,7 @@ connect to a docker an execute
     /emacs-client.sh
 
 Files sync
-==========
+----------
 
 A developer can edit files locally by using `lsyncd <https://github.com/axkibe/lsyncd>`:
 
