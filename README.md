@@ -1,6 +1,9 @@
 # install-odoo
 
-Install developement / production [odoo](https://www.odoo.com/) from [git](https://github.com/odoo/odoo) with / without using [docker](https://www.docker.com/).
+Install developement / production 
+[odoo](https://www.odoo.com/) from [git](https://github.com/odoo/odoo)
+with / without using [docker](https://www.docker.com/), 
+with / without using [Amazon RDS](https://aws.amazon.com/rds/)
 
 ## Preparation
 
