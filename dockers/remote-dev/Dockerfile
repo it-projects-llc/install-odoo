@@ -25,4 +25,3 @@ RUN mkdir /var/run/sshd && \
 EXPOSE 22
 
 ENTRYPOINT ["/entrypoint-sshd.sh"]
-
