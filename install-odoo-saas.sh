@@ -303,7 +303,7 @@
  do
      eval "git clone --depth=1 -b ${ODOO_BRANCH} $r" || echo "Cannot clone: git clone -b ${ODOO_BRANCH} $r"
  done
- chown -R ${ODOO_USER}:${ODOO_USER} $ADDONS_DIR
+ chown -R ${ODOO_USER}:${ODOO_USER} $ADDONS_DIR || true
 
 
  #from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
