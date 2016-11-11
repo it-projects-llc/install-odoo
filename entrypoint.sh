@@ -13,10 +13,10 @@ export PGHOST PGPORT PGUSER PGPASSWORD
 case "$1" in
 	  --)
 		    shift
-		    exec /mnt/odoo-source/openerp-server "$@"
+		    exec /mnt/odoo-source/odoo-bin "$@"
 		    ;;
 	  -*)
-		    exec /mnt/odoo-source/openerp-server "$@"
+		    exec /mnt/odoo-source/odoo-bin "$@"
 		    ;;
 	  *)
 		    exec "$@"

@@ -79,4 +79,4 @@ VOLUME ["/mnt/data-dir", \
 # we don't add /mnt/odoo-source and /mnt/addons in order to allow modify theirs content in inherited dockers
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/mnt/odoo-source/openerp-server"]
+CMD ["/mnt/odoo-source/odoo-bin"]

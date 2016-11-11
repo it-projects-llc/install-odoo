@@ -16,7 +16,7 @@ Group={{ODOO_USER}}
 SyslogIdentifier=odoo-server
 PIDFile=/run/odoo/odoo-server.pid
 #ExecStartPre=/usr/bin/install -d -m755 -o odoo -g odoo /run/odoo
-ExecStart={{ODOO_SOURCE_DIR}}/openerp-server --config={{OPENERP_SERVER}} --logfile={{LOGS_DIR}}/odoo-server.log
+ExecStart={{ODOO_SOURCE_DIR}}/odoo-bin --config={{OPENERP_SERVER}} --logfile={{LOGS_DIR}}/odoo-server.log
 #ExecStop=/bin/kill $MAINPID
 Restart=on-failure
 RestartSec=10
