@@ -48,7 +48,7 @@ with / without using [Amazon RDS](https://aws.amazon.com/rds/)
     tail -f -n 100 /var/log/odoo/odoo-server.log
     
     # start from console (for ODOO_USER=odoo):
-    sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo-source/openerp-server -c /etc/openerp-server.conf"
+    sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo-source/odoo-bin -c /etc/openerp-server.conf"
     
     # psql (use name of your database)
     sudo -u odoo psql DATABASE
@@ -135,7 +135,7 @@ Example for base installation
     --portal-create \
     --server-create \
     --plan-create \
-    --odoo-script=/usr/local/src/odoo-source/openerp-server \
+    --odoo-script=/usr/local/src/odoo-source/odoo-bin \
     --odoo-config=/etc/openerp-server.conf \
     --admin-password=${ODOO_MASTER_PASS} \
     --portal-db-name=${ODOO_DOMAIN} \
@@ -152,7 +152,7 @@ Example for docker installation
     --portal-create \
     --server-create \
     --plan-create \
-    --odoo-script=/mnt/odoo-source/openerp-server \
+    --odoo-script=/mnt/odoo-source/odoo-bin \
     --odoo-config=/mnt/config/odoo-server.conf \
     --admin-password=${ODOO_MASTER_PASS} \
     --portal-db-name=${ODOO_DOMAIN} \

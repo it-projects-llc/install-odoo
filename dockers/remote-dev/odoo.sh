@@ -9,4 +9,4 @@ set -e
 : ${PGPASSWORD:=$DB_ENV_POSTGRES_PASSWORD}
 export PGHOST PGPORT PGUSER PGPASSWORD
 
-/mnt/odoo-source/openerp-server $@
+/mnt/odoo-source/odoo-bin $@
