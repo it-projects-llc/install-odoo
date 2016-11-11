@@ -1,6 +1,9 @@
 # install-odoo
 
-Install developement / production [odoo](https://www.odoo.com/) from [git](https://github.com/odoo/odoo) with / without using [docker](https://www.docker.com/).
+Install developement / production 
+[odoo](https://www.odoo.com/) from [git](https://github.com/odoo/odoo)
+with / without using [docker](https://www.docker.com/), 
+with / without using [Amazon RDS](https://aws.amazon.com/rds/)
 
 ## Preparation
 
@@ -93,7 +96,7 @@ Simplest way to create odoo container is as following:
     -p 8069:8069 \
     -p 8072:8072 \
     --name odoo \
-    --link db-odoo:db
+    --link db-odoo:db \
     -t itprojectsllc/install-odoo
 
 For more specific installation check following links:
@@ -124,7 +127,9 @@ Finish docker installation:
 
 ## SaaS Tools
 
-To prepare [saas tools](https://github.com/it-projects-llc/odoo-saas-tools) specify params for ``saas.py`` script, e.g.:
+To prepare [saas tools](https://github.com/it-projects-llc/odoo-saas-tools) do as on examples below.
+
+Example for base installation
 
     INIT_SAAS_TOOLS_VALUE="\
     --portal-create \
@@ -137,16 +142,29 @@ To prepare [saas tools](https://github.com/it-projects-llc/odoo-saas-tools) spec
     --server-db-name=server-1.${ODOO_DOMAIN} \
     --plan-template-db-name=template-1.${ODOO_DOMAIN} \
     --plan-clients=demo-%i.${ODOO_DOMAIN} \
+    --odoo-xmlrpc-port=8869 \
     "
-
-Then run script.
-
-    # for base installation
     INIT_SAAS_TOOLS=$INIT_SAAS_TOOLS_VALUE bash -x install-odoo-saas.sh
 
-    # for docker installation:
-    docker exec INIT_SAAS_TOOLS=$INIT_SAAS_TOOLS_VALUE /bin/bash /install-odoo-saas.sh
+Example for docker installation
+
+    INIT_SAAS_TOOLS_VALUE="\
+    --portal-create \
+    --server-create \
+    --plan-create \
+    --odoo-script=/mnt/odoo-source/openerp-server \
+    --odoo-config=/mnt/config/odoo-server.conf \
+    --admin-password=${ODOO_MASTER_PASS} \
+    --portal-db-name=${ODOO_DOMAIN} \
+    --server-db-name=server-1.${ODOO_DOMAIN} \
+    --plan-template-db-name=template-1.${ODOO_DOMAIN} \
+    --plan-clients=demo-%i.${ODOO_DOMAIN} \
+    --odoo-xmlrpc-port=8869 \
+    "
+
+    docker exec -u root -i -t odoo /bin/bash -c "export INIT_SAAS_TOOLS='$INIT_SAAS_TOOLS_VALUE'; bash /install-odoo-saas.sh"
     
+After that you need to edit config file and update db_filter value to *^%h$*.
 
 # Contributors
 
