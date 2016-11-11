@@ -36,7 +36,7 @@ ENV ODOO_BRANCH=9.0 \
     BACKUPS_DIR=/mnt/backups \
     LOGS_DIR=/mnt/logs \
     ODOO_DATA_DIR=/mnt/data-dir \
-    BUILD_DATE=2016_08_05
+    BUILD_DATE=2016_10_20
 
 # Make a separate layer for odoo source, because it's too heavy
 RUN git clone --depth=1 -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git /mnt/odoo-source && \
