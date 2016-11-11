@@ -1,4 +1,4 @@
-FROM itprojectsllc/install-odoo:9.0
+FROM itprojectsllc/install-odoo:latest
 
 # install module for all new databases
 ENV AUTOINSTALL_MODULES="['theme_kit']"
