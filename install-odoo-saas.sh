@@ -184,7 +184,7 @@
      else
          apt-get install libjpeg-dev zlib1g-dev -y
      fi
-     # install pillow
+     # reinstall pillow
      pip install -I pillow
      # (from here https://github.com/odoo/odoo/issues/612 )
 
