@@ -254,8 +254,6 @@
      cd $ODOO_SOURCE_DIR
      ## delete matches="..." at /web/database/manager
      sed -i 's/matches="[^"]*"//g' addons/web/static/src/xml/base.xml
-     ## disable im_odoo_support
-     sed -i "s/'auto_install': True/'auto_install': False/" addons/im_odoo_support/__openerp__.py
  fi
 
  mkdir -p $ADDONS_DIR
