@@ -5,19 +5,17 @@ Install developement / production
 with / without using [docker](https://www.docker.com/), 
 with / without using [Amazon RDS](https://aws.amazon.com/rds/)
 
-## Preparation
+# Basic usage
 
-    apt-get update | grep "Hit http" -C 10000 && echo "Some packages are not loaded"
-    apt-get install git -y
+## Getting script
+
     git clone https://github.com/it-projects-llc/install-odoo.git
     cd install-odoo
-
-    # if you got error after apt-get update, you probably need to update source list:
-    sed -i 's/\/\/.*\.ec2\.//g' /etc/apt/sources.list
-    apt-get update | grep "Hit http" -C 10000 && echo "Some packages are not loaded"
     
+## Running script
 
-## Basic usage
+    apt-get update | grep "Hit http\|Ign http" -C 10000 && echo "There are possible failures on fetching. Try apt-get update again"
+    apt-get install git -y
 
     # run script with parameters you need
     # (list of all parameters with default values can be found at install-odoo-saas.sh)
@@ -58,9 +56,9 @@ with / without using [Amazon RDS](https://aws.amazon.com/rds/)
 
 
 
-## Installation in Docker
+# Installation in Docker
 
-### Install Docker engine
+## Install Docker engine
 
     # Install docker
     # see https://docs.docker.com/engine/installation/
@@ -82,12 +80,12 @@ with / without using [Amazon RDS](https://aws.amazon.com/rds/)
 
     apt-get install -y docker-engine
 
-### Create postgres container 
+## Create postgres container 
 
     # create postgres container
     docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo --name db-odoo postgres:9.5
 
-### Create odoo container
+## Create odoo container
 
 Simplest way to create odoo container is as following:
 
@@ -98,6 +96,11 @@ Simplest way to create odoo container is as following:
     --name odoo \
     --link db-odoo:db \
     -t itprojectsllc/install-odoo
+
+Additionally, you can specify following environment variables:
+
+* ``-e ODOO_MASTER_PASS=123abcd`` -- specify master password (one, you will use on Database Manager page). If this variable is not specified, system will generate new password on each start.
+* ``-e RESET_ADMIN_PASSWORDS_ON_STARTUP=yes`` -- will reset admin password at all databases to ``$ODOO_MASTER_PASS`` (manual or generated value)
 
 For more specific installation check following links:
 
@@ -125,7 +128,7 @@ Finish docker installation:
     INIT_START_SCRIPTS=docker-host \
     install-odoo-saas.sh
 
-## SaaS Tools
+# SaaS Tools
 
 To prepare [saas tools](https://github.com/it-projects-llc/odoo-saas-tools) do as on examples below.
 

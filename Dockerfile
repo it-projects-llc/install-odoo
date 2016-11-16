@@ -1,6 +1,8 @@
 FROM debian:jessie
 
-# install python and other common packages to have base layer
+################
+# dependencies #
+################
 RUN apt-get update && \
     apt-get install -y moreutils && \
     apt-get install -y git && \
@@ -18,17 +20,31 @@ RUN apt-get update && \
             node-clean-css \
             python-pyinotify \
             python-renderpm \
-            python-support
+            python-support && \
+    # postgresql-client-9.5
+    curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' >> /etc/apt/sources.list.d/pgdg.list && \
+    apt-get update && \
+    apt-get install -y postgresql-client-9.5 && \
+    # wkhtmltopdf
+    curl -o wkhtmltox.deb -SL http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb && \
+    dpkg --force-depends -i wkhtmltox.deb && \
+    apt-get -y install -f --no-install-recommends && \
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm && \
+    rm -rf /var/lib/apt/lists/* wkhtmltox.deb && \
+    # pip dependencies
+    pip install pillow psycogreen && \
+    pip install Boto && \
+    pip install FileChunkIO && \
+    pip install pysftp && \
+    pip install rotate-backups && \
+    pip install oauthlib && \
+    pip install requests --upgrade
 
-RUN adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --group odoo
 
-RUN mkdir -p /mnt/odoo-source && chown odoo /mnt/odoo-source && \
-    mkdir -p /mnt/addons/extra && chown -R odoo /mnt/addons && \
-    mkdir -p /mnt/data-dir && chown odoo /mnt/data-dir && \
-    mkdir -p /mnt/config && chown odoo /mnt/config && \
-    mkdir -p /mnt/backups && chown odoo /mnt/backups && \
-    mkdir -p /mnt/logs && chown odoo /mnt/logs
-
+#######
+# ENV #
+#######
 ENV ODOO_BRANCH=10.0 \
     OPENERP_SERVER=/mnt/config/odoo-server.conf \
     ODOO_SOURCE_DIR=/mnt/odoo-source \
@@ -38,35 +54,42 @@ ENV ODOO_BRANCH=10.0 \
     ODOO_DATA_DIR=/mnt/data-dir \
     BUILD_DATE=2016_10_20
 
-# Make a separate layer for odoo source, because it's too heavy
-RUN git clone --depth=1 -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git /mnt/odoo-source && \
-    chown -R odoo:odoo /mnt/odoo-source
+#####################################
+# odoo source, user, docker folders #
+#####################################
+RUN git clone --depth=1 -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git $ODOO_SOURCE_DIR && \
+    adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --group odoo && \
+    chown -R odoo:odoo $ODOO_SOURCE_DIR && \
+    mkdir -p $ODOO_SOURCE_DIR && chown odoo $ODOO_SOURCE_DIR && \
+    mkdir -p $ADDONS_DIR/extra && chown -R odoo $ADDONS_DIR && \
+    mkdir -p $ODOO_DATA_DIR && chown odoo $ODOO_DATA_DIR && \
+    mkdir -p /mnt/config && chown odoo /mnt/config && \
+    mkdir -p $BACKUPS_DIR && chown odoo $BACKUPS_DIR && \
+    mkdir -p $LOGS_DIR && chown odoo $LOGS_DIR
 
+###############################################
+# config, scripts, repos, autoinstall modules #
+###############################################
 COPY install-odoo-saas.sh /
 COPY configs-docker-container/odoo-server.conf $OPENERP_SERVER
-
 COPY odoo-backup.py /usr/local/bin/
-RUN  chmod +x /usr/local/bin/odoo-backup.py
 
-run INSTALL_DEPENDENCIES=yes \
-    WKHTMLTOPDF_DEB_URL="http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb" \
-    WKHTMLTOPDF_DEPENDENCIES="xfonts-base xfonts-75dpi libjpeg62-turbo" \
+RUN chmod +x /usr/local/bin/odoo-backup.py && \
+    chown odoo:odoo $OPENERP_SERVER && \
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
     INIT_ODOO_CONFIG=docker-container \
     UPDATE_ADDONS_PATH=yes \
-    INIT_POSTGRESQL=docker-container \
-    POSTGRES_PACKAGES="postgresql-client-9.5" \
     bash -x install-odoo-saas.sh
 
+COPY reset-admin-passwords.py /
+
+########################
+# docker configuration #
+########################
 COPY ./entrypoint.sh /
-
-# Expose Odoo services
-EXPOSE 8069 8071
-
-# Set default user when running the container
+EXPOSE 8069 8072
 USER odoo
-
 VOLUME ["/mnt/data-dir", \
        "/mnt/config", \
        "/mnt/backups", \
@@ -76,7 +99,7 @@ VOLUME ["/mnt/data-dir", \
 # Expected structure is:
 # /mnt/addons/extra/REPO_OR_GROUP_NAME/MODULE/__openerp__.py
 #
-# we don't add /mnt/odoo-source and /mnt/addons in order to allow modify theirs content in inherited dockers
+# we don't add /mnt/odoo-source and /mnt/addons to VOLUME in order to allow modify theirs content in inherited dockers
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/mnt/odoo-source/odoo-bin"]
