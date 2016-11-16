@@ -41,14 +41,14 @@
  export EMAIL_PASS=${EMAIL_PASS:-GiveMeYourPassBaby}
 
  ## PostgreSQL
- export DB_PASS=${DB_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;`}
+ export DB_PASS=${DB_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c16;echo;`}
 
  ## Odoo
  export ODOO_DOMAIN=${ODOO_DOMAIN:-odoo.example.com}
  export ODOO_DATABASE=${ODOO_DATABASE:-odoo.example.com}
  export ODOO_USER=${ODOO_USER:-odoo}
  export ODOO_BRANCH=${ODOO_BRANCH:-9.0}
- export ODOO_MASTER_PASS=${ODOO_MASTER_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-12};echo;`}
+ export ODOO_MASTER_PASS=${ODOO_MASTER_PASS:-`< /dev/urandom tr -dc A-Za-z0-9 | head -c16;echo;`}
 
  ## Nginx
  export NGINX_SSL=${NGINX_SSL:-"no"}
@@ -213,7 +213,12 @@
  if [[ "$INIT_POSTGRESQL" != "no" ]]
  then
     ### PostgreSQL
-     POSTGRES_PACKAGES="postgresql-9.5 postgresql-contrib-9.5 postgresql-client-9.5"
+     if [[ "$INIT_POSTGRESQL" == "docker-container" ]]
+     then
+         POSTGRES_PACKAGES="postgresql-client-9.5"
+     else
+         POSTGRES_PACKAGES="postgresql-9.5 postgresql-contrib-9.5 postgresql-client-9.5"
+     fi
      apt-get install $POSTGRES_PACKAGES -y || \
          curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
          apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 7FCC7D46ACCC4CF8 && \
