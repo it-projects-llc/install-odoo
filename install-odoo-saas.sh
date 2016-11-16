@@ -95,7 +95,6 @@
 
  if [[ "$INIT_NGINX" != "no" ]] || [[ "$INIT_START_SCRIPTS" != "no" ]] || [[ "$INIT_ODOO_CONFIG" != "no" ]]
  then
-     apt-get install -y emacs23-nox || apt-get install -y emacs24-nox
      # moreutils is installed for sponge util
      apt-get install -y moreutils
  fi
