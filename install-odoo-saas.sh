@@ -411,8 +411,7 @@
  #### Odoo Saas Tool
  if [[ "$INIT_SAAS_TOOLS" != "no" ]]        ###################################### IF
  then
-     apt-get install -y sudo
-     sudo -E su --preserve-environment - ${ODOO_USER} -s /bin/bash -c  "python $ADDONS_DIR/it-projects-llc/odoo-saas-tools/saas.py $INIT_SAAS_TOOLS"
+     su --preserve-environment - ${ODOO_USER} -s /bin/bash -c  "python $ADDONS_DIR/it-projects-llc/odoo-saas-tools/saas.py $INIT_SAAS_TOOLS"
  fi
 
  #### START CONTROL
