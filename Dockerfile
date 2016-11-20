@@ -33,13 +33,16 @@ RUN apt-get update && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm && \
     rm -rf /var/lib/apt/lists/* wkhtmltox.deb && \
     # pip dependencies
+    pip install pip --upgrade
     pip install pillow psycogreen && \
     pip install Boto && \
     pip install FileChunkIO && \
     pip install pysftp && \
     pip install rotate-backups && \
     pip install oauthlib && \
-    pip install requests --upgrade
+    pip install requests --upgrade && \
+    # check that pip is not broken after requests --upgrade
+    pip --version
 
 #############################
 # 8.0 specific dependencies #
