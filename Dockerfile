@@ -34,6 +34,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* wkhtmltox.deb && \
     # pip dependencies
     pip install pip --upgrade && \
+    pip install werkzeug --upgrade && \
     pip install pillow psycogreen && \
     pip install Boto && \
     pip install FileChunkIO && \
