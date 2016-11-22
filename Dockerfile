@@ -98,7 +98,6 @@ COPY ./entrypoint.sh /
 EXPOSE 8069 8072
 USER odoo
 VOLUME ["/mnt/data-dir", \
-       "/mnt/config", \
        "/mnt/backups", \
        "/mnt/logs", \
        "/mnt/addons/extra"]
@@ -106,7 +105,7 @@ VOLUME ["/mnt/data-dir", \
 # Expected structure is:
 # /mnt/addons/extra/REPO_OR_GROUP_NAME/MODULE/__openerp__.py
 #
-# we don't add /mnt/odoo-source and /mnt/addons to VOLUME in order to allow modify theirs content in inherited dockers
+# we don't add /mnt/odoo-source, /mnt/addons, /mnt/config to VOLUME in order to allow modify theirs content in inherited dockers
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/mnt/odoo-source/openerp-server"]
