@@ -83,6 +83,7 @@ RUN chmod +x /usr/local/bin/odoo-backup.py && \
     CLONE_OCA=yes \
     INIT_ODOO_CONFIG=docker-container \
     UPDATE_ADDONS_PATH=yes \
+    ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage']" \
     bash -x install-odoo-saas.sh
 
 COPY reset-admin-passwords.py /
