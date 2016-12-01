@@ -1,9 +1,12 @@
 # install-odoo
 
-Install developement / production 
+Install developement or production 
 [odoo](https://www.odoo.com/) from [git](https://github.com/odoo/odoo)
-with / without using [docker](https://www.docker.com/), 
-with / without using [Amazon RDS](https://aws.amazon.com/rds/)
+with or without using [docker](https://www.docker.com/), 
+with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional improvements: 
+
+* Attachments are stored in postgres large objects by default
+* Completly debranded system
 
 # Basic usage
 
@@ -31,6 +34,7 @@ with / without using [Amazon RDS](https://aws.amazon.com/rds/)
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
     UPDATE_ADDONS_PATH=yes \
+    ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage']"
     /bin/bash -x install-odoo-saas.sh
 
 ## After installation
