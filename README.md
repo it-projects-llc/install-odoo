@@ -6,7 +6,7 @@ with or without using [docker](https://www.docker.com/),
 with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional improvements: 
 
 * Attachments are stored in postgres large objects by default
-* Completly debranded system
+* Completely debranded system
 
 # Basic usage
 
