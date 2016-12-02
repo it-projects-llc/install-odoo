@@ -7,6 +7,7 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
 
 * Attachments are stored in postgres large objects by default
 * Completely debranded system
+* Save sessions to postgres. It simplifies multi-instance deployment
 
 # Basic usage
 
