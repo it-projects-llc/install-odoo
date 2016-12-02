@@ -14,6 +14,7 @@
  export INIT_ODOO_CONFIG=${INIT_ODOO_CONFIG:-"no"} # no | yes | docker-container
  export INIT_USER=${INIT_USER:-"no"}
  export INIT_DIRS=${INIT_DIRS:-"no"}
+ export ADD_AUTOINSTALL_MODULES=${ADD_AUTOINSTALL_MODULES:-""} # "['module1','module2']"
  export GIT_PULL=${GIT_PULL:-"no"}
  export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"no"}
  export CLEAN=${CLEAN:-"no"}
@@ -344,6 +345,26 @@
      ADDONS_PATH=`echo $ODOO_SOURCE_DIR/odoo/addons,$ODOO_SOURCE_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" `
      sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $OPENERP_SERVER
 
+ fi
+
+ if [[ -n "$ADD_AUTOINSTALL_MODULES" ]]
+ then
+     DB_PY=$ODOO_SOURCE_DIR/odoo/service/db.py
+     # add base code
+     grep AUTOINSTALL_MODULES $DB_PY || \
+         sed -i "s;\
+            if lang:;\
+            AUTOINSTALL_MODULES = []\n\
+            modules = env['ir.module.module'].search([('name', 'in', AUTOINSTALL_MODULES)])\n\
+            modules.button_immediate_install()\n\
+            if lang:;" \
+             $DB_PY
+     # update module list
+     sed -i "s;\
+            AUTOINSTALL_MODULES = \[\];\
+            AUTOINSTALL_MODULES = []\n\
+            AUTOINSTALL_MODULES += $ADD_AUTOINSTALL_MODULES;" \
+         $DB_PY
  fi
 
  if [[ "$GIT_PULL" == "yes" ]]
