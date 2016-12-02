@@ -349,14 +349,14 @@
 
  if [[ -n "$ADD_AUTOINSTALL_MODULES" ]]
  then
-     DB_PY=$ODOO_SOURCE_DIR/openerp/service/db.py
+     DB_PY=$ODOO_SOURCE_DIR/odoo/service/db.py
      # add base code
      grep AUTOINSTALL_MODULES $DB_PY || \
          sed -i "s;\
             if lang:;\
             AUTOINSTALL_MODULES = []\n\
-            module_ids = registry['ir.module.module'].search(cr, SUPERUSER_ID, [('name', 'in', AUTOINSTALL_MODULES)])\n\
-            registry['ir.module.module'].button_immediate_install(cr, SUPERUSER_ID, module_ids)\n\
+            modules = env['ir.module.module'].search([('name', 'in', AUTOINSTALL_MODULES)])\n\
+            modules.button_immediate_install()\n\
             if lang:;" \
              $DB_PY
      # update module list
