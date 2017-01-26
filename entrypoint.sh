@@ -5,9 +5,9 @@ set -e
 # set odoo database host, port, user and password
 # try to use linked DB first and if it's empty use RDS values
 : ${HOST:=${DB_PORT_5432_TCP_ADDR:=$RDS_HOSTNAME}}
-: ${PORT:=${DB_PORT_5432_TCP_PORT:=$RDS_PORT}}
-: ${USER:=${DB_ENV_POSTGRES_USER:=${RDS_USERNAME:='postgres'}}}
-: ${PASSWORD:=${DB_ENV_POSTGRES_PASSWORD:=$RDS_PASSWORD}}
+: ${PORT:=${DB_PORT_5432_TCP_PORT:=${RDS_PORT:='5432'}}}
+: ${USER:=${DB_ENV_POSTGRES_USER:=${RDS_USERNAME:='odoo'}}}
+: ${PASSWORD:=${DB_ENV_POSTGRES_PASSWORD:=${RDS_PASSWORD:='odoo'}}}
 
 DB_ARGS=("--db_user" $USER "--db_password" $PASSWORD "--db_host" $HOST "--db_port" $PORT)
 
