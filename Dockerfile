@@ -6,7 +6,6 @@ FROM debian:jessie
 RUN apt-get update && \
     apt-get install -y moreutils && \
     apt-get install -y git && \
-    apt-get install -y python-pip && \
     apt-get install -y libffi-dev libssl-dev && \
     apt-get install -y python-gevent python-simplejson && \
     apt-get install -y xfonts-base xfonts-75dpi libjpeg62-turbo && \
@@ -33,7 +32,7 @@ RUN apt-get update && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm && \
     rm -rf /var/lib/apt/lists/* wkhtmltox.deb && \
     # pip dependencies
-    pip install pip --upgrade && \
+    curl --silent https://bootstrap.pypa.io/get-pip.py | python && \
     pip install werkzeug --upgrade && \
     pip install pillow psycogreen && \
     pip install Boto && \
@@ -88,6 +87,7 @@ RUN chmod +x /usr/local/bin/odoo-backup.py && \
     CLONE_OCA=yes \
     INIT_ODOO_CONFIG=docker-container \
     UPDATE_ADDONS_PATH=yes \
+    ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage']" \
     bash -x install-odoo-saas.sh
 
 COPY reset-admin-passwords.py /
@@ -99,7 +99,6 @@ COPY ./entrypoint.sh /
 EXPOSE 8069 8072
 USER odoo
 VOLUME ["/mnt/data-dir", \
-       "/mnt/config", \
        "/mnt/backups", \
        "/mnt/logs", \
        "/mnt/addons/extra"]
@@ -107,7 +106,7 @@ VOLUME ["/mnt/data-dir", \
 # Expected structure is:
 # /mnt/addons/extra/REPO_OR_GROUP_NAME/MODULE/__openerp__.py
 #
-# we don't add /mnt/odoo-source and /mnt/addons to VOLUME in order to allow modify theirs content in inherited dockers
+# we don't add /mnt/odoo-source, /mnt/addons, /mnt/config to VOLUME in order to allow modify theirs content in inherited dockers
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/mnt/odoo-source/openerp-server"]

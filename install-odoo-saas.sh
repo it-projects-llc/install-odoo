@@ -14,6 +14,7 @@
  export INIT_ODOO_CONFIG=${INIT_ODOO_CONFIG:-"no"} # no | yes | docker-container
  export INIT_USER=${INIT_USER:-"no"}
  export INIT_DIRS=${INIT_DIRS:-"no"}
+ export ADD_AUTOINSTALL_MODULES=${ADD_AUTOINSTALL_MODULES:-""} # "['module1','module2']"
  export GIT_PULL=${GIT_PULL:-"no"}
  export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"no"}
  export CLEAN=${CLEAN:-"no"}
@@ -103,7 +104,7 @@
 
  if [[ "$INSTALL_DEPENDENCIES" == "yes" ]]
  then
-     apt-get install -y python-pip
+     curl --silent https://bootstrap.pypa.io/get-pip.py | python 
      apt-get install -y --no-install-recommends \
              ca-certificates \
              curl \
@@ -347,6 +348,26 @@
      ADDONS_PATH=`echo $ODOO_SOURCE_DIR/openerp/addons,$ODOO_SOURCE_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" `
      sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $OPENERP_SERVER
 
+ fi
+
+ if [[ -n "$ADD_AUTOINSTALL_MODULES" ]]
+ then
+     DB_PY=$ODOO_SOURCE_DIR/openerp/service/db.py
+     # add base code
+     grep AUTOINSTALL_MODULES $DB_PY || \
+         sed -i "s;\
+            if lang:;\
+            AUTOINSTALL_MODULES = []\n\
+            module_ids = registry['ir.module.module'].search(cr, SUPERUSER_ID, [('name', 'in', AUTOINSTALL_MODULES)])\n\
+            registry['ir.module.module'].button_immediate_install(cr, SUPERUSER_ID, module_ids)\n\
+            if lang:;" \
+             $DB_PY
+     # update module list
+     sed -i "s;\
+            AUTOINSTALL_MODULES = \[\];\
+            AUTOINSTALL_MODULES = []\n\
+            AUTOINSTALL_MODULES += $ADD_AUTOINSTALL_MODULES;" \
+         $DB_PY
  fi
 
  if [[ "$GIT_PULL" == "yes" ]]
