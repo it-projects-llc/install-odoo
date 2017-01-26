@@ -104,7 +104,7 @@
 
  if [[ "$INSTALL_DEPENDENCIES" == "yes" ]]
  then
-     apt-get install -y python-pip
+     curl --silent https://bootstrap.pypa.io/get-pip.py | python 
      apt-get install -y --no-install-recommends \
              ca-certificates \
              curl \
