@@ -165,6 +165,7 @@
      fi
 
 
+     pip install werkzeug --upgrade
      pip install psycogreen
      # requirements.txt
      #apt-get install -y postgresql-server-dev-all python-dev  build-essential libxml2-dev libxslt1-dev 
