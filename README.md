@@ -13,13 +13,13 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
 
 ## Getting script
 
+    apt-get update | grep "Hit http\|Ign http" -C 10000 && echo "There are possible failures on fetching. Try apt-get update again"
+    
+    apt-get install git -y
     git clone https://github.com/it-projects-llc/install-odoo.git
     cd install-odoo
     
 ## Running script
-
-    apt-get update | grep "Hit http\|Ign http" -C 10000 && echo "There are possible failures on fetching. Try apt-get update again"
-    apt-get install git -y
 
     # run script with parameters you need
     # (list of all parameters with default values can be found at install-odoo-saas.sh)
