@@ -145,12 +145,12 @@ Example for base installation
     --plan-create \
     --odoo-script=/usr/local/src/odoo-source/odoo-bin \
     --odoo-config=/etc/openerp-server.conf \
-    --admin-password=${ODOO_MASTER_PASS} \
+    --admin-password='${ODOO_MASTER_PASS}' \
     --portal-db-name=${ODOO_DOMAIN} \
     --server-db-name=server-1.${ODOO_DOMAIN} \
     --plan-template-db-name=template-1.${ODOO_DOMAIN} \
     --plan-clients=demo-%i.${ODOO_DOMAIN} \
-    --odoo-xmlrpc-port=8869 \
+    --odoo-xmlrpc-port=8069 \
     "
     INIT_SAAS_TOOLS=$INIT_SAAS_TOOLS_VALUE bash -x install-odoo-saas.sh
 
@@ -162,7 +162,7 @@ Example for docker installation
     --plan-create \
     --odoo-script=/mnt/odoo-source/odoo-bin \
     --odoo-config=/mnt/config/odoo-server.conf \
-    --admin-password=${ODOO_MASTER_PASS} \
+    --admin-password='${ODOO_MASTER_PASS}' \
     --portal-db-name=${ODOO_DOMAIN} \
     --server-db-name=server-1.${ODOO_DOMAIN} \
     --plan-template-db-name=template-1.${ODOO_DOMAIN} \
