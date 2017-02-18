@@ -104,7 +104,7 @@
 
  if [[ "$INSTALL_DEPENDENCIES" == "yes" ]]
  then
-     apt-get install -y python-pip
+     curl --silent https://bootstrap.pypa.io/get-pip.py | python 
      apt-get install -y --no-install-recommends \
              ca-certificates \
              curl \
@@ -165,6 +165,7 @@
      fi
 
 
+     pip install werkzeug --upgrade
      pip install psycogreen
      # requirements.txt
      #apt-get install -y postgresql-server-dev-all python-dev  build-essential libxml2-dev libxslt1-dev 

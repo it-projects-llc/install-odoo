@@ -6,7 +6,6 @@ FROM debian:jessie
 RUN apt-get update && \
     apt-get install -y moreutils && \
     apt-get install -y git && \
-    apt-get install -y python-pip && \
     apt-get install -y libffi-dev libssl-dev && \
     apt-get install -y python-gevent python-simplejson && \
     apt-get install -y xfonts-base xfonts-75dpi libjpeg62-turbo && \
@@ -33,7 +32,8 @@ RUN apt-get update && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm && \
     rm -rf /var/lib/apt/lists/* wkhtmltox.deb && \
     # pip dependencies
-    pip install pip --upgrade && \
+    curl --silent https://bootstrap.pypa.io/get-pip.py | python && \
+    pip install werkzeug --upgrade && \
     pip install pillow psycogreen && \
     pip install Boto && \
     pip install FileChunkIO && \
