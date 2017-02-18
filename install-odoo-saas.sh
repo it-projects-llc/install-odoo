@@ -111,8 +111,7 @@
              node-less \
              node-clean-css \
              python-pyinotify \
-             python-renderpm \
-             python-support
+             python-renderpm
 
      ## wkhtmltopdf
      WKHTMLTOPDF_INSTALLED="no"
