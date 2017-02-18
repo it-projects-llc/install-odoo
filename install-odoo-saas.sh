@@ -63,6 +63,7 @@
  #### Detect type of system manager
  export SYSTEM=''
  pidof systemd && export SYSTEM='systemd'
+ pidof systemd-journald && export SYSTEM='systemd'
  [[ -z $SYSTEM ]] && whereis upstart | grep -q 'upstart: /' && export SYSTEM='upstart'
  [[ -z $SYSTEM ]] &&  export SYSTEM='supervisor'
  echo "SYSTEM=$SYSTEM"
