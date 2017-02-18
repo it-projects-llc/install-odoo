@@ -11,7 +11,7 @@ RUN apt-get update && \
     apt-get install -y xfonts-base xfonts-75dpi libjpeg62-turbo && \
     apt-get install -y python-dev build-essential libxml2-dev libxslt1-dev && \
     apt-get install -y libjpeg62-turbo-dev zlib1g-dev && \
-    apt-get install -y adduser node-less node-clean-css python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-pybabel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml && \
+    apt-get install -y adduser node-less node-clean-css python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-babel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml && \
     apt-get install -y --no-install-recommends \
             ca-certificates \
             curl \
