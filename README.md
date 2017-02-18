@@ -34,7 +34,7 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
     UPDATE_ADDONS_PATH=yes \
-    ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage']"
+    ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage']" \
     /bin/bash -x install-odoo-saas.sh
 
 ## After installation
