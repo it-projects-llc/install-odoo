@@ -67,23 +67,25 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
 
     # Install docker
     # see https://docs.docker.com/engine/installation/
-    apt-get install -y apt-transport-https ca-certificates
-    apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+    sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+    
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-    # Ubuntu 12.04
-    echo "deb https://apt.dockerproject.org/repo ubuntu-precise main" > /etc/apt/sources.list.d/docker.list
-
-    # Ubuntu 14.04
-    echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" > /etc/apt/sources.list.d/docker.list
-
-    # Ubuntu 16.04
-    echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" > /etc/apt/sources.list.d/docker.list
+    sudo add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+    $(lsb_release -cs) \
+    stable"
 
     apt-get update
 
+    # Recommended extra packages for Trusty 14.04
     apt-get install -y linux-image-extra-$(uname -r)
 
-    apt-get install -y docker-engine
+    apt-get install -y docker-ce
 
 ## Create postgres container 
 
