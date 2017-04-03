@@ -33,7 +33,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* wkhtmltox.deb && \
     # pip dependencies
     curl --silent https://bootstrap.pypa.io/get-pip.py | python && \
-    pip install werkzeug --upgrade && \
+    pip install "werkzeug<0.12" --upgrade && \
     pip install pillow psycogreen && \
     pip install Boto && \
     pip install FileChunkIO && \
