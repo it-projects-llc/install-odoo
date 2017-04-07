@@ -16,6 +16,15 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
     git clone https://github.com/it-projects-llc/install-odoo.git
     cd install-odoo
     
+## Choosing version
+
+    # need 8.0 version of odoo:
+    git checkout 8.0
+    # or 9.0:
+    git checkout 9.0
+    # or recent version:
+    git checkout master
+
 ## Running script
 
     apt-get update | grep "Hit http\|Ign http" -C 10000 && echo "There are possible failures on fetching. Try apt-get update again"
@@ -35,7 +44,7 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
     UPDATE_ADDONS_PATH=yes \
-    ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage']"
+    ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage']" \
     /bin/bash -x install-odoo-saas.sh
 
 ## After installation
