@@ -108,7 +108,7 @@ Simplest way to create odoo container is as following:
     -p 8072:8072 \
     --name odoo \
     --link db-odoo:db \
-    -t itprojectsllc/install-odoo
+    -t itprojectsllc/install-odoo:8.0
 
 Additionally, you can specify following environment variables:
 
