@@ -7,7 +7,7 @@ RUN sed -i "s;\
             module_ids = registry['ir.module.module'].search(cr, SUPERUSER_ID, [('name', 'in', ${AUTOINSTALL_MODULES})])\n\
             registry['ir.module.module'].button_immediate_install(cr, SUPERUSER_ID, module_ids)\n\
             if lang:;" \
-    $ODOO_SOURCE_DIR/openerp/service/db.py
+    $ODOO_SOURCE_DIR/odoo/service/db.py
 
 # Debrand database manager
 RUN sed -i "s;<title>Odoo</title>;;" \
