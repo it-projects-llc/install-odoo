@@ -35,6 +35,7 @@
  ## Docker Names
  export ODOO_DOCKER=${ODOO_DOCKER:-"odoo"}
  export DB_ODOO_DOCKER=${DB_ODOO_DOCKER:-"db-odoo"}
+ export NGINX_ODOO_DOCKER=${NGINX_ODOO_DOCKER:-""}  # unused if not specified
 
  ## E-Mail
  export EMAIL_SERVER=${EMAIL_SERVER:-stmp.example.com}
@@ -446,6 +447,10 @@
  if [[ "$INIT_START_SCRIPTS" == "docker-host" ]]
  then
      DAEMON_LIST=( "odoo-docker" "odoo-docker-db" )
+     if [[ -z $NGINX_ODOO_DOCKER ]]
+     then
+	 DAEMON_LIST=( "${DAEMON_LIST[@]}" "odoo-docker-nginx" )
+     fi
      CONFIGS="./configs-docker-host"
  fi
 
