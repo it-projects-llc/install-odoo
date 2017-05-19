@@ -1,4 +1,4 @@
-FROM itprojectsllc/install-odoo:latest
+FROM itprojectsllc/install-odoo:10.0
 
 # install module for all new databases
 RUN ADD_AUTOINSTALL_MODULES="['theme_kit']" \
