@@ -1,13 +1,8 @@
 FROM itprojectsllc/install-odoo:latest
 
 # install module for all new databases
-ENV AUTOINSTALL_MODULES="['theme_kit']"
-RUN sed -i "s;\
-            if lang:;\
-            module_ids = registry['ir.module.module'].search(cr, SUPERUSER_ID, [('name', 'in', ${AUTOINSTALL_MODULES})])\n\
-            registry['ir.module.module'].button_immediate_install(cr, SUPERUSER_ID, module_ids)\n\
-            if lang:;" \
-    $ODOO_SOURCE_DIR/odoo/service/db.py
+RUN ADD_AUTOINSTALL_MODULES="['theme_kit']" \
+    bash -x install-odoo-saas.sh
 
 # Debrand database manager
 RUN sed -i "s;<title>Odoo</title>;;" \
