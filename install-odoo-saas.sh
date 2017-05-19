@@ -15,6 +15,7 @@
  export INIT_USER=${INIT_USER:-"no"}
  export INIT_DIRS=${INIT_DIRS:-"no"}
  export ADD_AUTOINSTALL_MODULES=${ADD_AUTOINSTALL_MODULES:-""} # "['module1','module2']"
+ export ADD_IGNORED_DATABASES=${ADD_IGNORED_DATABASES:-""} # "['db1','db2']"
  export GIT_PULL=${GIT_PULL:-"no"}
  export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"no"}
  export CLEAN=${CLEAN:-"no"}
@@ -353,9 +354,9 @@
 
  fi
 
+ DB_PY=$ODOO_SOURCE_DIR/odoo/service/db.py
  if [[ -n "$ADD_AUTOINSTALL_MODULES" ]]
  then
-     DB_PY=$ODOO_SOURCE_DIR/odoo/service/db.py
      # add base code
      grep AUTOINSTALL_MODULES $DB_PY || \
          sed -i "s;\
@@ -371,6 +372,24 @@
             AUTOINSTALL_MODULES = []\n\
             AUTOINSTALL_MODULES += $ADD_AUTOINSTALL_MODULES;" \
          $DB_PY
+ fi
+
+ if [[ -n "$ADD_IGNORED_DATABASES" ]]
+ then
+     # add base code
+     grep IGNORED_DATABASES $DB_PY || \
+         sed -i "s;\
+    templates_list = tuple(set(;\
+    IGNORED_DATABASES = []\n\
+    templates_list = tuple(set(IGNORED_DATABASES + ;" \
+     $DB_PY
+
+     # update database list
+     sed -i "s;\
+    IGNORED_DATABASES = \[\];\
+    IGNORED_DATABASES = []\n\
+    IGNORED_DATABASES += $ADD_IGNORED_DATABASES;" \
+     $DB_PY
  fi
 
  if [[ "$GIT_PULL" == "yes" ]]

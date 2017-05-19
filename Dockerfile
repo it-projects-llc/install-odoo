@@ -83,6 +83,7 @@ RUN chmod +x /usr/local/bin/odoo-backup.py && \
     INIT_ODOO_CONFIG=docker-container \
     UPDATE_ADDONS_PATH=yes \
     ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage', 'base_session_store_psql']" \
+    ADD_IGNORED_DATABASES="['session_store']" \
     bash -x install-odoo-saas.sh
 
 COPY reset-admin-passwords.py /
