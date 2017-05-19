@@ -59,7 +59,7 @@ ENV ODOO_BRANCH=10.0 \
 #####################################
 # odoo source, user, docker folders #
 #####################################
-RUN git clone --depth=1 -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git $ODOO_SOURCE_DIR && \
+RUN git depth --clone=1 -b ${ODOO_BRANCH} https://github.com/odoo/odoo.git $ODOO_SOURCE_DIR && \
     adduser --system --quiet --shell=/bin/bash --home=/opt/odoo --group odoo && \
     chown -R odoo:odoo $ODOO_SOURCE_DIR && \
     mkdir -p $ODOO_SOURCE_DIR && chown odoo $ODOO_SOURCE_DIR && \
@@ -83,6 +83,7 @@ RUN chmod +x /usr/local/bin/odoo-backup.py && \
     INIT_ODOO_CONFIG=docker-container \
     UPDATE_ADDONS_PATH=yes \
     ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage', 'base_session_store_psql']" \
+    ADD_IGNORED_DATABASES="['session_store']" \
     bash -x install-odoo-saas.sh
 
 COPY reset-admin-passwords.py /
