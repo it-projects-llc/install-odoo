@@ -161,7 +161,6 @@ Example for base installation
     --server-db-name=server-1.${ODOO_DOMAIN} \
     --plan-template-db-name=template-1.${ODOO_DOMAIN} \
     --plan-clients=demo-%i.${ODOO_DOMAIN} \
-    --odoo-xmlrpc-port=8069 \
     "
     INIT_SAAS_TOOLS=$INIT_SAAS_TOOLS_VALUE bash -x install-odoo-saas.sh
 
@@ -178,7 +177,6 @@ Example for docker installation
     --server-db-name=server-1.${ODOO_DOMAIN} \
     --plan-template-db-name=template-1.${ODOO_DOMAIN} \
     --plan-clients=demo-%i.${ODOO_DOMAIN} \
-    --odoo-xmlrpc-port=8869 \
     "
 
     docker exec -u root -i -t odoo /bin/bash -c "export INIT_SAAS_TOOLS='$INIT_SAAS_TOOLS_VALUE'; bash /install-odoo-saas.sh"
