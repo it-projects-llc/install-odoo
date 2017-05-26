@@ -104,7 +104,6 @@
 
  if [[ "$INSTALL_DEPENDENCIES" == "yes" ]]
  then
-     curl --silent https://bootstrap.pypa.io/get-pip.py | python 
      apt-get install -y --no-install-recommends \
              ca-certificates \
              curl \
@@ -113,6 +112,8 @@
              python-pyinotify \
              python-renderpm \
              python-support
+
+     curl --silent https://bootstrap.pypa.io/get-pip.py | python
 
      ## wkhtmltopdf
      WKHTMLTOPDF_INSTALLED="no"
@@ -137,7 +138,7 @@
 
          if [[ "$WKHTMLTOPDF_DEB_URL" == "" ]]
          then
-             WKHTMLTOPDF_DEB_URL="http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-${WK_OS}-${WK_PLATFORM}.deb"
+             WKHTMLTOPDF_DEB_URL="https://downloads.wkhtmltopdf.org/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-${WK_OS}-${WK_PLATFORM}.deb"
          fi
 
          if [[ "$WKHTMLTOPDF_DEPENDENCIES" == "" ]]
