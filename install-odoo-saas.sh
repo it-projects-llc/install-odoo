@@ -355,42 +355,50 @@
 
  fi
 
- DB_PY=$ODOO_SOURCE_DIR/odoo/service/db.py
+ MODULES_DB_PY=$ODOO_SOURCE_DIR/odoo/modules/db.py
+ SERVICE_DB_PY=$ODOO_SOURCE_DIR/odoo/service/db.py
+ LOADING_PY=$ODOO_SOURCE_DIR/odoo/modules/loading.py
  if [[ -n "$ADD_AUTOINSTALL_MODULES" ]]
  then
      # add base code
-     grep AUTOINSTALL_MODULES $DB_PY || \
+     grep AUTOINSTALL_MODULES $LOADING_PY || \
          sed -i "s;\
-            if lang:;\
+        \# STEP 3;\
+        \# STEP 2.5: install AUTOINSTALL_MODULES if we just created database\n\
+        if update_module:\n\
             AUTOINSTALL_MODULES = []\n\
-            modules = env['ir.module.module'].search([('name', 'in', AUTOINSTALL_MODULES)])\n\
-            modules.button_immediate_install()\n\
-            if lang:;" \
-             $DB_PY
+            modules = env['ir.module.module'].search([('state', '=', 'uninstalled'), ('name', 'in', AUTOINSTALL_MODULES)])\n\
+            if modules:\n\
+                modules.button_install()\n\
+                Module.invalidate_cache(['state'])\n\
+\n\
+        \# STEP 3;" \
+         $LOADING_PY
+
      # update module list
      sed -i "s;\
             AUTOINSTALL_MODULES = \[\];\
             AUTOINSTALL_MODULES = []\n\
             AUTOINSTALL_MODULES += $ADD_AUTOINSTALL_MODULES;" \
-         $DB_PY
+         $LOADING_PY
  fi
 
  if [[ -n "$ADD_IGNORED_DATABASES" ]]
  then
      # add base code
-     grep IGNORED_DATABASES $DB_PY || \
+     grep IGNORED_DATABASES $LOADING_PY || \
          sed -i "s;\
     templates_list = tuple(set(;\
     IGNORED_DATABASES = []\n\
     templates_list = tuple(set(IGNORED_DATABASES + ;" \
-     $DB_PY
+     $SERVICE_DB_PY
 
      # update database list
      sed -i "s;\
     IGNORED_DATABASES = \[\];\
     IGNORED_DATABASES = []\n\
     IGNORED_DATABASES += $ADD_IGNORED_DATABASES;" \
-     $DB_PY
+     $SERVICE_DB_PY
  fi
 
  if [[ "$GIT_PULL" == "yes" ]]
