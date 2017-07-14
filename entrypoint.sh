@@ -27,6 +27,9 @@ then
     python /reset-admin-passwords.py
 fi
 
+# remove password from env
+unset ODOO_MASTER_PASS
+
 case "$1" in
 	  -- | openerp-server | /mnt/odoo-source/openerp-server)
 		    shift
