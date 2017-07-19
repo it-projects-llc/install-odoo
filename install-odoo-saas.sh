@@ -351,7 +351,7 @@
      #  -> pos/
      #  -> ...
      ADDONS_PATH=`ls -d1 $ADDONS_DIR/*/* | tr '\n' ','`
-     ADDONS_PATH=`echo $ODOO_SOURCE_DIR/odoo/addons,$ODOO_SOURCE_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" `
+     ADDONS_PATH=`echo $ODOO_SOURCE_DIR/odoo/addons,$ODOO_SOURCE_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" | sed "s,.$,,g" `
      sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $OPENERP_SERVER
 
  fi
