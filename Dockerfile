@@ -41,9 +41,9 @@ RUN apt-get update && \
     pip install oauthlib && \
     pip install requests --upgrade && \
     # check that pip is not broken after requests --upgrade
-    pip --version
+    pip --version && \
     # dependencies for OCA/website/website_multi_theme
-    apt-get install ruby-compass
+    apt-get install ruby-compass && \
     gem install compass bootstrap-sass
 
 
