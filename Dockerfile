@@ -19,6 +19,9 @@ RUN apt-get update && \
             node-clean-css \
             python-pyinotify \
             python-renderpm && \
+    # dependencies for OCA/website/website_multi_theme
+    apt-get install -y ruby-compass && \
+    gem install compass bootstrap-sass && \
     # postgresql-client-9.5
     curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' >> /etc/apt/sources.list.d/pgdg.list && \
@@ -42,9 +45,6 @@ RUN apt-get update && \
     pip install requests --upgrade && \
     # check that pip is not broken after requests --upgrade
     pip --version
-    # dependencies for OCA/website/website_multi_theme
-    RUN apt-get install ruby-compass && \
-    gem install compass bootstrap-sass
 
 
 #######
