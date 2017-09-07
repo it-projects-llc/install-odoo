@@ -8,14 +8,16 @@ To run this docker you to provide `access to USB devices <https://stackoverflow.
   # create postgres container
   docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo --name db-posbox-8.0 postgres:9.5
 
-  docker run
+  docker run \
+  # expose ports:
+  -p 9069:8069 \
   # remove container after stopping:
-  --rm
+  --rm \
   # access to usb:
-  --privileged
+  --privileged \
   -v /dev/bus/usb:/dev/bus/usb
   # link to postgres
-  --link db-posbox-8.0:db
+  --link db-posbox-8.0:db \
   # image name
   -t itprojectsllc/install-odoo:8.0-posbox
 
