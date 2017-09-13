@@ -18,6 +18,7 @@
  export ADD_IGNORED_DATABASES=${ADD_IGNORED_DATABASES:-""} # "['db1','db2']"
  export GIT_PULL=${GIT_PULL:-"no"}
  export UPDATE_ADDONS_PATH=${UPDATE_ADDONS_PATH:-"no"}
+ export INITI_CERTBOT=${INIT_CERTBOT:-"no"} # yes | no 
  export CLEAN=${CLEAN:-"no"}
 
  ## Dirs
@@ -568,6 +569,11 @@
      # e.g.
      # cd /usr/local/bin/ && sudo su - odoo -s /bin/bash -c  "odoo-backup.py -d ergodoo.com -p /opt/odoo/backups/"
  fi                                         ################################## END IF
+
+if [[ "$INIT_CERTBOT == "yes" ]]
+then
+    /bin/bash -x certbot.sh
+fi
 
 if [[ "$CLEAN" == "yes" ]]
 then
