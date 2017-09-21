@@ -26,7 +26,7 @@
  export ODOO_DATA_DIR=${ODOO_DATA_DIR:-"/opt/odoo/data/"}
  export BACKUPS_DIR=${BACKUPS_DIR:-"/opt/odoo/backups/"}
  export LOGS_DIR=${LOGS_DIR:-"/var/log/odoo/"}
- export ODOO_SERVER=${ODOO_SERVER:-/etc/odoo-server.conf}
+ export ODOO_SERVER=${ODOO_SERVER:/etc/odoo-server.conf}
 
  ## Cloning
  export CLONE_IT_PROJECTS_LLC=${CLONE_IT_PROJECTS_LLC:-"no"}
