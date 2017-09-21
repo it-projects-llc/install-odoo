@@ -10,7 +10,7 @@ Alias=odoo.service
 [Service]
 Type=simple
 PermissionsStartOnly=true
-EnvironmentFile=-/etc/odoo/odoo-server.conf
+EnvironmentFile=-{{ODOO_SERVER}}
 User={{ODOO_USER}}
 Group={{ODOO_USER}}
 SyslogIdentifier=odoo-server
