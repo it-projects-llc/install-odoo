@@ -160,6 +160,7 @@
      fi
 
      # Fix some issues
+     # Remove this test for Odoo 8 since end of life ?
      if [[ "$ODOO_BRANCH" == "8.0" ]]
      then
          apt-get install -y python-unittest2
@@ -234,12 +235,15 @@
  if [[ "$INIT_POSTGRESQL" != "no" ]]
  then
     ### PostgreSQL
-     if [[ "$INIT_POSTGRESQL" == "docker-container" ]]
-     then
-         POSTGRES_PACKAGES="postgresql-client-9.5"
-     else
+    if [[ "$INIT_POSTGRESQL" == "docker-container" ]]
+    then
+        POSTGRES_PACKAGES="postgresql-client-9.5"
+    if [[ "$ODOO_BRANCH" < "11.0" ]]
+    then
+	POSTGRES_PACKAGES="postgresql-10"
+    else
          POSTGRES_PACKAGES="postgresql-9.5 postgresql-contrib postgresql-client"
-     fi
+    fi
      apt-get install $POSTGRES_PACKAGES -y || \
          curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
          apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 7FCC7D46ACCC4CF8 && \
