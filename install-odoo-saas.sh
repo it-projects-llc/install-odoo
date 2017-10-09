@@ -213,6 +213,8 @@
     elif [[ "$ODOO_BRANCH" == "11.0" ]]
     then
 	
+	# For compatibility with Ubuntu <= 16.04
+	sudo apt-get install python3-suds
         #apt-get install -y python3-psycopg2 python3-babel python3-decorator python3-docutils python3-feedparser python3-gevent python3-greenlet python3-html2text python3-jinja2 python3-lxml python3-mako python3-markupsafe python3-mock python3-ofxparse python3-passlib python3-pillow python3-psutil python3-pydot python3-pyldap python3-pyparsing python3-pypdf2 python3-serial python3-dateutil python3-openid python3-yaml python3-qrcode python3-reportlab python3-requests python3-six python3-suds python3-vatnumber python3-vobject python3-werkzeug python3-xlrd
 		
         # Or install dependencies with requirements.txt
