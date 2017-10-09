@@ -238,7 +238,7 @@
     if [[ "$INIT_POSTGRESQL" == "docker-container" ]]
     then
         POSTGRES_PACKAGES="postgresql-client-9.5"
-    if [[ "$ODOO_BRANCH" < "11.0" ]]
+    elif [[ "$ODOO_BRANCH" < "11.0" ]]
     then
 	POSTGRES_PACKAGES="postgresql-10"
     else
