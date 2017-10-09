@@ -240,7 +240,9 @@
         POSTGRES_PACKAGES="postgresql-client-9.5"
     elif [[ "$ODOO_BRANCH" == "11.0" ]]
     then
-	POSTGRES_PACKAGES="postgresql-10"
+	echo -e "\n Possible bug on Ubuntu 17.04, may require to install libicu52 even if libicu57 exist"
+	echo -e "http://security.ubuntu.com/ubuntu/pool/main/i/icu/libicu52_52.1-3ubuntu0.6_amd64.deb"
+        POSTGRES_PACKAGES="postgresql-10"
     else
          POSTGRES_PACKAGES="postgresql-9.5 postgresql-contrib postgresql-client"
     fi
