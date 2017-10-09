@@ -26,7 +26,7 @@
  export ODOO_DATA_DIR=${ODOO_DATA_DIR:-"/opt/odoo/data/"}
  export BACKUPS_DIR=${BACKUPS_DIR:-"/opt/odoo/backups/"}
  export LOGS_DIR=${LOGS_DIR:-"/var/log/odoo/"}
- export OPENERP_SERVER=${OPENERP_SERVER:-/etc/openerp-server.conf}
+ export ODOO_RC=${ODOO_RC:-/odoo-server.conf}
 
  ## Cloning
  export CLONE_IT_PROJECTS_LLC=${CLONE_IT_PROJECTS_LLC:-"no"}
@@ -159,38 +159,18 @@
          rm -rf /var/lib/apt/lists/* wkhtmltox.deb
      fi
 
-     apt-get install -y adduser node-less node-clean-css python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-babel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml
-     apt-get install -y python-gevent python-simplejson
-
+     # Fix some issues
      if [[ "$ODOO_BRANCH" == "8.0" ]]
      then
          apt-get install -y python-unittest2
      fi
-
-
-     pip install "werkzeug<0.12" --upgrade
-     pip install psycogreen
-     # requirements.txt
-     #apt-get install -y postgresql-server-dev-all python-dev  build-essential libxml2-dev libxslt1-dev 
-     #cd $ODOO_SOURCE_DIR
-     #pip install -r requirements.txt
-
-     # fix error with jpeg (if you get it)
-     apt-get install -y python-dev build-essential libxml2-dev libxslt1-dev
-     # uninstall PIL
-     pip uninstall PIL || echo "PIL is not installed"
+     
      if [[ "$OS_RELEASE" == "jessie" ]]
      then
-         apt-get install libjpeg62-turbo-dev zlib1g-dev -y
-     elif [[ "$OS_RELEASE" == "trusty" ]]
-     then
-         apt-get install libjpeg-dev zlib1g-dev -y
-     else
-         apt-get install libjpeg-dev zlib1g-dev -y
+          apt-get install libjpeg62-turbo-dev zlib1g-dev -y
      fi
-     # reinstall pillow
-     pip install -I pillow
-     # (from here https://github.com/odoo/odoo/issues/612 )
+     # for all since Trusty
+     apt-get install libjpeg-dev zlib1g-dev -y
 
      # ## Less CSS via nodejs
      # ## nodejs:
@@ -201,17 +181,48 @@
      # # check https://www.odoo.com/documentation/8.0/setup/install.html
      # ## less css
      # npm install -g less less-plugin-clean-css
+	
+     if [[ "$ODOO_BRANCH" < "11.0" ]]
+     then
+		
+          # Fix error with jpeg (if you get it)
+        apt-get install -y python-dev build-essential libxml2-dev libxslt1-dev
+	
+        apt-get install -y adduser node-less node-clean-css python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-babel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml python-gevent python-simplejson
+		
+        #apt-get install -y postgresql-server-dev-all python-dev  build-essential libxml2-dev libxslt1-dev 
+        pip install "werkzeug<0.12" --upgrade
+        pip install setuptools #added!
+        pip install psycogreen
+		
+        # uninstall PIL
+        pip uninstall PIL || echo "PIL is not installed"
+        # reinstall pillow (from here https://github.com/odoo/odoo/issues/612 )
+        pip install -I pillow
 
-
-     ### Deps for Odoo Saas Tool
-     # TODO replace it with deb packages
-     apt-get install -y libffi-dev libssl-dev
-     pip install Boto
-     pip install FileChunkIO
-     pip install pysftp
-     pip install rotate-backups
-     pip install oauthlib
-     pip install requests --upgrade
+        ### Deps for Odoo Saas Tool
+        # TODO replace it with deb packages
+        apt-get install -y libffi-dev libssl-dev
+        pip install Boto
+        pip install FileChunkIO
+        pip install pysftp
+        pip install rotate-backups
+        pip install oauthlib
+        pip install requests --upgrade
+	 
+    elif [[ "$ODOO_BRANCH" == "11.0" ]]
+    then
+	
+        #apt-get install -y python3-psycopg2 python3-babel python3-decorator python3-docutils python3-feedparser python3-gevent python3-greenlet python3-html2text python3-jinja2 python3-lxml python3-mako python3-markupsafe python3-mock python3-ofxparse python3-passlib python3-pillow python3-psutil python3-pydot python3-pyldap python3-pyparsing python3-pypdf2 python3-serial python3-dateutil python3-openid python3-yaml python3-qrcode python3-reportlab python3-requests python3-six python3-suds python3-vatnumber python3-vobject python3-werkzeug python3-xlrd
+		
+        # Or install dependencies with requirements.txt
+        #cd $ODOO_SOURCE_DIR
+        apt-get install -y python3-pip
+        pip3 install setuptools
+        pip3 install -r https://raw.githubusercontent.com/odoo/odoo/${ODOO_BRANCH}/requirements.txt
+		
+    fi
+    
  fi
 
  if [[ "$INIT_POSTGRESQL" != "no" ]]
@@ -221,7 +232,7 @@
      then
          POSTGRES_PACKAGES="postgresql-client-9.5"
      else
-         POSTGRES_PACKAGES="postgresql-9.5 postgresql-contrib-9.5 postgresql-client-9.5"
+         POSTGRES_PACKAGES="postgresql-9.5 postgresql-contrib postgresql-client"
      fi
      apt-get install $POSTGRES_PACKAGES -y || \
          curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
@@ -332,11 +343,11 @@
      cd $INSTALL_ODOO_DIR
      if [[ "$INIT_ODOO_CONFIG" != "docker-container" ]]
      then
-         cp ./configs/odoo-server.conf $OPENERP_SERVER
+         cp ./configs/odoo-server.conf $ODOO_RC
      fi
-     eval "${PERL_UPDATE_ENV} < $OPENERP_SERVER" | sponge $OPENERP_SERVER
-     chown ${ODOO_USER}:${ODOO_USER} $OPENERP_SERVER
-     chmod 600 $OPENERP_SERVER
+     eval "${PERL_UPDATE_ENV} < $ODOO_RC" | sponge $ODOO_RC
+     chown ${ODOO_USER}:${ODOO_USER} $ODOO_RC
+     chmod 600 $ODOO_RC
  fi
 
 
@@ -352,7 +363,7 @@
      #  -> ...
      ADDONS_PATH=`ls -d1 $ADDONS_DIR/*/* | tr '\n' ','`
      ADDONS_PATH=`echo $ODOO_SOURCE_DIR/odoo/addons,$ODOO_SOURCE_DIR/addons,$ADDONS_PATH | sed "s,//,/,g" | sed "s,/,\\\\\/,g" | sed "s,.$,,g" `
-     sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $OPENERP_SERVER
+     sed -ibak "s/addons_path.*/addons_path = $ADDONS_PATH/" $ODOO_RC
 
  fi
 
@@ -557,7 +568,7 @@
          BACKUP_EXEC="${ODOO_USER} odoo-backup.py"
      elif [[ "$INIT_BACKUPS" == "docker-host" ]]
      then
-         BACKUP_EXEC="root docker exec -u root -i -t ${ODOO_DOCKER} /usr/local/bin/odoo-backup.py -d ${ODOO_DATABASE} -c ${OPENERP_SERVER} -p ${BACKUPS_DIR}"
+         BACKUP_EXEC="root docker exec -u root -i -t ${ODOO_DOCKER} /usr/local/bin/odoo-backup.py -d ${ODOO_DATABASE} -c ${ODOO_RC} -p ${BACKUPS_DIR}"
      fi
      echo "### check url for undestanding time parameters: https://github.com/xolox/python-rotate-backups" >> /etc/crontab
      echo -e "#6 6\t* * *\t${BACKUP_EXEC} --no-save-filestore --daily 8 --weekly 0 --monthly 0 --yearly 0" >> /etc/crontab
