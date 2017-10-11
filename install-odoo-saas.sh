@@ -404,11 +404,11 @@
 
  if [[ "$GIT_PULL" == "yes" ]]
  then
-     su --preserve-environment - ${ODOO_USER} -s /bin/bash -c "git -C $ODOO_SOURCE_DIR pull"
+     su --preserve-environment - ${ODOO_USER} -s /bin/bash -c "git -C $ODOO_SOURCE_DIR pull" || :
 
      for repo in `ls -d1 $ADDONS_DIR/*/*`
      do
-         su --preserve-environment - ${ODOO_USER} -s /bin/bash -c "git -C $repo pull"
+         su --preserve-environment - ${ODOO_USER} -s /bin/bash -c "git -C $repo pull" || :
      done
  fi
 
