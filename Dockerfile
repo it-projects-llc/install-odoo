@@ -1,56 +1,52 @@
-FROM debian:jessie
+FROM debian:stretch
 
 ################
 # dependencies #
 ################
-RUN apt-get update && \
-    apt-get install -y moreutils && \
-    apt-get install -y git && \
-    apt-get install -y libffi-dev libssl-dev && \
-    apt-get install -y python-gevent python-simplejson && \
-    apt-get install -y xfonts-base xfonts-75dpi libjpeg62-turbo && \
-    apt-get install -y python-dev build-essential libxml2-dev libxslt1-dev && \
-    apt-get install -y libjpeg62-turbo-dev zlib1g-dev && \
-    apt-get install -y adduser node-less node-clean-css python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-babel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml && \
-    apt-get install -y --no-install-recommends \
+RUN set -x; \
+        apt-get update \
+        && apt-get install -y --no-install-recommends \
             ca-certificates \
             curl \
             node-less \
-            node-clean-css \
-            python-pyinotify \
-            python-renderpm && \
-    # dependencies for OCA/website/website_multi_theme
-    apt-get install -y ruby-compass && \
-    gem install compass bootstrap-sass && \
-    # postgresql-client-9.5
-    curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-    echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' >> /etc/apt/sources.list.d/pgdg.list && \
-    apt-get update && \
-    apt-get install -y postgresql-client-9.5 && \
-    # wkhtmltopdf
-    curl -o wkhtmltox.deb -SL http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb && \
-    dpkg --force-depends -i wkhtmltox.deb && \
-    apt-get -y install -f --no-install-recommends && \
-    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm && \
-    rm -rf /var/lib/apt/lists/* wkhtmltox.deb && \
-    # pip dependencies
-    curl --silent https://bootstrap.pypa.io/get-pip.py | python && \
-    pip install "werkzeug<0.12" --upgrade && \
-    pip install pillow psycogreen && \
-    pip install Boto && \
-    pip install FileChunkIO && \
-    pip install pysftp && \
-    pip install rotate-backups && \
-    pip install oauthlib && \
-    pip install requests --upgrade && \
-    # check that pip is not broken after requests --upgrade
-    pip --version
-
+            python3-pip \
+            python3-setuptools \
+            python3-renderpm \
+            libssl1.0-dev \
+            xz-utils \
+            git \
+            python3-psutil \
+            libxrender1 \
+            libfontconfig1 \
+        && curl -o wkhtmltox.tar.xz -SL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
+        && echo '3f923f425d345940089e44c1466f6408b9619562 wkhtmltox.tar.xz' | sha1sum -c - \
+        && tar xvf wkhtmltox.tar.xz \
+        && cp wkhtmltox/lib/* /usr/local/lib/ \
+        && cp wkhtmltox/bin/* /usr/local/bin/ \
+        && cp -r wkhtmltox/share/man/man1 /usr/local/share/man/ \
+        # pip3 dependencies
+        && pip3 install pypdf2 \
+            passlib \
+            babel \
+            werkzeug \
+            lxml \
+            decorator \
+            python-dateutil \
+            pyyaml \
+            psycopg2 \
+            pillow \
+            requests \
+            jinja2 \
+            reportlab \
+            html2text \
+            docutils \
+            num2words \
+            gevent
 
 #######
 # ENV #
 #######
-ENV ODOO_BRANCH=10.0 \
+ENV ODOO_BRANCH=11.0 \
     OPENERP_SERVER=/mnt/config/odoo-server.conf \
     ODOO_SOURCE_DIR=/mnt/odoo-source \
     ADDONS_DIR=/mnt/addons \
