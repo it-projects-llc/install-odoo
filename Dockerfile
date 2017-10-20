@@ -41,6 +41,7 @@ RUN set -x; \
             html2text \
             docutils \
             num2words \
+            simplejson \
             gevent
 
 #######
