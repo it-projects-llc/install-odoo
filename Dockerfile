@@ -18,12 +18,15 @@ RUN set -x; \
             python3-psutil \
             libxrender1 \
             libfontconfig1 \
+            gnupg2 \
         && curl -o wkhtmltox.tar.xz -SL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
         && echo '3f923f425d345940089e44c1466f6408b9619562 wkhtmltox.tar.xz' | sha1sum -c - \
         && tar xvf wkhtmltox.tar.xz \
         && cp wkhtmltox/lib/* /usr/local/lib/ \
         && cp wkhtmltox/bin/* /usr/local/bin/ \
         && cp -r wkhtmltox/share/man/man1 /usr/local/share/man/ \
+        && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+        && apt-get install -yqq nodejs \
         && apt-get -yqq purge python2.7 \
         # pip3 dependencies
         && pip3 install pypdf2 \
@@ -44,6 +47,11 @@ RUN set -x; \
             num2words \
             simplejson \
             gevent
+
+# Special case to get latest Less and PhantomJS
+RUN ln -s /usr/bin/nodejs /usr/local/bin/node \
+    && npm install -g less phantomjs-prebuilt \
+    && rm -Rf ~/.npm /tmp/*
 
 #######
 # ENV #
