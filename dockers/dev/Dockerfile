@@ -2,6 +2,7 @@ FROM itprojectsllc/install-odoo:latest
 
 USER root
 
+# PHANTOMJS
 # based on https://github.com/wernight/docker-phantomjs
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -25,4 +26,6 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
+# Other
+RUN pip install unittest2
 USER odoo
