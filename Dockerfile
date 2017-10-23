@@ -24,6 +24,7 @@ RUN set -x; \
         && cp wkhtmltox/lib/* /usr/local/lib/ \
         && cp wkhtmltox/bin/* /usr/local/bin/ \
         && cp -r wkhtmltox/share/man/man1 /usr/local/share/man/ \
+        && apt-get -yqq purge python2.7 \
         # pip3 dependencies
         && pip3 install pypdf2 \
             passlib \
