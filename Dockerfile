@@ -18,6 +18,7 @@ RUN set -x; \
             python3-psutil \
             libxrender1 \
             libfontconfig1 \
+            && \
         # lessc
         apt-get install -y gnupg2 && \
         curl -sL https://deb.nodesource.com/setup_6.x | bash  && \
