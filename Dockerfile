@@ -73,22 +73,22 @@ RUN set -x; \
         # pip3 dependencies
         && pip3 install pypdf2 \
             passlib \
-            babel \
-            werkzeug \
-            lxml \
-            decorator \
-            python-dateutil \
-            pyyaml \
-            psycopg2 \
-            pillow \
-            requests \
-            jinja2 \
-            reportlab \
-            html2text \
-            docutils \
-            num2words \
+            babel==2.3.4 \
+            werkzeug==0.11.11 \
+            lxml==3.5.0 \
+            decorator==4.0.10 \
+            python-dateutil==2.5.3 \
+            pyyaml==3.12 \
+            psycopg2==2.7.1 \
+            pillow==3.4.1 \
+            requests==2.11.1 \
+            jinja2==2.8 \
+            reportlab==3.3.0 \
+            html2text==2016.9.19 \
+            docutils==0.12 \
+            num2words==0.5.4 \
             simplejson \
-            gevent \
+            gevent==1.1.2 \
             Boto \
             pysftp \
             oauthlib
