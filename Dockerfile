@@ -33,17 +33,17 @@ RUN set -x; \
         && cp -r wkhtmltox/share/man/man1 /usr/local/share/man/ \
         && apt-get -yqq purge python2.7 \
         # pip3 dependencies
+        && pip3 install "werkzeug<0.12" --upgrade \
+        && pip3 install requests --upgrade \
         && pip3 install pypdf2 \
             passlib \
             babel \
-            werkzeug \
             lxml \
             decorator \
             python-dateutil \
             pyyaml \
             psycopg2 \
             pillow \
-            requests \
             jinja2 \
             reportlab \
             html2text \
