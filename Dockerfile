@@ -95,7 +95,8 @@ COPY install-odoo-saas.sh /
 COPY configs-docker-container/odoo-server.conf $OPENERP_SERVER
 COPY odoo-backup.py /usr/local/bin/
 
-RUN chmod +x /usr/local/bin/odoo-backup.py && \
+RUN apt-get -qq update && \
+    chmod +x /usr/local/bin/odoo-backup.py && \
     chown odoo:odoo $OPENERP_SERVER && \
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
