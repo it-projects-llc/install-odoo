@@ -1,69 +1,79 @@
 FROM debian:stretch
-
-################
-# dependencies #
-################
-RUN set -x; \
-        apt-get update \
-        && apt-get install -y --no-install-recommends \
-            ca-certificates \
-            curl \
-            node-less \
-            python3-pip \
-            python3-setuptools \
-            python3-renderpm \
-            libssl1.0-dev \
-            xz-utils \
-            git \
-            python3-psutil \
-            libxrender1 \
-            libfontconfig1 \
-            && \
-        # lessc
-        apt-get install -y gnupg2 && \
-        curl -sL https://deb.nodesource.com/setup_6.x | bash  && \
-        apt-get install -y nodejs && \
-        ln -s /usr/bin/nodejs /usr/local/bin/node && \
-        npm install -g less \
-        # wkhtmltopdf
-        && curl -o wkhtmltox.tar.xz -SL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
-        && echo '3f923f425d345940089e44c1466f6408b9619562 wkhtmltox.tar.xz' | sha1sum -c - \
-        && tar xvf wkhtmltox.tar.xz \
-        && cp wkhtmltox/lib/* /usr/local/lib/ \
-        && cp wkhtmltox/bin/* /usr/local/bin/ \
-        && cp -r wkhtmltox/share/man/man1 /usr/local/share/man/ \
-        && apt-get -yqq purge python2.7 \
-        # pip3 dependencies
-        && pip3 install "werkzeug<0.12" --upgrade \
-        && pip3 install requests --upgrade \
-        && pip3 install pypdf2 \
-            passlib \
-            babel \
-            lxml \
-            decorator \
-            python-dateutil \
-            pyyaml \
-            psycopg2 \
-            pillow \
-            jinja2 \
-            reportlab \
-            html2text \
-            docutils \
-            num2words \
-            simplejson \
-            gevent
-
 #######
 # ENV #
 #######
 ENV ODOO_BRANCH=11.0 \
+    WKHTMLTOPDF_VERSION=0.12.4 \
+    WKHTMLTOPDF_CHECKSUM='049b2cdec9a8254f0ef8ac273afaf54f7e25459a273e27189591edc7d7cf29db' \
     OPENERP_SERVER=/mnt/config/odoo-server.conf \
     ODOO_SOURCE_DIR=/mnt/odoo-source \
     ADDONS_DIR=/mnt/addons \
     BACKUPS_DIR=/mnt/backups \
     LOGS_DIR=/mnt/logs \
-    ODOO_DATA_DIR=/mnt/data-dir \
-    BUILD_DATE=2016_10_20
+    ODOO_DATA_DIR=/mnt/data-dir
+
+################
+# dependencies #
+################
+# Based on https://github.com/Tecnativa/docker-odoo-base
+
+# Other requirements and recommendations to run Odoo
+# See https://github.com/$ODOO_SOURCE/blob/$ODOO_VERSION/debian/control
+RUN set -x; \
+    apt-get -qq update \
+    && apt-get -yqq upgrade \
+    && apt-get install -yqq --no-install-recommends \
+        python3 ruby-compass \
+        fontconfig libfreetype6 libxml2 libxslt1.1 libjpeg62-turbo zlib1g \
+        libfreetype6 liblcms2-2 libtiff5 tk tcl libpq5 \
+        libldap-2.4-2 libsasl2-2 libx11-6 libxext6 libxrender1 \
+        locales-all zlibc \
+        bzip2 ca-certificates curl gettext-base git gnupg2 nano \
+        openssh-client postgresql-client telnet xz-utils \
+    && curl https://bootstrap.pypa.io/get-pip.py | python3 /dev/stdin --no-cache-dir \
+    && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+    && apt-get install -yqq nodejs \
+    && apt-get -yqq purge python2.7 \
+    && apt-get -yqq autoremove \
+    && rm -Rf /var/lib/apt/lists/*
+
+
+# Special case to get latest Less
+RUN ln -s /usr/bin/nodejs /usr/local/bin/node \
+    && npm install -g less \
+    && rm -Rf ~/.npm /tmp/*
+
+# Special case to get bootstrap-sass, required by Odoo for Sass assets
+RUN gem install --no-rdoc --no-ri --no-update-sources bootstrap-sass --version '<4' \
+    && rm -Rf ~/.gem /var/lib/gems/*/cache/
+
+
+# Special case for wkhtmltox
+RUN curl -SLo wkhtmltox.tar.xz https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox-${WKHTMLTOPDF_VERSION}_linux-generic-amd64.tar.xz \
+    && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.tar.xz" | sha256sum -c - \
+    && tar --strip-components 1 -C /usr/local/ -xf wkhtmltox.tar.xz \
+    && rm wkhtmltox.tar.xz \
+    && wkhtmltopdf --version
+
+RUN apt-get update \
+    && apt-get install -y \
+        build-essential \
+        libevent-dev \
+        libjpeg-dev \
+        libldap2-dev \
+        libsasl2-dev \
+        libssl-dev \
+        libxml2-dev \
+        libxslt1-dev \
+        python3-dev \
+        zlib1g-dev \
+    && pip install --no-cache-dir -r https://raw.githubusercontent.com/odoo/odoo/${ODOO_BRANCH}/requirements.txt \
+    && pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/odoo-saas-tools/${ODOO_BRANCH}/requirements.txt \
+    && python3 -m compileall -q /usr/local/lib/python3.5/ || true \
+    && apt-get purge -yqq build-essential '*-dev' \
+    && apt-mark -qq manual '*' \
+    && rm -Rf /var/lib/apt/lists/*
+
 
 #####################################
 # odoo source, user, docker folders #
@@ -86,6 +96,7 @@ COPY configs-docker-container/odoo-server.conf $OPENERP_SERVER
 COPY odoo-backup.py /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/odoo-backup.py && \
+    apt-get update && \
     chown odoo:odoo $OPENERP_SERVER && \
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
