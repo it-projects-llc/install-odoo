@@ -68,7 +68,7 @@ RUN apt-get update \
         python3-dev \
         zlib1g-dev \
     && pip install --no-cache-dir -r https://raw.githubusercontent.com/odoo/odoo/${ODOO_BRANCH}/requirements.txt \
-    # && pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/odoo-saas-tools/${ODOO_BRANCH}/requirements.txt \
+    && pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/odoo-saas-tools/${ODOO_BRANCH}/requirements.txt \
     && python3 -m compileall -q /usr/local/lib/python3.5/ || true \
     && apt-get purge -yqq build-essential '*-dev' \
     && apt-mark -qq manual '*' \
@@ -102,7 +102,7 @@ RUN apt-get -qq update && \
     CLONE_OCA=yes \
     INIT_ODOO_CONFIG=docker-container \
     UPDATE_ADDONS_PATH=yes \
-    #ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage', 'base_session_store_psql']" \
+    ADD_AUTOINSTALL_MODULES="['ir_attachment_force_storage', 'base_session_store_psql']" \
     ADD_IGNORED_DATABASES="['session_store']" \
     bash -x install-odoo-saas.sh
 
