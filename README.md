@@ -128,7 +128,7 @@ Finish docker installation:
     docker start odoo
 
     # update source
-    docker exec GIT_PULL=yes /bin/bash /install-odoo-saas.sh
+    docker exec -u root -i -t odoo /bin/bash -c "export GIT_PULL='yes'; bash /install-odoo-saas.sh"
 
     # restart
     docker restart odoo
