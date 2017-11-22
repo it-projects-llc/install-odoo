@@ -1,4 +1,4 @@
-FROM itprojectsllc/install-odoo:latest
+FROM itprojectsllc/install-odoo:11.0
 
 USER root
 
