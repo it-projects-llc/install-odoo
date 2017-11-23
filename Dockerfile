@@ -39,6 +39,7 @@ RUN apt-get update && \
     pip install "werkzeug<0.12" --upgrade && \
     pip install pillow psycogreen && \
     pip install Boto && \
+    pip install boto3 && \
     pip install FileChunkIO && \
     pip install pysftp && \
     pip install rotate-backups && \
