@@ -68,9 +68,9 @@ RUN apt-get update \
         python3-dev \
         zlib1g-dev \
     && pip install openupgradelib \
-    && pip install boto3 \
     && pip install --no-cache-dir -r https://raw.githubusercontent.com/odoo/odoo/${ODOO_BRANCH}/requirements.txt \
     && pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/odoo-saas-tools/${ODOO_BRANCH}/requirements.txt \
+    && pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/misc-addons/${ODOO_BRANCH}/requirements.txt \
     && python3 -m compileall -q /usr/local/lib/python3.5/ || true \
     && apt-get purge -yqq build-essential '*-dev' \
     && apt-mark -qq manual '*' \
