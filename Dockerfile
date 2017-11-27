@@ -9,8 +9,7 @@ ENV ODOO_BRANCH=10.0 \
     ADDONS_DIR=/mnt/addons \
     BACKUPS_DIR=/mnt/backups \
     LOGS_DIR=/mnt/logs \
-    ODOO_DATA_DIR=/mnt/data-dir \
-    BUILD_DATE=2016_10_20
+    ODOO_DATA_DIR=/mnt/data-dir
 
 ################
 # dependencies #
