@@ -1,5 +1,17 @@
 FROM debian:jessie
 
+#######
+# ENV #
+#######
+ENV ODOO_BRANCH=10.0 \
+    OPENERP_SERVER=/mnt/config/odoo-server.conf \
+    ODOO_SOURCE_DIR=/mnt/odoo-source \
+    ADDONS_DIR=/mnt/addons \
+    BACKUPS_DIR=/mnt/backups \
+    LOGS_DIR=/mnt/logs \
+    ODOO_DATA_DIR=/mnt/data-dir \
+    BUILD_DATE=2016_10_20
+
 ################
 # dependencies #
 ################
@@ -38,8 +50,7 @@ RUN apt-get update && \
     pip install openupgradelib && \
     pip install "werkzeug<0.12" --upgrade && \
     pip install pillow psycogreen && \
-    pip install Boto && \
-    pip install boto3 && \
+    pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/misc-addons/${ODOO_BRANCH}/requirements.txt && \
     pip install FileChunkIO && \
     pip install pysftp && \
     pip install rotate-backups && \
@@ -47,19 +58,6 @@ RUN apt-get update && \
     pip install requests --upgrade && \
     # check that pip is not broken after requests --upgrade
     pip --version
-
-
-#######
-# ENV #
-#######
-ENV ODOO_BRANCH=10.0 \
-    OPENERP_SERVER=/mnt/config/odoo-server.conf \
-    ODOO_SOURCE_DIR=/mnt/odoo-source \
-    ADDONS_DIR=/mnt/addons \
-    BACKUPS_DIR=/mnt/backups \
-    LOGS_DIR=/mnt/logs \
-    ODOO_DATA_DIR=/mnt/data-dir \
-    BUILD_DATE=2016_10_20
 
 #####################################
 # odoo source, user, docker folders #
