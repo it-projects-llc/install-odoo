@@ -273,6 +273,7 @@
  if [[ "$CLONE_OCA" == "yes" ]]
  then
      REPOS=( "${REPOS[@]}" "https://github.com/OCA/web.git OCA/web")
+     REPOS=( "${REPOS[@]}" "https://github.com/OCA/event.git OCA/event")
      REPOS=( "${REPOS[@]}" "https://github.com/OCA/website.git OCA/website")
      REPOS=( "${REPOS[@]}" "https://github.com/OCA/account-financial-reporting.git OCA/account-financial-reporting")
      REPOS=( "${REPOS[@]}" "https://github.com/OCA/account-financial-tools.git OCA/account-financial-tools")
