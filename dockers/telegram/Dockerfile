@@ -14,6 +14,6 @@ RUN pip install -U pip && \
     echo "telegram dependencies are installed"
 
 # add telegram to server-wide modules
-RUN sed -i -e "s/^\(server_wide_modules.*\)/\1,telegram/" $OPENERP_SERVER
+RUN sed -i -e "s/^\(server_wide_modules.*\)/\1,telegram/" $ODOO_RC
 
 USER odoo
