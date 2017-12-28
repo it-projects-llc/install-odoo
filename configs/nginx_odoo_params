@@ -3,7 +3,7 @@ location = /favicon.ico {
     return 404;
 }
 
-## increase proxy buffer to handle some OpenERP web requests
+## increase proxy buffer to handle some Odoo web requests
 proxy_buffers               16 64k;
 proxy_buffer_size           128k;
 
