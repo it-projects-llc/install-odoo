@@ -21,10 +21,8 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
     
 ## Choosing version
 
-    # need 8.0 version of odoo:
-    git checkout 8.0
-    # or 9.0:
-    git checkout 9.0
+    # if specific version of odoo is needed :
+    git checkout 11.0
     # or recent version:
     git checkout master
 
@@ -52,7 +50,7 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
     # show settings (admin password, addons path)
     head /etc/openerp-server.conf
     # show odoo version
-    grep '^version_info ' $ODOO_SOURCE_DIR/openerp/release.py
+    grep '^version_info ' $ODOO_SOURCE_DIR/odoo/release.py
 
     # PGTune: http://pgtune.leopard.in.ua/"
 
@@ -60,7 +58,7 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
     tail -f -n 100 /var/log/odoo/odoo-server.log
     
     # start from console (for ODOO_USER=odoo):
-    sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo-source/odoo-bin -c /etc/openerp-server.conf"
+    sudo su - odoo -s /bin/bash -c  "/usr/local/src/odoo-source/odoo-bin -c /etc/odoo-server.conf"
     
     # psql (use name of your database)
     sudo -u odoo psql DATABASE
