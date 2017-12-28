@@ -48,7 +48,7 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
 ## After installation
 
     # show settings (admin password, addons path)
-    head /etc/openerp-server.conf
+    head /etc/odoo-server.conf
     # show odoo version
     grep '^version_info ' $ODOO_SOURCE_DIR/odoo/release.py
 
@@ -153,7 +153,7 @@ Example for base installation
     --server-create \
     --plan-create \
     --odoo-script=/usr/local/src/odoo-source/odoo-bin \
-    --odoo-config=/etc/openerp-server.conf \
+    --odoo-config=/etc/odoo-server.conf \
     --admin-password='${ODOO_MASTER_PASS}' \
     --portal-db-name=${ODOO_DOMAIN} \
     --server-db-name=server-1.${ODOO_DOMAIN} \
