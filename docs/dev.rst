@@ -21,7 +21,7 @@
     CLONE_IT_PROJECTS_LLC=yes \
     CLONE_OCA=yes \
     CLONE_SAAS=yes \
-    OPENERP_SERVER=${BASE_DIR}/config/openerp-server.conf \
+    OPENERP_SERVER=${BASE_DIR}/config/odoo-server.conf \
     INIT_ODOO_CONFIG=yes \
     install-odoo-saas.sh
 
