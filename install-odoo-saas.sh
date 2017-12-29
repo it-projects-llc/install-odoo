@@ -32,6 +32,7 @@
  export CLONE_IT_PROJECTS_LLC=${CLONE_IT_PROJECTS_LLC:-"no"}
  export CLONE_OCA=${CLONE_OCA:-"no"}
  export CLONE_ODOO=${CLONE_ODOO:-"no"}
+ export CLONE_GIT_UPDATES=${CLONE_GIT_UPDATES:-"no"}
 
  ## Docker Names
  export ODOO_DOCKER=${ODOO_DOCKER:-"odoo"}
@@ -265,6 +266,8 @@
      sed -i 's/matches="[^"]*"//g' addons/web/static/src/xml/base.xml
  fi
 
+if [[ "$CLONE_OCA" == "yes" ]] || [[ "$CLONE_IT_PROJECTS_LLC" == "yes" ]] || [[ "$CLONE_GIT_UPDATES" == "yes" ]]
+then
  mkdir -p $ADDONS_DIR
  cd $ADDONS_DIR
  REPOS=()
@@ -289,19 +292,19 @@
      REPOS=( "${REPOS[@]}" "https://github.com/OCA/bank-payment.git OCA/bank-payment")
      REPOS=( "${REPOS[@]}" "https://github.com/OCA/bank-statement-import.git OCA/bank-statement-import")
      REPOS=( "${REPOS[@]}" "https://github.com/OCA/bank-statement-reconcile.git OCA/bank-statement-reconcile")
-     REPOS=( "${REPOS[@]}" " https://github.com/OCA/product-attribute.git OCA/product-attribute")
+     REPOS=( "${REPOS[@]}" "https://github.com/OCA/product-attribute.git OCA/product-attribute")
  fi
 
  if [[ "$CLONE_IT_PROJECTS_LLC" == "yes" ]]
  then
-     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/e-commerce.git it-projects-llc/e-commerce")
-     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/pos-addons.git it-projects-llc/pos-addons")
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/access-addons.git it-projects-llc/access-addons")
-     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/website-addons.git it-projects-llc/website-addons")
-     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/misc-addons.git it-projects-llc/misc-addons")
+     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/e-commerce.git it-projects-llc/e-commerce")
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/mail-addons.git it-projects-llc/mail-addons")
+     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/misc-addons.git it-projects-llc/misc-addons")
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/odoo-saas-tools.git it-projects-llc/odoo-saas-tools")
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/odoo-telegram.git it-projects-llc/odoo-telegram")
+     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/pos-addons.git it-projects-llc/pos-addons")
+     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/website-addons.git it-projects-llc/website-addons")
  fi
 
  if [[ "${REPOS}" != "" ]]
@@ -309,16 +312,40 @@
      apt-get install -y git
  fi
 
- for r in "${REPOS[@]}"
- do
-     eval "git clone --depth=1 -b ${ODOO_BRANCH} $r" || echo "Cannot clone: git clone -b ${ODOO_BRANCH} $r"
- done
+	if [[ "$CLONE_GIT_UPDATES" == "yes" ]] # If the repositories exists and you need to update them
+	then
+	
+		CUR_DIR=$(pwd) # Current directory
 
- if [[ "${REPOS}" != "" ]]
- then
-     chown -R ${ODOO_USER}:${ODOO_USER} $ADDONS_DIR || true
- fi
+		# Find all git repositories and update it 
+		for i in $(find . -name ".git" | cut -c 3-); do
+			echo "Updating "+$i+"";
 
+			# We have to go to the .git parent
+			cd "$i";
+			cd ..;
+
+			git pull;
+
+			# and get back to the CUR_DIR
+			cd $CUR_DIR
+		done
+		
+	else # standard action who initially clone the repositories
+	
+		for r in "${REPOS[@]}"
+		do
+			eval "git clone --depth=1 -b ${ODOO_BRANCH} $r" || echo "Cannot clone: git clone -b ${ODOO_BRANCH} $r"
+		done
+		
+ 	fi
+
+	if [[ "${REPOS}" != "" ]]
+	then
+		chown -R ${ODOO_USER}:${ODOO_USER} $ADDONS_DIR || true
+	fi
+	
+fi
 
  #from http://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash
  export PERL_UPDATE_ENV="perl -p -e 's/\{\{([^}]+)\}\}/defined \$ENV{\$1} ? \$ENV{\$1} : \$&/eg' "
