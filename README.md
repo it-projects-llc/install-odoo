@@ -21,10 +21,8 @@ with or without using [Amazon RDS](https://aws.amazon.com/rds/), with additional
     
 ## Choosing version
 
-    # if specific version of odoo is needed :
+    # Checkout to specific odoo version if you don't use default one:
     git checkout 11.0
-    # or recent version:
-    git checkout master
 
 ## Running script
 
