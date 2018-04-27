@@ -24,6 +24,7 @@ RUN set -x; \
     && apt-get -yqq upgrade \
     && apt-get install -yqq --no-install-recommends \
         python3 ruby-compass \
+        python3-libsass \
         fontconfig libfreetype6 libxml2 libxslt1.1 libjpeg62-turbo zlib1g \
         libfreetype6 liblcms2-2 libtiff5 tk tcl libpq5 \
         libldap-2.4-2 libsasl2-2 libx11-6 libxext6 libxrender1 \
