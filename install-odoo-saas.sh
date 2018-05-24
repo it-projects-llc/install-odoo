@@ -290,6 +290,8 @@
      REPOS=( "${REPOS[@]}" "https://github.com/OCA/bank-statement-import.git OCA/bank-statement-import")
      REPOS=( "${REPOS[@]}" "https://github.com/OCA/bank-statement-reconcile.git OCA/bank-statement-reconcile")
      REPOS=( "${REPOS[@]}" " https://github.com/OCA/product-attribute.git OCA/product-attribute")
+     REPOS=( "${REPOS[@]}" "https://github.com/OCA/account-invoicing.git OCA/account-invoicing")
+     REPOS=( "${REPOS[@]}" "https://github.com/OCA/account-closing.git OCA/account-closing")
  fi
 
  if [[ "$CLONE_IT_PROJECTS_LLC" == "yes" ]]
