@@ -14,7 +14,7 @@
   
     --link wdb:wdb -e WDB_SOCKET_SERVER=wdb -e WDB_NO_BROWSER_AUTO_OPEN=True
     
-  * Past code below where you need a breakpoint::
+  * Paste code below where you need a breakpoint::
 
      import wdb; wdb.set_trace()
 
