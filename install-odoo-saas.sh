@@ -302,7 +302,7 @@
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/website-addons.git it-projects-llc/website-addons")
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/misc-addons.git it-projects-llc/misc-addons")
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/mail-addons.git it-projects-llc/mail-addons")
-     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/odoo-saas-tools.git it-projects-llc/odoo-saas-tools")
+     REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/saas-addons.git it-projects-llc/saas-addons")
      REPOS=( "${REPOS[@]}" "https://github.com/it-projects-llc/odoo-telegram.git it-projects-llc/odoo-telegram")
  fi
 
@@ -471,7 +471,7 @@
  #### Odoo Saas Tool
  if [[ "$INIT_SAAS_TOOLS" != "no" ]]        ###################################### IF
  then
-     su --preserve-environment - ${ODOO_USER} -s /bin/bash -c  "$ADDONS_DIR/it-projects-llc/odoo-saas-tools/saas.py $INIT_SAAS_TOOLS"
+     su --preserve-environment - ${ODOO_USER} -s /bin/bash -c  "$ADDONS_DIR/it-projects-llc/saas-addons/saas.py $INIT_SAAS_TOOLS"
  fi
 
  #### START CONTROL
