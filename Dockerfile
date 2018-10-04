@@ -2,7 +2,7 @@ FROM debian:stretch
 #######
 # ENV #
 #######
-ENV ODOO_BRANCH=master \
+ENV ODOO_BRANCH=12.0 \
     WKHTMLTOPDF_VERSION=0.12.4 \
     WKHTMLTOPDF_CHECKSUM='049b2cdec9a8254f0ef8ac273afaf54f7e25459a273e27189591edc7d7cf29db' \
     OPENERP_SERVER=/mnt/config/odoo-server.conf \
