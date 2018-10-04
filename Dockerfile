@@ -49,6 +49,7 @@ RUN apt-get update && \
     pip install openupgradelib && \
     pip install "werkzeug<0.12" --upgrade && \
     pip install pillow psycogreen && \
+    pip install --no-cache-dir -r https://raw.githubusercontent.com/odoo/odoo/${ODOO_BRANCH}/requirements.txt && \
     pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/misc-addons/${ODOO_BRANCH}/requirements.txt && \
     pip install FileChunkIO && \
     pip install pysftp && \
