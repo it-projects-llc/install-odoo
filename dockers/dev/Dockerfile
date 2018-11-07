@@ -27,5 +27,5 @@ RUN apt-get update \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # Other
-RUN pip install unittest2 wdb requests-mock[fixture]
+RUN pip install unittest2 wdb requests-mock[fixture] websocket-client
 USER odoo
