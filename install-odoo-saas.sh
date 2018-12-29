@@ -100,7 +100,7 @@
  if [[ "$INIT_NGINX" != "no" ]] || [[ "$INIT_START_SCRIPTS" != "no" ]] || [[ "$INIT_ODOO_CONFIG" != "no" ]]
  then
      # moreutils is installed for sponge util
-     apt-get install -y moreutils
+     apt-get update && apt-get install -y moreutils
  fi
 
  [[ "$SYSTEM" == "supervisor" ]] && [[ "$INIT_START_SCRIPTS" != "no" ]] && apt-get install -y supervisor
