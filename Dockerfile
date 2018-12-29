@@ -32,7 +32,8 @@ RUN apt-get update && \
             python-renderpm && \
     # dependencies for OCA/website/website_multi_theme
     apt-get install -y ruby-compass && \
-    gem install compass bootstrap-sass && \
+    gem install compass && \
+    gem install bootstrap-sass --version '<3.4' && \
     # postgresql-client-9.5
     curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' >> /etc/apt/sources.list.d/pgdg.list && \
