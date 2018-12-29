@@ -44,7 +44,7 @@ RUN ln -s /usr/bin/nodejs /usr/local/bin/node \
     && rm -Rf ~/.npm /tmp/*
 
 # Special case to get bootstrap-sass, required by Odoo for Sass assets
-RUN gem install --no-rdoc --no-ri --no-update-sources bootstrap-sass --version '<4' \
+RUN gem install --no-rdoc --no-ri --no-update-sources bootstrap-sass --version '<3.4' \
     && rm -Rf ~/.gem /var/lib/gems/*/cache/
 
 
