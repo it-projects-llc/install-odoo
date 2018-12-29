@@ -4,6 +4,8 @@ FROM debian:jessie
 # ENV #
 #######
 ENV ODOO_BRANCH=10.0 \
+    WKHTMLTOPDF_VERSION=0.12.5 \
+    WKHTMLTOPDF_CHECKSUM='2583399a865d7604726da166ee7cec656b87ae0a6016e6bce7571dcd3045f98b' \
     OPENERP_SERVER=/mnt/config/odoo-server.conf \
     ODOO_SOURCE_DIR=/mnt/odoo-source \
     ADDONS_DIR=/mnt/addons \
@@ -14,50 +16,54 @@ ENV ODOO_BRANCH=10.0 \
 ################
 # dependencies #
 ################
-RUN apt-get update && \
-    apt-get install -y moreutils && \
-    apt-get install -y git && \
-    apt-get install -y libffi-dev libssl-dev && \
-    apt-get install -y python-gevent python-simplejson && \
-    apt-get install -y xfonts-base xfonts-75dpi libjpeg62-turbo && \
-    apt-get install -y python-dev build-essential libxml2-dev libxslt1-dev && \
-    apt-get install -y libjpeg62-turbo-dev zlib1g-dev && \
-    apt-get install -y adduser node-less node-clean-css python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-babel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml && \
-    apt-get install -y --no-install-recommends \
-            ca-certificates \
-            curl \
-            node-less \
-            node-clean-css \
-            python-pyinotify \
-            python-renderpm && \
-    # dependencies for OCA/website/website_multi_theme
-    apt-get install -y ruby-compass && \
-    gem install compass bootstrap-sass && \
-    # postgresql-client-9.5
-    curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-    echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' >> /etc/apt/sources.list.d/pgdg.list && \
-    apt-get update && \
-    apt-get install -y postgresql-client-9.5 && \
-    # wkhtmltopdf
-    curl -o wkhtmltox.deb -SL http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb && \
-    dpkg --force-depends -i wkhtmltox.deb && \
-    apt-get -y install -f --no-install-recommends && \
-    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm && \
-    rm -rf /var/lib/apt/lists/* wkhtmltox.deb && \
-    # pip dependencies
-    curl --silent https://bootstrap.pypa.io/get-pip.py | python && \
-    pip install openupgradelib && \
-    pip install "werkzeug<0.12" --upgrade && \
-    pip install pillow psycogreen && \
-    pip install --no-cache-dir -r https://raw.githubusercontent.com/odoo/odoo/${ODOO_BRANCH}/requirements.txt && \
-    pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/misc-addons/${ODOO_BRANCH}/requirements.txt && \
-    pip install FileChunkIO && \
-    pip install pysftp && \
-    pip install rotate-backups && \
-    pip install oauthlib && \
-    pip install requests --upgrade && \
-    # check that pip is not broken after requests --upgrade
-    pip --version
+
+# Other requirements and recommendations to run Odoo
+# See https://github.com/$ODOO_SOURCE/blob/$ODOO_VERSION/debian/control
+RUN apt-get update \
+    && apt-get -y upgrade \
+    && apt-get install -y --no-install-recommends \
+        python ruby-compass \
+        fontconfig libfreetype6 libxml2 libxslt1.1 libjpeg62-turbo zlib1g \
+        fonts-liberation \
+        libfreetype6 liblcms2-2 libopenjpeg5 libtiff5 tk tcl libpq5 \
+        libldap-2.4-2 libsasl2-2 libx11-6 libxext6 libxrender1 \
+        locales-all zlibc \
+        bzip2 ca-certificates curl gettext-base git nano \
+        openssh-client telnet xz-utils \
+    && curl https://bootstrap.pypa.io/get-pip.py | python /dev/stdin \
+    && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+    && apt-get install -yqq nodejs \
+    && curl -SLo fonts-liberation2.deb http://ftp.debian.org/debian/pool/main/f/fonts-liberation2/fonts-liberation2_2.00.1-3_all.deb \
+    && dpkg --install fonts-liberation2.deb \
+    && curl -SLo wkhtmltox.deb https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.jessie_amd64.deb \
+    && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.deb" | sha256sum -c - \
+    && (dpkg --install wkhtmltox.deb || true) \
+    && apt-get install -yqq --no-install-recommends --fix-broken \
+    && rm fonts-liberation2.deb wkhtmltox.deb \
+    && wkhtmltopdf --version \
+    && rm -Rf /var/lib/apt/lists/*
+
+# Special case to get latest PostgreSQL client
+RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' >> /etc/apt/sources.list.d/postgresql.list \
+    && curl -SL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends postgresql-client \
+    && rm -Rf /var/lib/apt/lists/* /tmp/*
+
+# Special case to get latest Less and PhantomJS
+RUN ln -s /usr/bin/nodejs /usr/local/bin/node \
+    && npm install -g less@2 less-plugin-clean-css@1 phantomjs-prebuilt@2 \
+    && rm -Rf ~/.npm /tmp/*
+
+# Special case to get bootstrap-sass, required by Odoo for Sass assets
+RUN gem install --no-rdoc --no-ri --no-update-sources bootstrap-sass --version '<3.4' \
+    && rm -Rf ~/.gem /var/lib/gems/*/cache/
+
+RUN pip install openupgradelib \
+&& pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/odoo-saas-tools/${ODOO_BRANCH}/requirements.txt \
+&& pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/misc-addons/${ODOO_BRANCH}/requirements.txt \
+&& python -m compileall -q /usr/local/lib/python2.7/ || true \
+&& rm -Rf /var/lib/apt/lists/*
 
 #####################################
 # odoo source, user, docker folders #
