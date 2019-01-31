@@ -10,9 +10,9 @@ import time
 
 def log(*args):
     ts = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-    print ''
-    print ts
-    print 'saas.py >>> ' + ', '.join([str(a) for a in args])
+    print ('')
+    print (ts)
+    print '(saas.py >>> ' + ', '.join([str(a) for a in args]))
 
 
 @contextlib.contextmanager
