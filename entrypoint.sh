@@ -24,7 +24,7 @@ then
     PGPORT=$PORT \
     PGUSER=$USER \
     PGPASSWORD=$PASSWORD \
-    python /reset-admin-passwords.py
+    python3 /reset-admin-passwords.py
 fi
 
 case "$1" in
