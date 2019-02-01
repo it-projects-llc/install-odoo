@@ -60,10 +60,20 @@ RUN gem install --no-rdoc --no-ri --no-update-sources bootstrap-sass --version '
     && rm -Rf ~/.gem /var/lib/gems/*/cache/
 
 RUN apt-get update \
-&& pip install openupgradelib \
-&& pip install passlib \
-&& pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/odoo-saas-tools/${ODOO_BRANCH}/requirements.txt \
-&& pip install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/misc-addons/${ODOO_BRANCH}/requirements.txt \
+    && apt-get install -y \
+       build-essential \
+       libevent-dev \
+       libjpeg-dev \
+       libldap2-dev \
+       libsasl2-dev \
+       libssl-dev \
+       libxml2-dev \
+       libxslt1-dev \
+       python-dev \
+&& pip2 install openupgradelib \
+&& pip2 install --no-cache-dir -r https://raw.githubusercontent.com/odoo/odoo/${ODOO_BRANCH}/requirements.txt \
+&& pip2 install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/odoo-saas-tools/${ODOO_BRANCH}/requirements.txt \
+&& pip2 install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/misc-addons/${ODOO_BRANCH}/requirements.txt \
 && python -m compileall -q /usr/local/lib/python2.7/ || true \
 && rm -Rf /var/lib/apt/lists/*
 
