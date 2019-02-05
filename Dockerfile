@@ -11,7 +11,8 @@ ENV ODOO_BRANCH=10.0 \
     ADDONS_DIR=/mnt/addons \
     BACKUPS_DIR=/mnt/backups \
     LOGS_DIR=/mnt/logs \
-    ODOO_DATA_DIR=/mnt/data-dir
+    ODOO_DATA_DIR=/mnt/data-dir \
+    LC_ALL=en_US.UTF-8
 
 ################
 # dependencies #
