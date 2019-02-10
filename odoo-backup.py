@@ -265,7 +265,7 @@ def which(file, mode=F_OK | X_OK, path=None, pathext=None):
         >>> # for doctest see which_files()
     """
     try:
-        return iter(which_files(file, mode, path, pathext)).next()
+        return iter(which_files(file, mode, path, pathext)).__next__()
     except StopIteration:
         try:
             from errno import ENOENT
