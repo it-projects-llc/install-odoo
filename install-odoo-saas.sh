@@ -72,17 +72,7 @@
 
  PLATFORM=`uname -i`
  echo "PLATFORM=$PLATFORM"
-
- OS_RELEASE="trusty"
- # TODO rest systems
- source /etc/os-release
- if [[ $VERSION == *"Trusty"* ]]
- then
-     OS_RELEASE="trusty"
- elif [[ $VERSION == *"jessie"* ]]
- then
-     OS_RELEASE="jessie"
- fi
+ OS_RELEASE=`. /etc/os-release; echo $VERSION_CODENAME`
  echo "OS_RELEASE=$OS_RELEASE"
 
 
@@ -122,8 +112,6 @@
      whereis wkhtmltopdf | grep -q 'wkhtmltopdf: /' && export WKHTMLTOPDF_INSTALLED='yes'
      if [[ "$WKHTMLTOPDF_DEB_URL" == "" ]] || [[ "$WKHTMLTOPDF_DEPENDENCIES" == "" ]]
      then
-         WK_DEPS="xfonts-base xfonts-75dpi libjpeg62-turbo"
-
          # try to guess about the system
          WK_PLATFORM="i386"
          if [[ "$PLATFORM" == "x86_64" ]]
@@ -131,21 +119,19 @@
              WK_PLATFORM="amd64"
          fi
 
-         WK_OS='trusty'
-         if [[ $OS_RELEASE == "trusty" ]]
-         then
-             WK_OS='trusty'
-             WK_DEPS="xfonts-base xfonts-75dpi libjpeg-turbo8"
-         fi
-
          if [[ "$WKHTMLTOPDF_DEB_URL" == "" ]]
          then
-             WKHTMLTOPDF_DEB_URL="https://downloads.wkhtmltopdf.org/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-${WK_OS}-${WK_PLATFORM}.deb"
+             WKHTMLTOPDF_DEB_URL="https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox-0.12.5-1.${OS_RELEASE}-${WK_PLATFORM}.deb"
          fi
 
          if [[ "$WKHTMLTOPDF_DEPENDENCIES" == "" ]]
          then
-             WKHTMLTOPDF_DEPENDENCIES=$WK_DEPS
+	 	if [[ $OS_RELEASE == "trusty" ]]
+		then
+			WKHTMLTOPDF_DEPENDENCIES="xfonts-base xfonts-75dpi libjpeg-turbo8"
+		else
+			WKHTMLTOPDF_DEPENDENCIES="xfonts-base xfonts-75dpi libjpeg62-turbo"
+		fi
          fi
 
      fi
@@ -162,12 +148,6 @@
      apt-get install -y adduser node-less node-clean-css python python-dateutil python-decorator python-docutils python-feedparser python-imaging python-jinja2 python-ldap python-libxslt1 python-lxml python-mako python-mock python-openid python-passlib python-psutil python-psycopg2 python-babel python-pychart python-pydot python-pyparsing python-pypdf python-reportlab python-requests python-suds python-tz python-vatnumber python-vobject python-werkzeug python-xlwt python-yaml
      apt-get install -y python-gevent python-simplejson
 
-     if [[ "$ODOO_BRANCH" == "8.0" ]]
-     then
-         apt-get install -y python-unittest2
-     fi
-
-
      pip install "werkzeug<0.12" --upgrade
      pip install psycogreen
      # requirements.txt
@@ -179,15 +159,14 @@
      apt-get install -y python-dev build-essential libxml2-dev libxslt1-dev
      # uninstall PIL
      pip uninstall PIL || echo "PIL is not installed"
-     if [[ "$OS_RELEASE" == "jessie" ]]
-     then
-         apt-get install libjpeg62-turbo-dev zlib1g-dev -y
-     elif [[ "$OS_RELEASE" == "trusty" ]]
-     then
-         apt-get install libjpeg-dev zlib1g-dev -y
-     else
-         apt-get install libjpeg-dev zlib1g-dev -y
-     fi
+     	
+	if [[ "$OS_RELEASE" == "trusty" ]]
+	then
+		apt-get install libjpeg-dev zlib1g-dev -y
+	else
+		apt-get install libjpeg62-turbo-dev zlib1g-dev -y
+	fi
+     
      # reinstall pillow
      pip install -I pillow
      # (from here https://github.com/odoo/odoo/issues/612 )
@@ -213,9 +192,10 @@
      pip install oauthlib
      pip install requests --upgrade
  fi
-
- if [[ "$INIT_POSTGRESQL" != "no" ]]
- then
+ 
+# TODO : Change postgresql install, we are now in version 11
+if [[ "$INIT_POSTGRESQL" != "no" ]]
+then
     ### PostgreSQL
      if [[ "$INIT_POSTGRESQL" == "docker-container" ]]
      then
