@@ -75,6 +75,7 @@ RUN apt-get update \
 && pip2 install --no-cache-dir -r https://raw.githubusercontent.com/odoo/odoo/${ODOO_BRANCH}/requirements.txt \
 && pip2 install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/odoo-saas-tools/${ODOO_BRANCH}/requirements.txt \
 && pip2 install --no-cache-dir -r https://raw.githubusercontent.com/it-projects-llc/misc-addons/${ODOO_BRANCH}/requirements.txt \
+&& pip2 install --no-cache-dir -r https://raw.githubusercontent.com/OCA/reporting-engine/${ODOO_BRANCH}/requirements.txt \
 && python -m compileall -q /usr/local/lib/python2.7/ || true \
 && rm -Rf /var/lib/apt/lists/*
 
